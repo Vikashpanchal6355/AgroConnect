@@ -1,0 +1,186 @@
+<!-- Login/Register Modal Component -->
+<style>
+    .form-log select,
+    .form-log textarea {
+        width: 100%;
+        border: 1px solid #e6e6e6;
+        border-radius: 8px;
+        padding: 14px 18px;
+        color: #222;
+        background: #fff;
+        outline: none;
+    }
+
+    .form-log textarea {
+        resize: vertical;
+        min-height: 96px;
+    }
+
+    .form-log select:focus,
+    .form-log textarea:focus {
+        border-color: var(--Primary);
+    }
+</style>
+
+<!-- Login Modal -->
+<div class="modal modalCentered fade modal-log" id="loginModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <span class="icon icon-close btn-hide-popup" data-bs-dismiss="modal"></span>
+            <div class="modal-log-wrap list-file-delete">
+                <div class="box-title">
+                    <h2 class="title fw-bold">Login</h2>
+                    <p class="fw-normal font-nunito h6 fs-18 text-main">Sign in to your farm account!</p>
+                </div>
+                <div id="loginModalMessage" class="alert alert-warning d-none" role="alert"></div>
+                <form action="{% url 'login' %}" method="POST" class="form-log">
+                    {% csrf_token %}
+                    <div class="form-content">
+                        <fieldset>
+                            <label for="username" class="text-uppercase">
+                                Username *
+                            </label>
+                            <input type="text" id="username" name="username" placeholder="Username" required="">
+                        </fieldset>
+                        <fieldset>
+                            <label for="password" class="text-uppercase">
+                                Password *
+                            </label>
+                            <input type="password" id="password" name="password" placeholder="Password" required="">
+                        </fieldset>
+                    </div>
+                    <div class="bottom">
+                        <div class="flat-box-click">
+                            <input type="checkbox" id="remember" name="remember" class="flat-check">
+                            <label for="remember" class="mb-0">Remember me</label>
+                        </div>
+                        <a href="#forgotPassword" data-bs-toggle="modal" class="link">
+                            Forgot password?
+                        </a>
+                    </div>
+                    <div class="button-submit">
+                        <button type="submit" class="tf-btn-nor w-100">
+                            Login
+                        </button>
+                    </div>
+                </form>
+                
+                <div class="orther-log">
+                    <p>
+                        You not registered? <a href="#registerModal" data-bs-toggle="modal" class="link">Create an account</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Register Modal -->
+<div class="modal modalCentered fade modal-log" id="registerModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <span class="icon icon-close btn-hide-popup" data-bs-dismiss="modal"></span>
+            <div class="modal-log-wrap list-file-delete">
+                <div class="box-title">
+                    <h2 class="title fw-bold">Register</h2>
+                    <p class="fw-normal font-nunito h6 fs-18 text-main">Register for a farm account to enjoy exclusive privileges!</p>
+                </div>
+                <form action="{% url 'register' %}" method="POST" class="form-log">
+                    {% csrf_token %}
+                    <div class="form-content">
+                        <fieldset>
+                            <label for="reg_username" class="text-uppercase">
+                                Username *
+                            </label>
+                            <input type="text" id="reg_username" name="username" placeholder="Username" required="">
+                        </fieldset>
+                        <fieldset>
+                            <label for="reg_email" class="text-uppercase">
+                                Email *
+                            </label>
+                            <input type="email" id="reg_email" name="email" placeholder="Email" required="">
+                        </fieldset>
+                        <fieldset>
+                            <label for="reg_role" class="text-uppercase">
+                                Register As *
+                            </label>
+                            <select id="reg_role" name="role" required="">
+                                <option value="customer">Customer</option>
+                                <option value="farmer">Farmer / Superuser</option>
+                            </select>
+                        </fieldset>
+                        <div id="farmerRegistrationFields" style="display: none;">
+                            <fieldset>
+                                <label for="reg_farmer_name" class="text-uppercase">
+                                    Farmer Name *
+                                </label>
+                                <input type="text" id="reg_farmer_name" name="farmer_name" placeholder="Farmer Name">
+                            </fieldset>
+                            <fieldset>
+                                <label for="reg_farmer_phone" class="text-uppercase">
+                                    Farmer Phone *
+                                </label>
+                                <input type="text" id="reg_farmer_phone" name="farmer_phone" placeholder="Phone Number">
+                            </fieldset>
+                            <fieldset>
+                                <label for="reg_farmer_address" class="text-uppercase">
+                                    Farmer Address
+                                </label>
+                                <textarea id="reg_farmer_address" name="farmer_address" placeholder="Farm or business address" rows="3"></textarea>
+                            </fieldset>
+                        </div>
+                        <fieldset>
+                            <label for="reg_password" class="text-uppercase">
+                                Password *
+                            </label>
+                            <input type="password" id="reg_password" name="password" placeholder="Password" required="">
+                        </fieldset>
+                        <fieldset>
+                            <label for="reg_password_confirm" class="text-uppercase">
+                                Repeat Password *
+                            </label>
+                            <input type="password" id="reg_password_confirm" name="password_confirm" placeholder="Confirm Password" required="">
+                        </fieldset>
+                    </div>
+                    <div class="button-submit">
+                        <button type="submit" class="tf-btn-nor w-100">
+                            Register Account
+                        </button>
+                    </div>
+                </form>
+                <div class="orther-log">
+                    <p>
+                        Do you already have an account? <a href="#loginModal" data-bs-toggle="modal" class="link">Login</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function () {
+        const roleSelect = document.getElementById('reg_role');
+        const farmerFields = document.getElementById('farmerRegistrationFields');
+        const farmerName = document.getElementById('reg_farmer_name');
+        const farmerPhone = document.getElementById('reg_farmer_phone');
+
+        function syncFarmerFields() {
+            const isFarmer = roleSelect && roleSelect.value === 'farmer';
+            if (farmerFields) {
+                farmerFields.style.display = isFarmer ? 'block' : 'none';
+            }
+            if (farmerName) {
+                farmerName.required = isFarmer;
+            }
+            if (farmerPhone) {
+                farmerPhone.required = isFarmer;
+            }
+        }
+
+        if (roleSelect) {
+            roleSelect.addEventListener('change', syncFarmerFields);
+            syncFarmerFields();
+        }
+    })();
+</script>

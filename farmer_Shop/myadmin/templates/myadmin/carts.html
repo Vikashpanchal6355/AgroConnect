@@ -1,0 +1,139 @@
+{% extends 'myadmin/base.html' %}
+{% load static %}
+
+{% block page_title %}Carts{% endblock %}
+{% block page_header %}Carts{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+    <div class="card">
+      <div class="card-header p-3 pt-2">
+        <div class="icon icon-lg icon-shape bg-gradient-dark shadow-dark text-center border-radius-xl mt-n4 position-absolute">
+          <i class="material-icons opacity-10">shopping_cart</i>
+        </div>
+        <div class="text-end pt-1">
+          <p class="text-sm mb-0 text-capitalize">Total Carts</p>
+          <h4 class="mb-0">{{ carts.count }}</h4>
+        </div>
+      </div>
+      <hr class="dark horizontal my-0">
+      <div class="card-footer p-3">
+        <p class="mb-0"><span class="text-success text-sm font-weight-bolder">Active</span> carts</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-4">
+  <div class="col-12">
+    <div class="card my-4">
+      <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+        <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+          <h6 class="text-white text-capitalize ps-3">All Carts</h6>
+        </div>
+      </div>
+      <div class="card-body px-0 pb-2">
+        <div class="table-responsive p-0">
+          <table class="table align-items-center mb-0">
+            <thead>
+              <tr>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">User</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Items</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Created</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Updated</th>
+                <th class="text-secondary opacity-7">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for cart in carts %}
+              <tr>
+                <td>
+                  <div class="d-flex px-2 py-1">
+                    <div class="d-flex flex-column justify-content-center">
+                      <h6 class="mb-0 text-sm">#{{ cart.id }}</h6>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="d-flex px-2 py-1">
+                    <div class="avatar avatar-sm me-3 bg-gradient-primary rounded-circle">
+                      <span class="text-xs">{% if cart.user %}{{ cart.user.username|slice:":1"|upper }}{% else %}G{% endif %}</span>
+                    </div>
+                    <div class="d-flex flex-column justify-content-center">
+                      <h6 class="mb-0 text-sm">{% if cart.user %}{{ cart.user.username }}{% else %}(No User){% endif %}</h6>
+                    </div>
+                  </div>
+                </td>
+                <td class="align-middle text-center text-sm">
+                  <span class="text-xs font-weight-bold">{{ cart.items.count }}</span>
+                </td>
+                <td class="align-middle text-center text-sm">
+                  <span class="text-xs">{{ cart.created_at|date:"d M Y" }}</span>
+                </td>
+                <td class="align-middle text-center text-sm">
+                  <span class="text-xs">{{ cart.updated_at|date:"d M Y" }}</span>
+                </td>
+                <td class="align-middle">
+                  <button type="button" class="btn btn-sm bg-gradient-info text-white" data-bs-toggle="modal" data-bs-target="#cartModal{{ cart.id }}">
+                    View Items
+                  </button>
+                  
+                  <!-- Cart Items Modal -->
+                  <div class="modal fade" id="cartModal{{ cart.id }}" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title">Cart #{{ cart.id }} Items</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                          <p><strong>User:</strong> {% if cart.user %}{{ cart.user.username }}{% else %}Guest (Session: {{ cart.session_id }}){% endif %}</p>
+                          <p><strong>Created:</strong> {{ cart.created_at|date:"d M Y, h:i A" }}</p>
+                          <p><strong>Updated:</strong> {{ cart.updated_at|date:"d M Y, h:i A" }}</p>
+                          <hr>
+                          {% if cart.items.all %}
+                          <table class="table table-sm">
+                            <thead>
+                              <tr>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {% for item in cart.items.all %}
+                              <tr>
+                                <td>{{ item.product.name }}</td>
+                                <td>{{ item.quantity }}</td>
+                                <td>₹{{ item.product.price }}</td>
+                              </tr>
+                              {% endfor %}
+                            </tbody>
+                          </table>
+                          {% else %}
+                          <p class="text-muted">No items in cart</p>
+                          {% endif %}
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="6" class="text-center text-sm text-muted py-4">No carts found</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

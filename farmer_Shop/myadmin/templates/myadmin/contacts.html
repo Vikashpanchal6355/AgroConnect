@@ -1,0 +1,111 @@
+{% extends 'myadmin/base.html' %}
+{% load static %}
+
+{% block page_title %}Contact Messages{% endblock %}
+{% block page_header %}Contact Messages{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+    <div class="card">
+      <div class="card-header p-3 pt-2">
+        <div class="icon icon-lg icon-shape bg-gradient-dark shadow-dark text-center border-radius-xl mt-n4 position-absolute">
+          <i class="material-icons opacity-10">email</i>
+        </div>
+        <div class="text-end pt-1">
+          <p class="text-sm mb-0 text-capitalize">Total Messages</p>
+          <h4 class="mb-0">{{ contacts.count }}</h4>
+        </div>
+      </div>
+      <hr class="dark horizontal my-0">
+      <div class="card-footer p-3">
+        <p class="mb-0"><span class="text-success text-sm font-weight-bolder">All</span> messages</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-4">
+  <div class="col-12">
+    <div class="card my-4">
+      <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+        <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+          <h6 class="text-white text-capitalize ps-3">Contact Messages</h6>
+        </div>
+      </div>
+      <div class="card-body px-0 pb-2">
+        <div class="table-responsive p-0">
+          <table class="table align-items-center mb-0">
+            <thead>
+              <tr>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Email</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Subject</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date</th>
+                <th class="text-secondary opacity-7">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for contact in contacts %}
+              <tr>
+                <td>
+                  <div class="d-flex px-2 py-1">
+                    <div class="avatar avatar-sm me-3 bg-gradient-primary rounded-circle">
+                      <span class="text-xs">{{ contact.name|slice:":1"|upper }}</span>
+                    </div>
+                    <div class="d-flex flex-column justify-content-center">
+                      <h6 class="mb-0 text-sm">{{ contact.name }}</h6>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <p class="text-sm font-weight-bold mb-0">{{ contact.email }}</p>
+                </td>
+                <td class="align-middle text-center text-sm">
+                  <span class="text-xs">{{ contact.subject|default:"No subject" }}</span>
+                </td>
+                <td class="align-middle text-center text-sm">
+                  <span class="text-xs">{{ contact.created_at|date:"d M Y" }}</span>
+                </td>
+                <td class="align-middle">
+                  <button type="button" class="btn btn-sm bg-gradient-info text-white" data-bs-toggle="modal" data-bs-target="#messageModal{{ contact.id }}">
+                    View
+                  </button>
+                  
+                  <!-- Message Modal -->
+                  <div class="modal fade" id="messageModal{{ contact.id }}" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title">Message from {{ contact.name }}</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                          <p><strong>Email:</strong> {{ contact.email }}</p>
+                          <p><strong>Subject:</strong> {{ contact.subject|default:"No subject" }}</p>
+                          <p><strong>Date:</strong> {{ contact.created_at|date:"d M Y, h:i A" }}</p>
+                          <hr>
+                          <p>{{ contact.message }}</p>
+                        </div>
+                        <div class="modal-footer">
+                          <a href="{% url 'myadmin:mark_contact_read' contact.id %}" class="btn btn-success">Mark as Read</a>
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="5" class="text-center text-sm text-muted py-4">No contact messages</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,1571 @@
+{% load static %}
+{% load i18n %}
+<!DOCTYPE html>
+<!--[if IE 8]><html class="ie" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<!--<![endif]-->
+
+
+<!-- Mirrored from themesflat.co/html/AgroConnect/ by HTTrack Website Copier/3.x -->
+
+<head>
+    <!-- Basic Page Needs -->
+    <meta charset="utf-8" />
+    <title>AgroConnect</title>
+    <style>
+        #loading {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+        }
+
+        #wrapper {
+            display: block !important;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .auth-buttons .tf-btn {
+            margin: 0;
+        }
+
+        /* Basket icon default and hover colors */
+        .tf-header-shop .icon-wrap .icon.wg-bag i {
+            color: var(--Primary);
+        }
+        .tf-header-shop .icon-wrap .icon.wg-bag:hover i {
+            color: var(--Secondary);
+        }
+
+        .site-messages {
+            padding: 24px 0 0;
+        }
+
+        .site-messages .alert {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 14px;
+            border-radius: 14px;
+            border: 1px solid transparent;
+            box-shadow: 0 10px 30px rgba(18, 45, 29, 0.08);
+        }
+
+        .site-messages .alert-success {
+            background: #dff3e7;
+            border-color: #a7d8ba;
+            color: #174c2d;
+        }
+
+        .site-messages .alert-error,
+        .site-messages .alert-danger {
+            background: #fde8e6;
+            border-color: #efb8b2;
+            color: #8f241c;
+        }
+
+        .site-messages .alert-warning {
+            background: #fff4d9;
+            border-color: #f1d08a;
+            color: #7a5313;
+        }
+
+        .site-messages .alert-info {
+            background: #e3f1fb;
+            border-color: #b7d8f1;
+            color: #184f77;
+        }
+
+        .site-messages .btn-close {
+            flex-shrink: 0;
+        }
+    </style>
+    <!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'><![endif]-->
+    <meta name="description"
+        content="AgroConnect is a minimal, clean, and modern One Page HTML Template designed for farms and other agriculture-related businesses, such as organic farms, agricultural research centers, or produce stores.">
+    <meta name="keywords"
+        content=" dairy farm, poultry farm, livestock, organic produce, fresh vegetables, fruits, grains, sustainable agriculture, eco-friendly farming, farm machinery, irrigation, tractor">
+    <meta name="author" content="themesflat.com">
+
+    <!-- Mobile Specific Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+    <!-- Bootstrap  -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+
+    <!-- Theme Style -->
+    <link rel="stylesheet" href="https://sibforms.com/forms/end-form/build/sib-styles.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/magnific-popup.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/drift-basic.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/swiper-bundle.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/nouislider.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/custom-brand.css' %}" />
+
+    <!-- Animation Style -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/animate.min.css' %}" />
+
+    <!-- Font -->
+    <link rel="stylesheet" href="{% static 'font/fonts.css' %}" />
+
+    <!-- Icon -->
+    <link rel="stylesheet" type="text/css" href="{% static 'icons/icomoon/style.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'icons/fontawesome/css/all.min.css' %}" />
+
+    <!-- Favicon and Touch Icons  -->
+    <link rel="shortcut icon" href="{% static 'images/logo/image.png' %}" />
+    <link rel="apple-touch-icon-precomposed" href="{% static 'images/logo/image.png' %}" />
+</head>
+
+<body>
+    <script>
+        // Hide preloader immediately and show content
+        var loader = document.getElementById('loading');
+        if (loader) {
+            loader.style.display = 'none !important';
+            loader.style.visibility = 'hidden';
+            loader.style.opacity = '0';
+        }
+        var wrapper = document.getElementById('wrapper');
+        if (wrapper) {
+            wrapper.style.display = 'block';
+        }
+    </script>
+    <style>
+        #loading {
+            display: none !important;
+        }
+    </style>
+    <!-- Wrapper -->
+    <div id="wrapper">
+        <!-- Preloader -->
+        <div id="loading">
+            <div id="loading-center">
+                <div class="loader-container">
+                    <div class="wrap-loader">
+                        <div class="loader">
+                        </div>
+                        <div class="icon">
+                            <img src="{% static 'images/logo/image.png' %}" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.Preloader -->
+
+        {% if user.is_authenticated %}
+        <!-- Top-bar -->
+        <div class="tf-topbar-shop">
+            <div class="tf-container w-1620">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="topbar-inner">
+                            <div class="topbar-left">
+                                {% if is_notification_active %}
+                                <div class="icon style-circle">
+                                    <i class="fa-solid fa-bell"></i>
+                                </div>
+                                <p>
+                                    {{ notification_banner }}
+                                </p>
+                                {% endif %}
+                            </div>
+                            <div class="topbar-right">
+                                <ul>
+                                    <li class="item">
+                                        <div class="icon">
+                                            <i class="fa-solid fa-location-dot"></i>
+                                        </div>
+                                        <a href="#">
+                                            Find a Store
+                                        </a>
+                                    </li>
+                                    <li class="item">
+                                        <div class="icon">
+                                            <i class="fa-solid fa-truck"></i>
+                                        </div>
+                                        <a href="{% url 'order_tracking' %}">
+                                            Order Tracking
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="s-img-item item-1">
+                <img src="{% static 'images/item/page-title-top.png' %}" alt="">
+            </div>
+        </div><!-- /Top-bar -->
+
+        <!-- Header  -->
+        <header class="tf-header-shop header style-4" id="header-main">
+            <div class="tf-container w-1620">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="header-topbar">
+                            <div class="header-left">
+                                <div class="logo-site">
+                                    <a href="{% url 'index' %}">
+                                        <img src="{% static 'images/logo/image.png' %}" alt="">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="header-right">
+                                <div class="search-product">
+
+                                    <form action="{% url 'search_products' %}" class="form-search style-1" method="GET">
+                                        <fieldset>
+                                            <input type="text" name="q" placeholder="{% trans 'Search Product...' %}" required>
+                                        </fieldset>
+                                        <button type="submit" class="btn-search">
+                                            <i class="fa-solid fa-magnifying-glass"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                                <div class="call-us">
+                                    <div class="img-item">
+                                        <img src="{% static 'images/item/call.png' %}" alt="">
+                                    </div>
+                                    <div class="content">
+                                        <p class="font-snowfall">
+                                            Call and Order in
+                                        </p>
+                                        <a href="#" class="number font-worksans hover-text-4">
++91 98765 43210
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="dropdown wg-category">
+                                    <a href="#" class="font-worksans dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">
+                                        <i class="fa-solid fa-list fs-16"></i>
+                                        Categories
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="{% url 'shop' %}">All Products</a></li>
+                                        {% for category in categories %}
+                                        <li><a class="dropdown-item" href="{% url 'shop' %}?category={{ category.id }}">{{ category.name }}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                <div class="icon-wrap">
+                                    <a class="icon style-circle header-search" href="#canvasSearch"
+                                        data-bs-toggle="offcanvas">
+                                        <i class="icon-magnifying-glass fs-21"></i>
+                                    </a>
+                                    {% if user.is_authenticated %}
+                                    <div class="dropdown user-dropdown">
+                                        <a href="javascript:void(0)" class="icon style-circle dropdown-toggle" data-bs-toggle="dropdown"
+                                            data-bs-display="static" aria-expanded="false" title="{{ user.username }}">
+                                            <i class="icon-user"></i>
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li class="dropdown-header user-header">
+                                                <i class="fa-solid fa-user-circle"></i>
+                                                <strong>{{ user.username }}</strong>
+                                            </li>
+                                            <li>
+                                                <hr class="dropdown-divider">
+                                            </li>
+                                            <li><a class="dropdown-item" href="{% url 'my_account' %}"><i
+                                                        class="fa-solid fa-user"></i>My Account</a></li>
+                                            <li><a class="dropdown-item" href="{% url 'my_account_orders' %}"><i
+                                                        class="fa-solid fa-box"></i>My Orders</a></li>
+                                            <li><a class="dropdown-item" href="{% url 'order_tracking' %}"><i
+                                                        class="fa-solid fa-location-dot"></i>Track Order</a></li>
+                                            <li><a class="dropdown-item" href="{% url 'my_account_address' %}"><i
+                                                        class="fa-solid fa-location-dot"></i>Addresses</a></li>
+                                            <li>
+                                                <hr class="dropdown-divider">
+                                            </li>
+                                            <li><a class="dropdown-item text-danger" href="{% url 'logout' %}"><i
+                                                        class="fa-solid fa-sign-out-alt"></i>Logout</a></li>
+                                        </ul>
+                                    </div>
+                                    {% else %}
+                                    <a href="#loginModal" data-bs-toggle="modal"
+                                        class="icon style-circle user-icon-trigger">
+                                        <i class="icon-user"></i>
+                                    </a>
+                                    {% endif %}
+                                    <a href="{% url 'wishlist' %}" class="icon style-circle">
+                                        <i class="icon-heart111"></i>
+                                    </a>
+                                    <a href="{% url 'shop_cart' %}" class="icon style-circle wg-bag position-relative">
+                                        <i class="icon-basket"></i>
+                                        {% if cart_count > 0 %}
+                                        <span
+                                            class="badge bg-danger text-white position-absolute top-0 end-0 translate-middle rounded-circle"
+                                            style="font-size: 10px; padding: 4px 6px;">{{ cart_count }}</span>
+                                        {% endif %}
+                                    </a>
+                                </div>
+                                <div class="your-cart">
+                                    <p class="font-nunito">
+                                        Your Cart
+                                    </p>
+                                    <p class="total fw-6 font-worksans fs-18">&#8377;{{ cart_total|default:"0.00" }}</p>
+                                </div>
+                                <div class="mobile-button">
+                                    <span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="header-inner">
+                            <div class="header-left">
+                                <div class="dropdown wg-category">
+                                    <a href="#" class="font-worksans dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">
+                                        <i class="fa-solid fa-list fs-16"></i>
+                                        Categories
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="{% url 'shop' %}">All Products</a></li>
+                                        {% for category in categories %}
+                                        <li><a class="dropdown-item" href="{% url 'shop' %}?category={{ category.id }}">{{ category.name }}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="header-center">
+                                <div class="main-nav">
+                                    <ul class="nav-list">
+                                        <li
+                                            class="item has-child {% if current_page == 'index' %}current-menu{% endif %}">
+                                            <a href="{% url 'index' %}">Home</a>
+                                        </li>
+                                        <li
+                                            class="item has-child {% if current_page == 'about_us' %}current-menu{% endif %}">
+                                            <a href="{% url 'about_us' %}">About Us</a>
+
+                                        </li>
+                                        <li
+                                            class="item has-child {% if current_page == 'portfolio' %}current-menu{% endif %}">
+                                            <a href="{% url 'portfolio' %}">Portfolio</a>
+                                        </li>
+                                        <li
+                                            class="item has-child {% if current_page == 'shop' %}current-menu{% endif %}">
+                                            <a href="{% url 'shop_products' %}">Shop</a>
+                                        </li>
+                                        <li
+                                            class="item has-child {% if current_page == 'services' %}current-menu{% endif %}">
+                                            <a href="{% url 'our_services' %}">Services</a>
+
+                                        </li>
+                                        <li
+                                            class="item has-child {% if current_page == 'contact_us' %}current-menu{% endif %}">
+                                            <a href="{% url 'contact_us' %}">Contact</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="header-right">
+                                <a href="{% url 'shop_products' %}" class="btn-order-now font-worksans">
+                                    <i class="fa-solid fa-bag-shopping fs-16"></i>
+                                    Order Online Now!
+                                </a>
+                            </div>
+
+
+                        </div> 
+
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="fixed-header style-absolute">
+                <div class="tf-container w-1780">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="header-inner">
+                                <div class="header-left">
+                                    <div class="main-nav">
+                                        <ul class="nav-list">
+                                            <li
+                                                class="item has-child {% if current_page == 'index' %}current-menu{% endif %}">
+                                                <a href="{% url 'index' %}">Home</a>
+                                            </li>
+                                            <li
+                                                class="item has-child {% if current_page == 'about_us' %}current-menu{% endif %}">
+                                                <a href="{% url 'about_us' %}">About Us</a>
+                                            </li>
+                                            <li
+                                                class="item has-child {% if current_page == 'portfolio' %}current-menu{% endif %}">
+                                                <a href="{% url 'portfolio' %}">Portfolio</a>
+                                            </li>
+                                            <li
+                                                class="item has-child {% if current_page == 'shop' %}current-menu{% endif %}">
+                                                <a href="{% url 'shop_products' %}">Shop</a>
+                                            </li>
+                                            <li
+                                                class="item has-child {% if current_page == 'our_services' %}current-menu{% endif %}">
+                                                <a href="{% url 'our_services' %}">Services</a>
+                                            </li>
+
+                                            <li
+                                                class="item has-child {% if current_page == 'contact_us' %}current-menu{% endif %}">
+                                                <a href="{% url 'contact_us' %}">Contact</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="header-center d-flex justify-content-center align-items-center">
+                                    <div class="logo-site">
+                                        <a href="{% url 'index' %}">
+                                            <img src="{% static 'images/logo/image.png' %}" alt="">
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="header-right">
+                                    <div class="icon-wrap">
+                                        <a class="icon style-circle header-search" href="#canvasSearch"
+                                            data-bs-toggle="offcanvas">
+                                            <i class="icon-magnifying-glass fs-21"></i>
+                                        </a>
+                                        {% if user.is_authenticated %}
+                                        <div class="dropdown user-dropdown">
+                                            <a href="#" class="icon style-circle dropdown-toggle"
+                                                data-bs-toggle="dropdown" title="{{ user.username }}">
+                                                <i class="icon-user"></i>
+                                            </a>
+                                            <ul class="dropdown-menu dropdown-menu-end">
+                                                <li class="dropdown-header user-header">
+                                                    <i class="fa-solid fa-user-circle"></i>
+                                                    <strong>{{ user.username }}</strong>
+                                                </li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li><a class="dropdown-item" href="{% url 'my_account' %}"><i
+                                                            class="fa-solid fa-user"></i>My Account</a></li>
+                                                <li><a class="dropdown-item" href="{% url 'my_account_orders' %}"><i
+                                                            class="fa-solid fa-box"></i>My Orders</a></li>
+                                                <li><a class="dropdown-item" href="{% url 'order_tracking' %}"><i
+                                                            class="fa-solid fa-location-dot"></i>Track Order</a></li>
+                                                <li><a class="dropdown-item" href="{% url 'my_account_address' %}"><i
+                                                            class="fa-solid fa-location-dot"></i>Addresses</a></li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li><a class="dropdown-item text-danger" href="{% url 'logout' %}"><i
+                                                            class="fa-solid fa-sign-out-alt"></i>Logout</a></li>
+                                            </ul>
+                                        </div>
+                                        {% else %}
+                                        <a href="#loginModal" data-bs-toggle="modal"
+                                            class="icon style-circle user-icon-trigger">
+                                            <i class="icon-user"></i>
+                                        </a>
+                                        {% endif %}
+                                        <a href="#wishlist" class="icon style-circle" data-bs-toggle="modal">
+                                            <i class="icon-heart111"></i>
+                                        </a>
+                                        <a href="{% url 'shop_cart' %}"
+                                            class="icon style-circle wg-bag position-relative">
+                                            <i class="icon-basket"></i>
+                                            {% if cart_count > 0 %}
+                                            <span
+                                                class="badge bg-danger text-white position-absolute top-0 end-0 translate-middle rounded-circle"
+                                                style="font-size: 10px; padding: 4px 6px;">{{ cart_count }}</span>
+                                            {% endif %}
+                                        </a>
+                                    </div>
+                                    <div class="your-cart">
+                                        <p class="font-nunito">
+                                            Your Cart
+                                        </p>
+                                        <p class="total fw-6 font-worksans fs-18">&#8377;{{ cart_total|default:"0.00" }}</p>
+                                    </div>
+                                    <div class="mobile-button">
+                                        <span></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="s-img-item item-1">
+                    <img src="{% static 'images/item/page-title-top.png' %}" alt="">
+                </div>
+            </div> -->
+            <div class="s-img-item item-1">
+                <img src="{% static 'images/item/page-title-top.png' %}" alt="">
+            </div>
+        </header><!-- Header  -->
+        <!-- nav mobile -->
+        <div class="mobile-nav-wrap">
+            <div class="overlay-mobile-nav"></div>
+            <div class="inner-mobile-nav overflow-y-auto">
+                <div class="top">
+                    <div class="logo">
+                        <a href="{% url 'index'%}" rel="home" class="main-logo">
+                            <img id="mobile-logo_header" alt="" src="{% static 'images/logo/image.png' %}" />
+                        </a>
+                        <div class="mobile-nav-close">
+                            <i class="icon-close"></i>
+                        </div>
+                    </div>
+                    <nav id="mobile-main-nav" class="mobile-main-nav">
+                        <ul id="menu-mobile-menu" class="menu">
+                            <li
+                                class="menu-item menu-item-has-children-mobile {% if current_page == 'index' %}current-nav{% endif %} ">
+                                <a class="item-menu-mobile {% if current_page == 'index' %}current{% endif %}"
+                                    href="{% url 'index' %}">
+                                    Home
+                                </a>
+                            </li>
+                            <li
+                                class="menu-item menu-item-has-children-mobile {% if current_page == 'about_us' %}current-nav{% endif %}">
+                                <a class="item-menu-mobile {% if current_page == 'about_us' %}current{% endif %}"
+                                    href="{% url 'about_us' %}">
+                                    About
+                                </a>
+
+                            </li>
+                            <li
+                                class="menu-item menu-item-has-children-mobile {% if current_page == 'portfolio' %}current-nav{% endif %}">
+                                <a class="item-menu-mobile {% if current_page == 'portfolio' %}current-nav{% endif %}"
+                                    href="{% url 'portfolio' %}">
+                                    Portfolio
+                                </a>
+                            </li>
+                            <li
+                                class="menu-item menu-item-has-children-mobile {% if current_page == 'shop' %}current-nav{% endif %}">
+                                <a class="item-menu-mobile {% if current_page == 'shop' %}current{% endif %}"
+                                    href="{% url 'shop_products'%}">
+                                    Shop
+                                </a>
+                            </li>
+                            <li
+                                class="menu-item menu-item-has-children-mobile {% if current_page == 'services' %}current-nav{% endif %}">
+                                <a class="item-menu-mobile {% if current_page == 'services' %}current{% endif %}"
+                                    href="{% url 'our_services' %}">
+                                    Services
+                                </a>
+                            </li>
+                            <li
+                                class="menu-item menu-item-has-children-mobile {% if current_page == 'contact_us' %}current-nav{% endif %}">
+                                <a class="item-menu-mobile {% if current_page == 'contact_us' %}current{% endif %}"
+                                    href="{% url 'contact_us' %}">Contact</a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <div class="group-icon">
+                        <a class="site-nav-icon header-search" href="#canvasSearch" data-bs-toggle="offcanvas">
+                            <i class="icon-magnifying-glass fs-21"> </i>
+                            Search
+                        </a>
+                        <a href="{% url 'shop_cart' %}" class="icon style-circle wg-bag position-relative">
+                            <i class="icon-basket"></i>
+                            {% if cart_count > 0 %}
+                            <span
+                                class="badge bg-danger text-white position-absolute top-0 end-0 translate-middle rounded-circle"
+                                style="font-size: 10px; padding: 4px 6px;">{{ cart_count }}</span>
+                            {% endif %}
+                            Shop
+                        </a>
+                    </div>
+                </div>
+                <div class="bottom">
+                    <div class="infor-list">
+                        <ul>
+                            <li>
+                                <h5 class="title">
+                                    Address:
+                                </h5>
+                                <p>
+                                    123, AgroConnect Towers, New Delhi, India
+                                </p>
+                            </li>
+                            <li>
+                                <h5 class="title">
+                                    Phone:
+                                </h5>
+                                <p>
+                                    +91 9876543210
+                                </p>
+                            </li>
+                            <li>
+                                <h5 class="title">
+                                    Email:
+                                </h5>
+                                <p>
+
+info@agroconnect.in
+                                </p>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div class="wg-social">
+                        <ul class="list">
+                            <li class="item">
+                                <a href="#"><i class="icon-facebook1"></i></a>
+                            </li>
+                            <li class="item">
+                                <a href="#"><i class="icon-twitter"></i></a>
+                            </li>
+                            <li class="item">
+                                <a href="#"><i class="icon-instagram2"></i></a>
+                            </li>
+                            <li class="item">
+                                <a href="#"><i class="icon-pinterest"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div><!-- /nav-main -->
+
+        {% else %}
+        <!-- DEFAULT HEADER FOR NON-SHOP PAGES -->
+        <!-- Top-bar -->
+        <div class="tf-topbar">
+            <div class="tf-container w-1780">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="topbar-inner">
+                            <div class="topbar-left">
+                                <span class="fs-14 font-nunito">Welcome to AgroConnect</span>
+                                <span class="fs-14 font-nunito">Agriculture & Organic Farms</span>
+                            </div>
+                            <div class="topbar-right">
+                                <ul class="contact-list">
+                                    <li class="item">
+                                        <a href="#" class="icon">
+                                            <i class="fa-solid fa-phone"></i>
+                                        </a>
+                                        <a href="#"> +91 98765 43210</a>
+                                    </li>
+                                    <li class="item">
+                                        <a href="#" class="icon">
+                                            <img src="{% static 'icons/mailbox.png' %}" alt="" />
+                                        </a>
+                                        <a href="#">
+                                            info@agroconnect.in
+                                        </a>
+                                    </li>
+                                    <li class="item">
+                                        <a href="#" class="icon">
+                                            <i class="fa-solid fa-location-dot"></i>
+                                        </a>
+                                        <a href="#">
+                                            123, AgroConnect Towers, New Delhi, India   
+                                        </a>
+                                    </li>
+                                </ul>
+                                <ul class="social-list">
+                                    <li class="item">
+                                        <a href="#">
+                                            <i class="icon-twitter"></i>
+                                        </a>
+                                    </li>
+                                    <li class="item">
+                                        <a href="#">
+                                            <i class="icon-facebook"></i>
+                                        </a>
+                                    </li>
+                                    <li class="item">
+                                        <a href="#">
+                                            <i class="icon-pinterest"></i>
+                                        </a>
+                                    </li>
+                                    <li class="item">
+                                        <a href="#">
+                                            <i class="icon-instagram2"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.Top-bar -->
+
+        <!-- Welcome -->
+        <div class="box-welcome">
+            <div class="tf-overlay"></div>
+            <div class="welcome-wrap">
+                <div class="content">
+                    <div class="btn-close-welcome icon style-circle">
+                        <i class="icon-close"></i>
+                    </div>
+                    <h3 class="title font-snowfall">
+                        AgroConnect Agriculture <br />
+                        Farm of laughter and
+                        happiness!
+                    </h3>
+                    <p class="text font-nunito">
+                        Lorem ipsum dolor sit amet,
+                        consectetur adipiscing elit.
+                        Maecenas ex ligula, pulvinar
+                        ultrices justo sed.
+                    </p>
+                    <ul class="infor-list">
+                        <li class="item">
+                            <i class="fa-solid fa-location-dot fs-18"></i>
+                            <p>
+                                123, AgroConnect Towers, New Delhi, India
+                            </p>
+                        </li>
+                        <li class="item">
+                            <i class="fa-solid fa-phone"></i>
+                            <p>
+                                Call us: +91 98765 43210
+                            </p>
+                        </li>
+                        <li class="item">
+                            <img src="{% static 'icons/mailbox-2.png' %}" alt="" />
+                            <p>
+                                Mail Support:
+                                info@agroconnect.in
+                            </p>
+                        </li>
+                        <li class="item">
+                            <i class="fa-solid fa-clock"></i>
+                            <p>
+                                Mon - Sat: 8.00am -
+                                18.00pm
+                            </p>
+                        </li>
+                    </ul>
+                    <div class="wg-social">
+                        <ul class="list">
+                            <li class="item">
+                                <a href="#"><i class="icon-facebook1"></i></a>
+                            </li>
+                            <li class="item">
+                                <a href="#"><i class="icon-twitter"></i></a>
+                            </li>
+                            <li class="item">
+                                <a href="#"><i class="icon-instagram2"></i></a>
+                            </li>
+                            <li class="item">
+                                <a href="#"><i class="icon-pinterest"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.Welcome -->
+        <header class="header has-item-bot" id="header-main">
+            <div class="tf-container w-1780">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="header-inner">
+                            <div class="header-left">
+                                <div class="logo-site">
+                                    <a href="{% url 'index' %}">
+                                        <img src="{% static 'images/logo/image.png' %}" alt="" />
+                                    </a>
+                                </div>
+                                <div class="main-nav">
+                                    <ul class="nav-list" style="margin-left: 50px;">
+                                        <li
+                                            class="item has-child {% if current_page == 'index' %}current-menu{% endif %}">
+                                            <a href="{% url 'index' %}">Home</a>
+                                        </li>
+                                        <li
+                                            class="item has-child {% if current_page == 'about_us' %}current-menu{% endif %}">
+                                            <a href="{% url 'about_us' %}">About Us</a>
+                                        </li>
+                                        <li
+                                            class="item has-child {% if current_page == 'portfolio' %}current-menu{% endif %}">
+                                            <a href="{% url 'portfolio' %}">Portfolio</a>
+                                        </li>
+                                        <li
+                                            class="item has-child {% if current_page == 'shop' %}current-menu{% endif %}">
+                                            <a href="{% url 'shop_products' %}">Shop</a>
+                                        </li>
+                                        <li
+                                            class="item has-child {% if current_page == 'services' %}current-menu{% endif %}">
+                                            <a href="{% url 'our_services' %}">Services</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="header-right">
+                                <a href="{% url 'contact_us' %}" class="tf-btn gap-30">
+                                    <span class="text-style">
+                                        Get In Touch!
+                                    </span>
+                                    <div class="icon">
+                                        <i class="icon-arrow_right"></i>
+                                    </div>
+                                </a>
+                                <div class="auth-buttons">
+                                    <a href="#loginModal" data-bs-toggle="modal" class="tf-btn style-2 type-2"
+                                        style="padding:10px 20px; font-size:15px;">
+                                        <span class="text-style">Login/Register</span>
+                                    </a>
+                                </div>
+                                <div class="icon-wrap">
+                                    <a class="icon header-search" href="#canvasSearch" data-bs-toggle="offcanvas">
+                                        <i class="icon-magnifying-glass fs-21"></i>
+                                    </a>
+                                    <a href="/shop-cart/" class="icon style-circle wg-bag position-relative">
+                                        <i class="icon-basket"></i>
+                                        {% if cart_count > 0 %}
+                                        <span
+                                            class="badge bg-danger text-white position-absolute top-0 end-0 translate-middle rounded-circle"
+                                            style="font-size: 10px; padding: 4px 6px;">{{ cart_count }}</span>
+                                        {% endif %}
+                                    </a>
+                                </div>
+
+                                <div class="mobile-button">
+                                    <span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mobile-nav-wrap">
+                            <div class="overlay-mobile-nav"></div>
+                            <div class="inner-mobile-nav overflow-y-auto">
+                                <div class="top">
+                                    <div class="logo">
+                                        <a href="{% url 'index' %}" rel="home" class="main-logo">
+                                            <img id="mobile-logo_header" alt=""
+                                                src="{% static 'images/logo/image.png' %}" />
+                                        </a>
+                                        <div class="mobile-nav-close">
+                                            <i class="icon-close"></i>
+                                        </div>
+                                    </div>
+                                    <nav id="mobile-main-nav" class="mobile-main-nav">
+                                        <ul id="menu-mobile-menu" class="menu">
+                                            <li
+                                                class="menu-item menu-item-has-children-mobile {% if current_page == 'index' %}current-nav{% endif %} ">
+                                                <a class="item-menu-mobile {% if current_page == 'index' %}current{% endif %}"
+                                                    href="{% url 'index' %}">
+                                                    Home
+                                                </a>
+                                            </li>
+                                            <li
+                                                class="menu-item menu-item-has-children-mobile {% if current_page == 'about_us' %}current-nav{% endif %} ">
+                                                <a class="item-menu-mobile {% if current_page == 'about_us' %}current{% endif %}"
+                                                    href="{% url 'about_us' %}">
+                                                    About Us
+                                                </a>
+                                            </li>
+                                            <li
+                                                class="menu-item menu-item-has-children-mobile {% if current_page == 'portfolio' %}current-nav{% endif %} ">
+                                                <a class="item-menu-mobile {% if current_page == 'portfolio' %}current{% endif %} "
+                                                    href="{% url 'portfolio' %}">
+                                                    Portfolio
+                                                </a>
+                                            </li>
+                                            <li
+                                                class="menu-item menu-item-has-children-mobile {% if current_page == 'shop' %}current-nav{% endif %} ">
+                                                <a class="item-menu-mobile {% if current_page == 'shop' %}current{% endif %}"
+                                                    href="{% url 'shop_products' %}">
+                                                    Shop
+                                                </a>
+                                            </li>
+                                            <li
+                                                class="menu-item menu-item-has-children-mobile  {% if current_page == 'services' %}current-nav{% endif %} ">
+                                                <a class="item-menu-mobile {% if current_page == 'services' %}current{% endif %}"
+                                                    href="{% url 'our_services' %}">
+                                                    Services
+                                                </a>
+                                            </li>
+                                            <li
+                                                class="menu-item menu-item-has-children-mobile {% if current_page == 'contact_us' %}current-nav{% endif %} ">
+                                                <a class="item-menu-mobile {% if current_page == 'contact_us' %}current{% endif %}"
+                                                    href="{% url 'contact_us' %}">Contact</a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                    <div class="group-icon">
+                                        <a class="site-nav-icon header-search" href="#canvasSearch"
+                                            data-bs-toggle="offcanvas">
+                                            <i class="icon-magnifying-glass fs-21"> </i>
+                                            Search
+                                        </a>
+                                        <a href="{% url 'shop_cart' %}" class="site-nav-icon wg-bag">
+                                            <i class="icon-basket"></i>
+                                            Shop
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="bottom">
+                                    <div class="infor-list">
+                                        <ul>
+                                            <li>
+                                                <h5 class="title">
+                                                    Address:
+                                                </h5>
+                                                <p>
+                                                    123, AgroConnect Towers, New Delhi, India
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <h5 class="title">
+                                                    Phone:
+                                                </h5>
+                                                <p>
++91 98765 43210
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <h5 class="title">
+                                                    Email:
+                                                </h5>
+                                                <p>
+
+info@agroconnect.in
+                                                </p>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="wg-social">
+                                        <ul class="list">
+                                            <li class="item">
+                                                <a href="#"><i class="icon-facebook1"></i></a>
+                                            </li>
+                                            <li class="item">
+                                                <a href="#"><i class="icon-twitter"></i></a>
+                                            </li>
+                                            <li class="item">
+                                                <a href="#"><i class="icon-instagram2"></i></a>
+                                            </li>
+                                            <li class="item">
+                                                <a href="#"><i class="icon-pinterest"></i></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="fixed-header style-absolute">
+                <div class="tf-container w-1780">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="header-inner ">
+                                <div class="header-left">
+                                    <div class="logo-site">
+                                        <a href="{% url 'index' %}">
+                                            <img src="{% static 'images/logo/image.png' %}" alt="" />
+                                        </a>
+                                    </div>
+                                    <div class="main-nav">
+                                        <ul class="nav-list">
+                                            <li class="item has-child current-menu">
+                                                <a href="javascript:void(0)">Home</a>
+                                            </li>
+                                            <li
+                                                class="item has-child {% if current_page == 'about_us' %}current-menu{% endif %}">
+                                                <a href="{% url 'about_us' %}">About Us</a>
+                                            </li>
+                                            <li class="item has-child">
+                                                <a href="javascript:void(0)">Portfolio</a>
+                                                <ul class="sub-nav">
+
+                                                    <li>
+                                                        <a href="portfolio-style-1.html">
+                                                            <span>
+                                                                Portfolio Style
+                                                                1
+                                                            </span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="portfolio-style-2.html">
+                                                            <span>
+                                                                Portfolio Style
+                                                                2
+                                                            </span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="portfolio-style-3.html">
+                                                            <span>
+                                                                Portfolio Style
+                                                                3
+                                                            </span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="portfolio-details.html">
+                                                            <span>
+                                                                Portfolio
+                                                                Details
+                                                            </span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="item has-child">
+                                                <a href="javascript:void(0)">Shop</a>
+                                                <ul class="sub-nav">
+                                                    <li><a href="shop-products.html"><span>Shop
+                                                                Products</span></a></li>
+                                                    <li><a href="shop-details.html"><span>Shop
+                                                                Details</span></a></li>
+                                                    <li><a href="shop-cart.html"><span>Shop Cart</span></a></li>
+                                                    <li><a href="wishlist.html"><span>Wishlist</span></a></li>
+                                                    <li><a href="checkout.html"><span>Checkout</span></a></li>
+                                                    <li><a href="order-tracking.html"><span>Order
+                                                                Tracking</span></a>
+                                                    </li>
+                                                    <li><a href="my-account.html"><span>My Account</span></a>
+                                                    </li>
+                                                    <li><a href="order-details.html"><span>Order
+                                                                Detail</span></a></li>
+                                                </ul>
+                                            </li>
+                                            <li class="item has-child">
+                                                <a href="{% url 'our_services' %}">Services</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="header-right">
+                                    <a href="contact-us.html" class="tf-btn gap-30">
+                                        <span class="text-style">
+                                            Get In Touch!
+                                        </span>
+                                        <div class="icon">
+                                            <i class="icon-arrow_right"></i>
+                                        </div>
+                                    </a>
+                                    <div class="icon-wrap">
+                                        <a class="icon header-search" href="#canvasSearch" data-bs-toggle="offcanvas">
+                                            <i class="icon-magnifying-glass fs-21"></i>
+                                        </a>
+                                        <a href="{% url 'shop_cart' %}" class="icon wg-bag">
+                                            <i class="icon-basket"></i>
+                                        </a>
+                                    </div>
+                                    <div class="wg-welcome btn-open-welcome">
+                                        <i class="icon-fences-icon fs-24"></i>
+                                    </div>
+                                    <div class="mobile-button">
+                                        <span></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="header-item children">
+                    <img src="{% static 'images/item/page-title-top.png' %}" alt="">
+                </div>
+            </div> -->
+
+            <div class="header-item">
+                <img src="{% static 'images/item/page-title-top.png' %}" alt="">
+            </div>
+        </header><!-- /.Header -->
+        {% endif %}
+        {% if messages %}
+        <div class="site-messages">
+            <div class="tf-container w-1290">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    <span>{{ message }}</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% block content %}
+        {% endblock %}
+        <!-- Footer -->
+        <footer class="footer" id="footer-main">
+            <div class="tf-container w-1290">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="footer-top">
+                            <div class="footer-left">
+                                <div class="logo">
+                                    <a href="{% url 'index' %}">
+                                        <img src="{% static 'images/logo/image.png' %}" alt="" />
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="footer-center">
+                                <p class="font-snowfall">
+                                    Farm of laughter and happiness!
+                                </p>
+                            </div>
+                            <div class="footer-right">
+                                <div class="wg-social">
+                                    <ul class="list">
+                                        <li class="item">
+                                            <a href="#"><i class="icon-facebook1"></i></a>
+                                        </li>
+                                        <li class="item">
+                                            <a href="#"><i class="icon-twitter"></i></a>
+                                        </li>
+                                        <li class="item">
+                                            <a href="#"><i class="icon-instagram2"></i></a>
+                                        </li>
+                                        <li class="item">
+                                            <a href="#"><i class="icon-pinterest"></i></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-inner">
+                <div class="tf-container w-1290">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-6 ">
+                            <div class="footer-inner-wrap footer-col-block">
+                                <h4 class="footer-title footer-title-desktop mb-23">
+                                    Contact Us!
+                                </h4>
+                                <h4 class="footer-title footer-title-mobile mb-23">
+                                    Contact Us!
+                                </h4>
+                                <ul class="contact-list tf-collapse-content">
+                                    <li>
+                                        <i class="fa-solid fa-location-dot fs-17"></i>
+                                        <p class="address">
+                                            123, AgroConnect Towers, New Delhi, India
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <i class="fa-solid fa-phone"></i>
+                                        <p class="phone-number fs-15">
+                                            Call us: +91 98765 43210
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <i class="icon-package-box"></i>
+                                        <p class="email fs-15">
+                                            Mail: info@agroconnect.in
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <i class="fa-solid fa-clock"></i>
+                                        <p class="time-open fs-15">
+                                            Mon - Sat: 8.00am - 18.00pm
+                                        </p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 ">
+                            <div class="footer-inner-wrap footer-col-block">
+                                <h4 class="footer-title footer-title-desktop mb-23">
+                                    News Posts
+                                </h4>
+                                <h4 class="footer-title footer-title-mobile mb-23">
+                                    News Posts
+                                </h4>
+                                <ul class="new-post-list tf-collapse-content">
+                                    <li class="item img-hover">
+                                        <div class="image hover-item">
+                                            <img src="{% static 'images/section/f-new-post-1.jpg' %}" alt="" />
+                                        </div>
+                                        <div class="content">
+                                            <a href="#" class="title-post hover-text-secondary">
+                                                Learn 10 Best Tips for New
+                                                Formers
+                                            </a>
+                                            <p class="date-release">
+                                                30 Oct, 2024
+                                            </p>
+                                        </div>
+                                    </li>
+                                    <li class="item img-hover">
+                                        <div class="image hover-item">
+                                            <img src="{% static 'images/section/f-new-post--2.jpg' %}" alt="" />
+                                        </div>
+                                        <div class="content">
+                                            <a href="#" class="title-post hover-text-secondary">
+                                                Farmer Sentiment Darkens
+                                                Hopes Fade
+                                            </a>
+                                            <p class="date-release">
+                                                30 Oct, 2024
+                                            </p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 ">
+                            <div class="footer-inner-wrap footer-col-block">
+                                <h4 class="footer-title footer-title-desktop mb-28">
+                                    Quick Links
+                                </h4>
+                                <h4 class="footer-title footer-title-mobile mb-28">
+                                    Quick Links
+                                </h4>
+                                <ul class="link-list tf-collapse-content">
+                                    <li class="item">
+
+                                        <a href="{% url 'about_us' %}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="14"
+                                                height="16">
+                                                <path
+                                                    d="M264.547 70.633L440.547 238.633C445.297 243.164 447.984 249.445 447.984 256.008S445.297 268.852 440.547 273.383L264.547 441.383C254.953 450.508 239.766 450.164 230.609 440.57C221.453 431.07 221.797 415.82 231.422 406.633L364.09 280.008H24C10.75 280.008 0 269.258 0 256.008S10.75 232.008 24 232.008H364.09L231.422 105.383C221.797 96.227 221.453 80.977 230.609 71.445C239.766 61.852 254.953 61.508 264.547 70.633Z">
+                                                </path>
+                                            </svg>
+                                            Learn About Us
+                                        </a>
+                                    </li>
+                                    <li class="item">
+
+                                        <a href="our-services.html">
+
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="14"
+                                                height="16">
+                                                <path
+                                                    d="M264.547 70.633L440.547 238.633C445.297 243.164 447.984 249.445 447.984 256.008S445.297 268.852 440.547 273.383L264.547 441.383C254.953 450.508 239.766 450.164 230.609 440.57C221.453 431.07 221.797 415.82 231.422 406.633L364.09 280.008H24C10.75 280.008 0 269.258 0 256.008S10.75 232.008 24 232.008H364.09L231.422 105.383C221.797 96.227 221.453 80.977 230.609 71.445C239.766 61.852 254.953 61.508 264.547 70.633Z">
+                                                </path>
+                                            </svg>
+                                            Services We Provide</a>
+                                    </li>
+                                    <li class="item">
+                                        <a href="portfolio-style-1.html">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="14"
+                                                height="16">
+                                                <path
+                                                    d="M264.547 70.633L440.547 238.633C445.297 243.164 447.984 249.445 447.984 256.008S445.297 268.852 440.547 273.383L264.547 441.383C254.953 450.508 239.766 450.164 230.609 440.57C221.453 431.07 221.797 415.82 231.422 406.633L364.09 280.008H24C10.75 280.008 0 269.258 0 256.008S10.75 232.008 24 232.008H364.09L231.422 105.383C221.797 96.227 221.453 80.977 230.609 71.445C239.766 61.852 254.953 61.508 264.547 70.633Z">
+                                                </path>
+                                            </svg>
+                                            View Recent Projects</a>
+                                    </li>
+                                    <li class="item">
+                                        <a href="our-farmers.html">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="14"
+                                                height="16">
+                                                <path
+                                                    d="M264.547 70.633L440.547 238.633C445.297 243.164 447.984 249.445 447.984 256.008S445.297 268.852 440.547 273.383L264.547 441.383C254.953 450.508 239.766 450.164 230.609 440.57C221.453 431.07 221.797 415.82 231.422 406.633L364.09 280.008H24C10.75 280.008 0 269.258 0 256.008S10.75 232.008 24 232.008H364.09L231.422 105.383C221.797 96.227 221.453 80.977 230.609 71.445C239.766 61.852 254.953 61.508 264.547 70.633Z">
+                                                </path>
+                                            </svg>
+                                            Meet The Farmers</a>
+                                    </li>
+                                    <li class="item">
+                                        <a href="coming-soon.html">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="14"
+                                                height="16">
+                                                <path
+                                                    d="M264.547 70.633L440.547 238.633C445.297 243.164 447.984 249.445 447.984 256.008S445.297 268.852 440.547 273.383L264.547 441.383C254.953 450.508 239.766 450.164 230.609 440.57C221.453 431.07 221.797 415.82 231.422 406.633L364.09 280.008H24C10.75 280.008 0 269.258 0 256.008S10.75 232.008 24 232.008H364.09L231.422 105.383C221.797 96.227 221.453 80.977 230.609 71.445C239.766 61.852 254.953 61.508 264.547 70.633Z">
+                                                </path>
+                                            </svg>
+                                            Up Coming Events</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="footer-inner-wrap">
+                                <h4 class="footer-title fs-20">
+                                    Subscribe Newsletter
+                                </h4>
+                                <div class="sib-form">
+                                    <div id="sib-form-container" class="sib-form-container">
+                                        <div id="error-message" class="sib-form-message-panel">
+                                            <div
+                                                class="sib-form-message-panel__text sib-form-message-panel__text--center">
+                                                <svg viewBox="0 0 512 512" class="sib-icon sib-notification__icon">
+                                                    <path
+                                                        d="M256 40c118.621 0 216 96.075 216 216 0 119.291-96.61 216-216 216-119.244 0-216-96.562-216-216 0-119.203 96.602-216 216-216m0-32C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm-11.49 120h22.979c6.823 0 12.274 5.682 11.99 12.5l-7 168c-.268 6.428-5.556 11.5-11.99 11.5h-8.979c-6.433 0-11.722-5.073-11.99-11.5l-7-168c-.283-6.818 5.167-12.5 11.99-12.5zM256 340c-15.464 0-28 12.536-28 28s12.536 28 28 28 28-12.536 28-28-12.536-28-28-28z" />
+                                                </svg>
+                                                <span class="sib-form-message-panel__inner-text">
+                                                    Your subscription could not be saved. Please try again.
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div id="success-message" class="sib-form-message-panel">
+                                            <div
+                                                class="sib-form-message-panel__text sib-form-message-panel__text--center">
+                                                <svg viewBox="0 0 512 512" class="sib-icon sib-notification__icon">
+                                                    <path
+                                                        d="M256 8C119.033 8 8 119.033 8 256s111.033 248 248 248 248-111.033 248-248S392.967 8 256 8zm0 464c-118.664 0-216-96.055-216-216 0-118.663 96.055-216 216-216 118.664 0 216 96.055 216 216 0 118.663-96.055 216-216 216zm141.63-274.961L217.15 376.071c-4.705 4.667-12.303 4.637-16.97-.068l-85.878-86.572c-4.667-4.705-4.637-12.303.068-16.97l8.52-8.451c4.705-4.667 12.303-4.637 16.97.068l68.976 69.533 163.441-162.13c4.705-4.667 12.303-4.637 16.97.068l8.451 8.52c4.668 4.705 4.637 12.303-.068 16.97z" />
+                                                </svg>
+                                                <span class="sib-form-message-panel__inner-text">
+                                                    Your subscription has been successful.
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div id="sib-container" class="sib-container--large sib-container--vertical">
+                                            <form id="sib-form" method="POST"
+                                                class=" form-newsletter form-email style-2"
+                                                action="https://3c02c1a1.sibforms.com/serve/MUIFAL4m-zPku9fXpqCo24Qexb68h9xXPdxcpJFhE-_XEvRPxuRgi23DJpcLxjJ0d3jruEYDiaoapoDNLvNfekoHGspPvct3OX998KRfxoubbRPjZoXe5Le9r-8u7EEfgznVtOEguZC294bevm4vjVXhRaL6WsewB95RSIbbLQH_ylKm8cUOSsMb5Pd9dm4WXAWx3Jy5JGfiw0gE"
+                                                subscription">
+                                                <div style="display: none;">
+                                                    <div class="sib-form-block">
+                                                        <p></p>
+                                                    </div>
+                                                </div>
+                                                <div style="display: none;">
+                                                    <div class="sib-form-block">
+                                                        <div class="sib-text-form-block">
+                                                            <p></p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div style="display: none;">
+                                                    <div class="sib-optin sib-form-block">
+                                                        <div class="form__entry entry_mcq">
+                                                            <div class="form__label-row ">
+                                                                <div class="entry__choice">
+                                                                    <label>
+                                                                        <input type="checkbox" class="input_replaced"
+                                                                            value="1" id="OPT_IN" name="OPT_IN" />
+                                                                        <span
+                                                                            class="checkbox checkbox_tick_positive"></span>
+                                                                        <span>
+                                                                            <p></p>
+                                                                        </span>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <label class="entry__error entry__error--primary">
+                                                            </label>
+                                                            <label class="entry__specification">
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="w-100">
+                                                    <div class="sib-input sib-form-block">
+                                                        <div class="form__entry entry_block">
+                                                            <div class="form__label-row ">
+                                                                <label class="entry__label" for="EMAIL">
+                                                                </label>
+                                                                <div class="entry__field">
+                                                                    <input class="input email" type="text" id="EMAIL"
+                                                                        name="EMAIL" autocomplete="off"
+                                                                        placeholder="Email address*"
+                                                                        data-required="true" required />
+                                                                </div>
+                                                            </div>
+                                                            <label class="entry__error entry__error--primary"></label>
+                                                            <label class="entry__specification">
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="w-100">
+                                                    <div class="sib-form-block">
+                                                        <button
+                                                            class="sib-form-block__button sib-form-block__button-with-loader tf-btn full bg-white scale-40"
+                                                            form="sib-form" type="submit">
+                                                            <svg class="icon clickable__icon progress-indicator__icon sib-hide-loader-icon"
+                                                                viewBox="0 0 512 512">
+                                                                <path
+                                                                    d="M460.116 373.846l-20.823-12.022c-5.541-3.199-7.54-10.159-4.663-15.874 30.137-59.886 28.343-131.652-5.386-189.946-33.641-58.394-94.896-95.833-161.827-99.676C261.028 55.961 256 50.751 256 44.352V20.309c0-6.904 5.808-12.337 12.703-11.982 83.556 4.306 160.163 50.864 202.11 123.677 42.063 72.696 44.079 162.316 6.031 236.832-3.14 6.148-10.75 8.461-16.728 5.01z" />
+                                                            </svg>
+                                                            <span class="text-style cl-primary">
+                                                                Subscribe Now!
+                                                            </span>
+                                                            <span class="icon">
+                                                                <i class="fa-solid fa-paper-plane fs-14"></i>
+                                                            </span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <input type="text" name="email_address_check" value=""
+                                                    class="input--hidden">
+                                                <input type="hidden" name="locale" value="en">
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tf-container w-1290">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="footer-bottom">
+                            <p class="no-copy font-nunito">
+                                Copyright © 2026 AgroConnect by
+                                <span>
+                                    <a href="https://themeforest.net/user/themesflat/portfolio">
+                                        AgroConnect</a>.</span>
+                                All Rights Reserved.
+                            </p>
+                            <ul class="policy-list">
+                                <li class="item">
+                                    <a href="#">
+                                        Confidentiality & Privacy
+                                    </a>
+                                </li>
+                                <li class="item">
+                                    <a href="#"> Legal Information </a>
+                                </li>
+                                <li class="item">
+                                    <a href="#">
+                                        Return and Refund Policy
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="img-item item-1">
+                <img src="{% static 'images/item/grass-2.png' %}" alt="" />
+            </div>
+            <div class="img-item item-2">
+
+                <div class="  scroll-element-3">
+                    <img class="wow zoomIn" src="{% static 'images/item/silo.png' %}" alt="" />
+                </div>
+            </div>
+        </footer>
+        <!-- /.Footer -->
+
+    </div>
+    <!-- /#Wapper -->
+
+    {% include 'chatbot/chat_widget.html' %}
+
+    <!-- Authentication Modals -->
+    {% include 'auth-modal.html' %}
+
+    <!-- Open-search -->
+    <div class="offcanvas offcanvas-top offcanvas-search" id="canvasSearch">
+        <button class="btn-close-search" type="button" data-bs-dismiss="offcanvas" aria-label="Close">
+            <i class="icon-close"></i>
+        </button>
+        <div class="tf-container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="offcanvas-body">
+                        <form action="{% url 'search_products' %}" class="form-search-courses" method="GET">
+                            <div class="icon">
+                                <i class="icon-keyboard"></i>
+                            </div>
+                            <fieldset>
+                                <input class="" type="text" placeholder="{% trans 'Search for anything' %}" name="q" tabindex="2"
+                                    value="" aria-required="true" required="" />
+                            </fieldset>
+                            <div class="button-submit">
+                                <button class="" type="submit">
+                                    <i class="icon-magnifying-glass"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.Open-search -->
+
+
+
+    <!-- Prograss -->
+    <div class="progress-wrap">
+        <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+            <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"
+                style="transition: stroke-dashoffset 10ms linear; stroke-dasharray: 307.919, 307.919; stroke-dashoffset: 307.919;">
+            </path>
+        </svg>
+    </div><!-- /.Prograss -->
+
+    <!-- Javascript -->
+    <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/lazysize.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/wow.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/magnific-popup.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/swiper-bundle.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/swiper.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/odometer.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/counter.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/count-down.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery-validate.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/gsap-animation.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/gsap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/ScrollTrigger.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/Splitetext.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/sibforms.js' %}" defer></script>
+    <script>
+        window.REQUIRED_CODE_ERROR_MESSAGE = 'Please choose a country code';
+        window.LOCALE = 'en';
+        window.EMAIL_INVALID_MESSAGE = window.SMS_INVALID_MESSAGE = "The information provided is invalid. Please review the field format and try again.";
+
+        window.REQUIRED_ERROR_MESSAGE = "This field cannot be left blank. ";
+
+        window.GENERIC_INVALID_MESSAGE = "The information provided is invalid. Please review the field format and try again.";
+
+        window.translation = {
+            common: {
+                selectedList: '{quantity} list selected',
+                selectedLists: '{quantity} lists selected'
+            }
+        };
+
+        var AUTOHIDE = Boolean(0);
+
+        // Fix modal closing issues
+        $(document).ready(function () {
+            $('.modal').on('hidden.bs.modal', function () {
+                $('body').removeClass('modal-open');
+                $('.modal-backdrop').remove();
+            });
+
+            $('.modal').on('show.bs.modal', function () {
+                $('body').addClass('modal-open');
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            if ({% if user.is_authenticated %}true{% else %}false{% endif %}) {
+                return;
+            }
+
+            var loginModalElement = document.getElementById('loginModal');
+            var loginModalMessage = document.getElementById('loginModalMessage');
+
+            if (loginModalElement && loginModalMessage) {
+                loginModalElement.addEventListener('hidden.bs.modal', function () {
+                    loginModalMessage.textContent = '';
+                    loginModalMessage.classList.add('d-none');
+                });
+            }
+
+            document.querySelectorAll('form[data-login-required]').forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    event.preventDefault();
+
+                    if (loginModalMessage) {
+                        loginModalMessage.textContent = form.getAttribute('data-login-message') || 'Please login to continue.';
+                        loginModalMessage.classList.remove('d-none');
+                    }
+
+                    if (loginModalElement && window.bootstrap && bootstrap.Modal) {
+                        bootstrap.Modal.getOrCreateInstance(loginModalElement).show();
+                    }
+                });
+            });
+        });
+    </script>
+    <!-- /Javascript -->
+
+
+</body>
+
+
+<!-- Mirrored from themesflat.co/html/AgroConnect/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 07 Jan 2026 09:25:05 GMT -->
+
+</html>
+

@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<script>
+// Auto-print if print=true in URL
+window.onload = function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('print') === 'true') {
+        window.print();
+    }
+};
+</script>
+<style>
+@media print {
+    /* Hide header, footer, and other non-receipt elements */
+    .header, .footer, .page-title, .flat-spacing-1, .breadcrumb,
+    .tf-cols, .order-actions, .icon-img, .img-item, .tf-container.w-1290 > .row > .col-lg-12 > .content,
+    .header-inner, .topbar, .nav, .mobile-menu, .sidebar, .modal, .btn, .no-print {
+        display: none !important;
+    }
+    
+    /* Receipt-specific styles */
+    body {
+        background: white !important;
+        font-size: 14px;
+    }
+    
+    .tf-order-detail {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    .tf-order-detail .wrap {
+        margin-bottom: 20px !important;
+        padding: 15px !important;
+        border: 1px solid #ddd !important;
+    }
+    
+    .tf-table-order-detail {
+        width: 100% !important;
+    }
+    
+    .tf-table-order-detail th, 
+    .tf-table-order-detail td {
+        padding: 8px !important;
+        text-align: left !important;
+    }
+    
+    .order-meta-list {
+        list-style: none !important;
+        padding: 0 !important;
+    }
+    
+    .order-meta-list li {
+        margin-bottom: 5px !important;
+    }
+    
+    a {
+        text-decoration: none !important;
+        color: #333 !important;
+    }
+    
+    /* Ensure table prints properly */
+    table {
+        page-break-inside: auto !important;
+    }
+    
+    tr {
+        page-break-inside: avoid !important;
+        page-break-after: auto !important;
+    }
+}
+</style>
+<!-- Page-title -->
+        <div class="page-title page-shop-detail">
+            <div class="rellax" data-rellax-speed="5">
+                <img src="{% static 'images/page-title/shop-detail.jpg' %}" alt="">
+            </div>
+            <div class="content-wrap">
+                <div class="tf-container w-1290">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="content center">
+                                <p class="sub-title">
+                                    Buy Health Foods At Our Store
+                                </p>
+                                <h1 class="title">
+                                    Order Detail
+                                </h1>
+                                <div class="icon-img">
+                                    <img src="{% static 'images/item/line-throw-title.png' %}" alt="">
+                                </div>
+                                <div class="breadcrumb">
+                                    <a href="{% url 'index' %}">Home</a>
+                                    <div class="icon">
+                                        <i class="icon-arrow-right1"></i>
+                                    </div>
+                                    <a href="javascript:void(0)"> Order Detail </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="img-item item-2">
+                <img src="{% static 'images/item/grass-6.png' %}" alt="">
+            </div>
+        </div><!-- /.Page-title -->
+
+        <!-- Order Details -->
+        <section class="flat-spacing-1">
+            <div class="tf-container">
+                <div class="tf-order-detail">
+                    <div class="wrap">
+                        <p class="oder-notice text-def">Thank you. Your order has been received.</p>
+                        <div class="order-actions mb-3">
+                            <a href="{% url 'print_receipt' order.id %}" target="_blank" class="tf-btn-nor style-2">
+                                <i class="fa-solid fa-print"></i> Print Receipt
+                            </a>
+                        </div>
+                        <ul class="order-meta-list">
+                            <li>
+                                <span class="text-small-2 text-uppercase">Order number:</span>
+                                <span class="text-def fw-medium text-main-2">{{ order.order_number }}</span>
+                            </li>
+                            <li>
+                                <span class="text-small-2 text-uppercase">Date:</span>
+                                <span class="text-def fw-medium text-main-2">{{ order.created_at|date:"F d, Y" }}</span>
+                            </li>
+                            <li>
+                                <span class="text-small-2 text-uppercase">Total:</span>
+                                <span class="text-def fw-medium text-main-2">₹{{ order.total|floatformat:2 }}</span>
+                            </li>
+                            <li>
+                                <span class="text-small-2 text-uppercase">Payment method:</span>
+                                <span class="text-def fw-medium text-main-2">{% if order.payment_method == 'cod' %}Cash on Delivery{% elif order.payment_method == 'online' %}Online Payment{% elif order.payment_method == 'upi' %}UPI{% else %}{{ order.payment_method }}{% endif %}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="wrap">
+                        <h5 class="order-title fw-bold text-main-2">Order details</h5>
+                        <table class="tf-table-order-detail">
+                            <thead>
+                                <tr>
+                                    <td><span class="fw-medium text-def">Product</span></td>
+                                    <td><span class="fw-medium text-def">Total</span></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in order_items %}
+                                <tr class="tf-order-item">
+                                    <td class="tf-order-item_product">
+                                        <a href="#" class="link text-def fw-normal">
+                                            {{ item.product.name }}
+                                            <span class="text-main">×{{ item.quantity }}</span>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <span class="fw-medium text-def">₹{{ item.subtotal|floatformat:2 }}</span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th><span class="text-def fw-normal">Subtotal:</span></th>
+                                    <td><span class="text-def">₹{{ order.subtotal|floatformat:2 }}</span></td>
+                                </tr>
+                                <tr>
+                                    <th><span class="text-def fw-normal">Shipping:</span></th>
+                                    <td><span class="text-def">{% if order.shipping_cost == 0 %}Free shipping{% else %}₹{{ order.shipping_cost|floatformat:2 }}{% endif %}</span></td>
+                                </tr>
+                                <tr>
+                                    <th><span class="text-def fw-normal">Payment method:</span></th>
+                                    <td><span class="text-def">{% if order.payment_method == 'cod' %}Cash on Delivery{% elif order.payment_method == 'online' %}Online Payment{% elif order.payment_method == 'upi' %}UPI{% else %}{{ order.payment_method }}{% endif %}</span></td>
+                                </tr>
+                                <tr>
+                                    <th><span class="text-md text-main-2 fw-normal text-uppercase">Total:</span></th>
+                                    <td><span class="text-md text-main-2">₹{{ order.total|floatformat:2 }}</span></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div class="tf-cols">
+                        <div class="cols-sm-6 cols-12">
+                            <div class="wrap">
+                                <h5 class="order-title fw-bold text-main-2">Billing address</h5>
+                                <div class="billing-info">
+                                    <p>{{ order.first_name }} {{ order.last_name }}</p>
+                                    <p>{{ order.address_line_1 }}{% if order.address_line_2 %}, {{ order.address_line_2 }}{% endif %}</p>
+                                    <p>{{ order.city }}, {{ order.state }} {{ order.postal_code }}</p>
+                                    <p>{{ order.country }}</p>
+                                    <p>{{ order.phone }}</p>
+                                    <p>{{ order.email }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cols-sm-6 cols-12">
+                            <div class="wrap">
+                                <h5 class="order-title fw-bold text-main-2">Shipping address</h5>
+                                <div class="billing-info">
+                                    <p>{{ order.first_name }} {{ order.last_name }}</p>
+                                    <p>{{ order.address_line_1 }}{% if order.address_line_2 %}, {{ order.address_line_2 }}{% endif %}</p>
+                                    <p>{{ order.city }}, {{ order.state }} {{ order.postal_code }}</p>
+                                    <p>{{ order.country }}</p>
+                                    <p>{{ order.phone }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- /Order Details -->
+         {% endblock %}

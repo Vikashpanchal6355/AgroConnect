@@ -1,0 +1,367 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+        <!-- Page-title-home-1 -->
+        <div class="page-title-home-1">
+            <div class="swiper-container slider-home-1">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <div class="slide-home-1">
+                            <div class="image overflow-hidden">
+                                <img src="{% static 'images/page-title/index-1.jpg' %}" data-src="{% static 'images/page-title/index-1.jpg' %}"
+                                    alt="" class="lazyload tf-animate-zoom-in-out" />
+                            </div>
+                            <div class="content-wrap">
+                                <div class="content">
+                                    <p class="sub-title font-snowfall tf-fade-top fade-item-1">
+                                        Better Agriculture for Better Future
+                                    </p>
+                                    <h1 class="title font-farmhouse tf-fade-right fade-item-2">
+                                        Welcome to AgroConnect, <br />
+                                        Your Agricultural Marketplace.
+                                    </h1>
+                                    <div class="img-item ">
+                                        <img src="{% static 'images/item/line-throw-title.png' %}"
+                                            class="tf-trainsition-draw-left access-trainsition" alt="" />
+                                    </div>
+                                    <p class="text font-nunito tf-fade-left fade-item-4">
+                                     AgroConnect connects farmers directly
+                                     with consumers, ensuring fresh and
+                                     quality <br />
+                                     agricultural products.
+                                    </p>
+                                    <a href="{% url 'our_services' %}"
+                                        class="tf-btn btn-view bg-white tf-fade-bottom fade-item-5">
+                                        <span class="text-style cl-primary">
+                                            See Our Services
+                                        </span>
+
+                                        <div class="icon">
+                                            <i class="icon-arrow_right"></i>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="btn-slide-home-1 btn-next">
+                    <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="80px" height="20px" viewBox="0 0 80 20"
+                        preserveAspectRatio="xMidYMid meet">
+                        <g fill="#ffffff">
+                            <path
+                                d="M63 19 c0 -0.5 2.6 -2.4 5.8 -4.2 l5.7 -3.3 -19.5 -0.8 c-11 -0.5 -27.1 -0.5 -37 0.1 -9.6 0.5 -17.7 0.7 -17.9 0.5 -2.4 -1.9 22 -3.5 48.7 -3.1 l25.2 0.3 -4.6 -3.9 c-2.5 -2.1 -4.3 -4 -4 -4.3 0.7 -0.7 14.6 8.9 14.6 10.2 0 1.1 -14.3 9.5 -16.2 9.5 -0.4 0 -0.8 -0.4 -0.8 -1z" />
+                        </g>
+                    </svg>
+                </div>
+                <div class="btn-slide-home-1 btn-prev">
+                    <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="80px" height="20px" viewBox="0 0 80 20"
+                        preserveAspectRatio="xMidYMid meet">
+                        <g fill="#ffffff">
+                            <path
+                                d="M7 15.4 c-3.6 -2.4 -6.6 -5 -6.8 -5.7 -0.2 -1.2 13.8 -9.7 16 -9.7 2.4 0 0.2 2.4 -4.9 5.2 l-5.8 3.3 19.5 0.8 c11 0.5 27.1 0.5 37 -0.1 9.6 -0.5 17.7 -0.7 17.9 -0.5 2.4 1.9 -22 3.5 -48.6 3.1 l-25.2 -0.3 4.7 4.2 c6.1 5.5 4.4 5.3 -3.8 -0.3z" />
+                        </g>
+                    </svg>
+                </div>
+            </div>
+        </div><!-- /.Page-title-home-1 -->
+
+        <!-- Main-content -->
+        <div class="main-content pt-0 page-index" style="margin-bottom: 200px;">
+
+
+
+
+
+            <!-- Section about -->
+            <section class="s-about-us">
+                <div class="tf-container w-1290">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="main-section">
+                                <div class="content-left img-hover">
+                                    <div class="heading-section">
+                                        <p class="sub-title wow fadeInUp" data-wow-delay="0s">
+                                            AgroConnect: Connecting Farmers
+                                            and Consumers Worldwide
+                                        </p>
+                                        <p class="title text-container tf-animate-2">
+                                            Providing Fresh Agricultural Products
+                                            to Consumers Everywhere.
+                                        </p>
+                                    </div>
+                                    <p class="text-1">
+                                        AgroConnect is an online marketplace
+                                        where farmers can list their products
+                                        and consumers can purchase fresh
+                                        agricultural goods directly.
+                                    </p>
+                                    <p class="text-2">
+                                        Our platform promotes sustainable
+                                        agriculture by connecting producers
+                                        with buyers, ensuring fair prices
+                                        and access to quality products for
+                                        everyone.
+                                    </p>
+                                    <a href="{% url 'about_us' %}" class="tf-btn btn-read-more gap-34">
+                                        <span class="text-style">
+                                            More About Us
+                                        </span>
+                                        <div class="icon">
+                                            <i class="icon-arrow_right"></i>
+                                        </div>
+                                    </a>
+                                    <div class="image hover-item">
+                                        <img src="{% static 'images/section/s-about.jpg' %}" data-src="{% static 'images/section/s-about.jpg' %}"
+                                            alt="" class="lazyload tf-animate-2" />
+                                    </div>
+                                </div>
+                                <div class="content-right">
+                                    <div class="wg-counter style-2">
+                                        <div class="has-border">
+                                            <div class="counter-item">
+                                                <div class="icon style-circle">
+                                                    <i class="icon-wheat-grains"></i>
+                                                </div>
+                                                <p class="title font-worksans">
+                                                    Happy Customers
+                                                </p>
+                                                <div class="counter">
+                                                    <div id="odometer" class="odometer style-2">
+                                                        10000
+                                                    </div>
+                                                    <span class="sub-odo">+</span>
+                                                </div>
+                                                <p class="text font-nunito">
+                                                    Join thousands of satisfied
+                                                    users on AgroConnect for
+                                                    quality agricultural
+                                                    products.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="box-trust">
+                                        <div class="has-border">
+                                            <ul class="benefit-list ">
+                                                <li>
+                                                    <i class="fa-solid fa-circle-check"></i>
+                                                    <p>
+                                                        Direct Farmer-to-Consumer
+                                                        Sales
+                                                    </p>
+                                                </li>
+                                                <li>
+                                                    <i class="fa-solid fa-circle-check"></i>
+                                                    <p>
+                                                        Wide Variety of Fresh
+                                                        Produce
+                                                    </p>
+                                                </li>
+                                                <li>
+                                                    <i class="fa-solid fa-circle-check"></i>
+                                                    <p>
+                                                        Quality Assured
+                                                        Products
+                                                    </p>
+                                                </li>
+                                            </ul>
+                                            <ul class="box-icon-list">
+                                                <li>
+                                                    <div class="box-icon  style-3 ic-hover wow fadeInUp"
+                                                        data-wow-delay="0s">
+                                                        <div class="icon style-circle hover-icon">
+                                                            <i class="icon-farmer"></i>
+                                                        </div>
+                                                        <a href="{% url 'about_us' %}"
+                                                            class="caption fw-6 font-worksans text-upper hover-text-secondary">
+                                                            Verified Farmers <br>
+                                                            and Sellers
+                                                        </a>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="box-icon style-3 ic-hover wow fadeInUp"
+                                                        data-wow-delay="0s">
+                                                        <div class="icon style-circle hover-icon">
+                                                            <i class="icon-chicken"></i>
+                                                        </div>
+                                                        <a href="{% url 'about_us' %}"
+                                                            class="caption fw-6 font-worksans text-upper hover-text-secondary">
+                                                            Agricultural <br>
+                                                            Products
+                                                        </a>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                            <a href="{% url 'about_us' %}" class="tf-btn-read text-white hover-text-secondary">
+                                                Read More
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section><!-- /.Section about -->
+
+            <!-- Section service -->
+            <section class="s-service has-img-item">
+                <div class="tf-container w-1620">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="heading-section has-text text-center">
+                                <p class="sub-title">
+                                    Our Expertise at AgroConnect
+                                </p>
+                                <p class="title wow fadeInUp" data-wow-delay="0s">
+                                    We Provide Reliable <br />
+                                    Agricultural Services
+                                </p>
+                                <p class="text wow fadeInUp" data-wow-delay="0s">
+                                     AgroConnect is dedicated to fostering <br />
+                                     sustainable farming practices and <br />
+                                     empowering Indian farmers.
+                                </p>
+                                <div class="img-item ">
+                                    <img class="tf-animate-1" src="{% static 'images/item/rice-plant-2.png' %}" alt="" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="box-icon style-6 ic-hover wow fadeInUp" data-wow-delay="0s">
+                                <div class="icon hover-icon style-circle">
+                                    <i class="icon-salad"></i>
+                                </div>
+                                <a href="#" class="caption fw-6 font-worksans hover-text-secondary">
+                                    Fresh Produce Listings
+                                </a>
+                                <p class="text font-nunito">
+                                    Fresh produce sourced directly from
+                                    farmers,<br /> ensuring quality and
+                                    freshness.
+                                </p>
+                                <a href="#" class="btn-read">
+                                    <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="80px" height="20px"
+                                        viewBox="0 0 80 20" preserveAspectRatio="xMidYMid meet">
+                                        <g fill="#ffffff">
+                                            <path
+                                                d="M63 19 c0 -0.5 2.6 -2.4 5.8 -4.2 l5.7 -3.3 -19.5 -0.8 c-11 -0.5 -27.1 -0.5 -37 0.1 -9.6 0.5 -17.7 0.7 -17.9 0.5 -2.4 -1.9 22 -3.5 48.7 -3.1 l25.2 0.3 -4.6 -3.9 c-2.5 -2.1 -4.3 -4 -4 -4.3 0.7 -0.7 14.6 8.9 14.6 10.2 0 1.1 -14.3 9.5 -16.2 9.5 -0.4 0 -0.8 -0.4 -0.8 -1z" />
+                                        </g>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="box-icon style-6 ic-hover wow fadeInUp" data-wow-delay="0.1s">
+                                <div class="icon hover-icon style-circle">
+                                    <i class="icon-cow"></i>
+                                </div>
+                                <a href="{% url 'service_detail' %}" class="caption fw-6 font-worksans hover-text-secondary">
+                                    Livestock Products
+                                </a>
+                                <p class="text font-nunito">
+                                    Ultrices sagittis orci a scelerisque
+
+                                    purus<br /> semper eget duis at.
+                                    Sollictudin nibh <br /> sit amet commodo nulla.
+                                </p>
+                                <a href="{% url 'service_detail' %}" class="btn-read">
+                                    <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="80px" height="20px"
+                                        viewBox="0 0 80 20" preserveAspectRatio="xMidYMid meet">
+                                        <g fill="#ffffff">
+                                            <path
+                                                d="M63 19 c0 -0.5 2.6 -2.4 5.8 -4.2 l5.7 -3.3 -19.5 -0.8 c-11 -0.5 -27.1 -0.5 -37 0.1 -9.6 0.5 -17.7 0.7 -17.9 0.5 -2.4 -1.9 22 -3.5 48.7 -3.1 l25.2 0.3 -4.6 -3.9 c-2.5 -2.1 -4.3 -4 -4 -4.3 0.7 -0.7 14.6 8.9 14.6 10.2 0 1.1 -14.3 9.5 -16.2 9.5 -0.4 0 -0.8 -0.4 -0.8 -1z" />
+                                        </g>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="box-icon style-6 ic-hover wow fadeInUp" data-wow-delay="0.2s">
+                                <div class="icon hover-icon style-circle">
+                                    <i class="icon-chicken-2 fs-67"></i>
+                                </div>
+                                <a href="{% url 'service_detail' %}" class="caption fw-6 font-worksans hover-text-secondary">
+                                    Poultry and Eggs
+                                </a>
+                                <p class="text font-nunito">
+                                    Ultrices sagittis orci a scelerisque
+
+                                    purus<br /> semper eget duis at.
+                                    Sollictudin nibh <br /> sit amet commodo nulla.
+                                </p>
+                                <a href="{% url 'service_detail' %}" class="btn-read">
+                                    <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="80px" height="20px"
+                                        viewBox="0 0 80 20" preserveAspectRatio="xMidYMid meet">
+                                        <g fill="#ffffff">
+                                            <path
+                                                d="M63 19 c0 -0.5 2.6 -2.4 5.8 -4.2 l5.7 -3.3 -19.5 -0.8 c-11 -0.5 -27.1 -0.5 -37 0.1 -9.6 0.5 -17.7 0.7 -17.9 0.5 -2.4 -1.9 22 -3.5 48.7 -3.1 l25.2 0.3 -4.6 -3.9 c-2.5 -2.1 -4.3 -4 -4 -4.3 0.7 -0.7 14.6 8.9 14.6 10.2 0 1.1 -14.3 9.5 -16.2 9.5 -0.4 0 -0.8 -0.4 -0.8 -1z" />
+                                        </g>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="box-icon style-6 ic-hover wow fadeInUp" data-wow-delay="0.3s">
+                                <div class="icon hover-icon style-circle">
+                                    <i class="icon-seed-bag"></i>
+                                </div>
+                                <a href="{% url 'service_detail' %}" class="caption fw-6 font-worksans hover-text-secondary">
+                                    Farm Supplies
+                                </a>
+                                <p class="text font-nunito">
+                                    Ultrices sagittis orci a scelerisque
+
+                                    purus<br /> semper eget duis at.
+                                    Sollictudin nibh <br /> sit amet commodo nulla.
+                                </p>
+                                <a href="{% url 'service_detail' %}" class="btn-read">
+                                    <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="80px" height="20px"
+                                        viewBox="0 0 80 20" preserveAspectRatio="xMidYMid meet">
+                                        <g fill="#ffffff">
+                                            <path
+                                                d="M63 19 c0 -0.5 2.6 -2.4 5.8 -4.2 l5.7 -3.3 -19.5 -0.8 c-11 -0.5 -27.1 -0.5 -37 0.1 -9.6 0.5 -17.7 0.7 -17.9 0.5 -2.4 -1.9 22 -3.5 48.7 -3.1 l25.2 0.3 -4.6 -3.9 c-2.5 -2.1 -4.3 -4 -4 -4.3 0.7 -0.7 14.6 8.9 14.6 10.2 0 1.1 -14.3 9.5 -16.2 9.5 -0.4 0 -0.8 -0.4 -0.8 -1z" />
+                                        </g>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="s-img-item item-1">
+                    <img src="{% static 'images/item/page-title-top.png' %}" alt="" />
+                </div>
+                <div class="s-img-item item-2 wow zoomIn">
+                    <div class="scroll-element-3">
+
+                        <img src="{% static 'images/item/house-mountain.png' %}" alt="" />
+                    </div>
+                </div>
+                <div class="s-img-item item-3">
+                    <img src="{% static 'images/item/page-title-top.png' %}" alt="" />
+                </div>
+            </section><!-- /.Section service -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </div><!-- /.Main-content -->
+
+        {% endblock %}

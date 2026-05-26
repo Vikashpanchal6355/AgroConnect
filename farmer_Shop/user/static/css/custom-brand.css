@@ -1,0 +1,198 @@
+/* Custom brand overrides for AgroConnect - premium polish */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+:root{
+  --brand-radius: 12px;
+  --brand-easing: cubic-bezier(.2,.9,.2,1);
+}
+html,body{font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;}
+
+/* Buttons */
+.tf-btn, .btn, button{
+  border-radius: var(--brand-radius);
+  transition: all .22s var(--brand-easing);
+  box-shadow: 0 6px 18px rgba(21,98,68,0.12);
+}
+.tf-btn:hover, .btn:hover, button:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(21,98,68,0.14);
+}
+
+/* Header improvements */
+.header-inner, .header-topbar{backdrop-filter: blur(6px);}
+
+/* Cards and product tiles */
+.card, .product-item, .box-portfolio{border-radius: 14px; box-shadow: 0 8px 30px rgba(10,20,10,0.06); overflow: hidden}
+
+/* Accent links */
+a:hover{color: var(--Secondary);}
+
+/* Footer */
+footer{padding: 48px 0}
+
+/* Small responsive tweaks */
+@media (max-width:767px){
+  .tf-btn{padding:10px 14px;font-size:14px}
+}
+
+.improved-shop-page .tf-sidebar .sidebar-item,
+.improved-cart-page .box-order,
+.improved-cart-page .polished-panel,
+.improved-checkout-page .wrap-form-checkout,
+.account-info-box{
+  border-radius: 18px;
+  border: 1px solid rgba(21,98,68,0.08);
+  box-shadow: 0 14px 35px rgba(16, 41, 28, 0.07);
+}
+
+.improved-shop-page .card-product{
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(21,98,68,0.08);
+  box-shadow: 0 16px 36px rgba(16, 41, 28, 0.08);
+  transition: transform .22s var(--brand-easing), box-shadow .22s var(--brand-easing);
+}
+
+.improved-shop-page .card-product:hover{
+  transform: translateY(-6px);
+  box-shadow: 0 24px 44px rgba(16, 41, 28, 0.14);
+}
+
+.improved-shop-page .card-product .image{
+  background: linear-gradient(180deg, rgba(248,251,246,1), rgba(242,247,239,1));
+}
+
+.improved-shop-page .card-product .image img{
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.polished-filter-form .polished-price-ranges{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.polished-filter-form .price-range-option{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(248, 251, 246, 0.9);
+  cursor: pointer;
+  transition: background-color .2s ease, border-color .2s ease;
+}
+
+.polished-filter-form .price-range-option:hover{
+  background: rgba(232, 243, 235, 0.95);
+}
+
+.clear-filter-link{
+  display: inline-flex;
+  margin-top: 14px;
+  color: #1f7c53;
+  font-weight: 600;
+}
+
+.improved-cart-page .tf-table-page-cart,
+.improved-cart-page .tf-table-page-cart th,
+.improved-cart-page .tf-table-page-cart td{
+  border-color: rgba(21,98,68,0.08);
+}
+
+.improved-cart-page .tf-cart-item_product .img-box img{
+  border-radius: 14px;
+}
+
+.cart-policy-note{
+  margin: 10px 0 0;
+  color: #567161;
+  font-size: 14px;
+}
+
+.improved-checkout-page .wrap-form-checkout{
+  padding: 28px;
+}
+
+.improved-checkout-page .payment-item{
+  border-radius: 14px;
+}
+
+.improved-checkout-page .payment-item:has(input:checked){
+  border-color: #4CAF50;
+  background: #f8fff8;
+  box-shadow: inset 0 0 0 1px rgba(76, 175, 80, 0.18);
+}
+
+.my-account-content,
+.wrap-sidebar-account{
+  border-radius: 18px;
+}
+
+.my-account-nav{
+  display: grid;
+  gap: 10px;
+}
+
+.my-account-nav-item{
+  border-radius: 12px;
+}
+
+.tf-header-shop,
+.tf-header-shop .header-topbar,
+.tf-header-shop .header-inner,
+.tf-header-shop .icon-wrap,
+.tf-header-shop .header-right{
+  overflow: visible;
+}
+
+.tf-header-shop .header-topbar{
+  position: relative;
+  z-index: 40;
+}
+
+.tf-header-shop .header-inner{
+  position: relative;
+  z-index: 10;
+}
+
+.tf-header-shop .header-center,
+.tf-header-shop .main-nav,
+.tf-header-shop .nav-list{
+  position: relative;
+  z-index: 1;
+}
+
+.tf-header-shop .user-dropdown{
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  z-index: 1300;
+}
+
+.tf-header-shop .user-dropdown .dropdown-menu{
+  top: 100% !important;
+  right: 0 !important;
+  left: auto !important;
+  margin-top: 330px !important;
+  inset: auto 0 auto auto !important;
+  transform: none !important;
+  z-index: 1400;
+}
+
+.tf-header-shop .user-dropdown .dropdown-menu.show{
+  display: block;
+}
+
+@media (max-width: 991px){
+  .improved-shop-page .tf-shop-control{
+    gap: 14px;
+    align-items: flex-start;
+  }
+
+  .improved-checkout-page .wrap-form-checkout{
+    padding: 22px;
+  }
+}

@@ -1,0 +1,526 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Order Receipt - {{ order.order_number }}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-size: 12px;
+            line-height: 1.5;
+            color: #333;
+            padding: 15px;
+            background: #e8e8e8;
+        }
+        
+        .receipt {
+            max-width: 700px;
+            margin: 0 auto;
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        /* Header Section */
+        .header {
+            background: linear-gradient(to right, #8bc34a 0%, #4a7c23 50%, #2d5016 100%);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo-icon img {
+            max-width: 280px;
+            max-height: 90px;
+            object-fit: contain;
+        }
+        
+        .logo-text {
+            font-size: 22px;
+            font-weight: 700;
+            color: #fff;
+            display: none;
+        }
+        
+        .logo-text span { color: #ffdb00; }
+        
+        .invoice-label {
+            text-align: right;
+            color: #fff;
+        }
+        
+        .invoice-label h1 {
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        
+        .invoice-label p {
+            font-size: 11px;
+            opacity: 0.9;
+        }
+        
+        /* Order Info Bar */
+        .order-bar {
+            background: #f4f4f4;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .order-info-left h2 {
+            font-size: 16px;
+            color: #222;
+            margin-bottom: 4px;
+        }
+        
+        .order-info-left p {
+            font-size: 11px;
+            color: #666;
+        }
+        
+        .order-info-left p strong { color: #333; }
+        
+        .order-status {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .status-pill {
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .status-order {
+            background: #2d5016;
+            color: #fff;
+        }
+        
+        .status-payment {
+            background: #ffdb00;
+            color: #222;
+        }
+        
+        /* Address Section */
+        .address-section {
+            display: flex;
+            padding: 20px 30px;
+            border-bottom: 1px solid #eee;
+            gap: 30px;
+        }
+        
+        .address-box {
+            flex: 1;
+        }
+        
+        .address-box h3 {
+            font-size: 11px;
+            font-weight: 700;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .address-box h3::before {
+            content: '';
+            width: 3px;
+            height: 12px;
+            background: #ffdb00;
+            border-radius: 2px;
+        }
+        
+        .address-box p {
+            font-size: 12px;
+            color: #444;
+            margin: 3px 0;
+        }
+        
+        .address-box .name {
+            font-weight: 600;
+            color: #222;
+            font-size: 13px;
+        }
+        
+        /* Products Section */
+        .products-section {
+            padding: 20px 30px;
+        }
+        
+        .section-header {
+            font-size: 13px;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #2d5016;
+        }
+        
+        .products-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .products-table thead {
+            background: #2d5016;
+        }
+        
+        .products-table thead tr th {
+            padding: 12px 10px;
+            text-align: left;
+            font-size: 10px;
+            font-weight: 600;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .products-table thead tr th:nth-child(2),
+        .products-table thead tr th:nth-child(3),
+        .products-table thead tr th:nth-child(4) {
+            text-align: center;
+        }
+        
+        .products-table thead tr th:last-child {
+            text-align: right;
+        }
+        
+        .products-table tbody tr {
+            border-bottom: 1px solid #eee;
+        }
+        
+        .products-table tbody tr:hover {
+            background: #f0f8e8;
+        }
+        
+        .products-table tbody td {
+            padding: 14px 10px;
+            font-size: 12px;
+            vertical-align: middle;
+        }
+        
+        .products-table tbody td:nth-child(2),
+        .products-table tbody td:nth-child(3) {
+            text-align: center;
+        }
+        
+        .products-table tbody td:last-child {
+            text-align: right;
+            font-weight: 600;
+            color: #2d5016;
+        }
+        
+        .product-info .name {
+            font-weight: 600;
+            color: #222;
+            font-size: 13px;
+        }
+        
+        .product-info .sku {
+            font-size: 10px;
+            color: #777;
+            margin-top: 3px;
+        }
+        
+        .product-qty {
+            background: #e8f5e9;
+            color: #2d5016;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        
+        /* Price Summary */
+        .price-section {
+            display: flex;
+            justify-content: flex-end;
+            padding: 20px 30px;
+            background: #f9f9f9;
+            border-top: 1px solid #eee;
+        }
+        
+        .price-table {
+            width: 260px;
+        }
+        
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .price-row:last-child {
+            border-bottom: none;
+        }
+        
+        .price-row .label { color: #555; }
+        .price-row .value { font-weight: 600; color: #222; }
+        
+        .price-row.discount .value { color: #28a745; }
+        
+        .price-row.total {
+            background: linear-gradient(135deg, #2d5016 0%, #4a7c23 100%);
+            color: #fff;
+            padding: 12px 15px;
+            margin-top: 5px;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+        
+        .price-row.total .label { color: #fff; font-weight: 600; }
+        .price-row.total .value { color: #ffdb00; font-size: 18px; font-weight: 700; }
+        
+        /* Payment Details */
+        .payment-section {
+            padding: 15px 30px;
+            background: #fff;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 40px;
+        }
+        
+        .payment-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .payment-item label {
+            font-size: 11px;
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .payment-item span {
+            font-size: 12px;
+            font-weight: 600;
+            color: #222;
+        }
+        
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, #2d5016 0%, #4a7c23 100%);
+            padding: 20px 30px;
+            text-align: center;
+            color: #fff;
+        }
+        
+        .footer h3 {
+            font-size: 14px;
+            margin-bottom: 5px;
+            color: #ffdb00;
+        }
+        
+        .footer p {
+            font-size: 10px;
+            opacity: 0.9;
+        }
+        
+        /* Print Button */
+        .print-btn {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #ffdb00 0%, #ffea00 100%);
+            color: #222;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 25px;
+            box-shadow: 0 4px 15px rgba(255, 219, 0, 0.4);
+        }
+        
+        .print-btn:hover { 
+            background: linear-gradient(135deg, #ffc800 0%, #ffdb00 100%);
+            transform: translateY(-2px);
+        }
+        
+        /* Print Styles */
+        @media print {
+            @page { 
+                size: A4; 
+                margin: 8mm; 
+            }
+            
+            .print-btn { display: none; }
+            
+            body { 
+                padding: 0; 
+                background: white;
+            }
+            
+            .receipt { 
+                box-shadow: none;
+            }
+            
+            .header, .products-table thead, .price-row.total, .footer, .status-pill, .product-qty {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            
+            * { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+    <button class="print-btn" onclick="window.print()">🖨️ Print Receipt</button>
+    
+    <div class="receipt">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <img src="{% static 'images/logo/image.png' %}" alt="AgroConnect Logo">
+                </div>
+            </div>
+            <div class="invoice-label">
+                <h1>INVOICE</h1>
+                <p>Tax Invoice / Bill of Supply</p>
+            </div>
+        </div>
+        
+        <!-- Order Info Bar -->
+        <div class="order-bar">
+            <div class="order-info-left">
+                <h2>Order #{{ order.order_number }}</h2>
+                <p>Placed on <strong>{{ order.created_at|date:"d M Y, h:i A" }}</strong></p>
+            </div>
+            <div class="order-status">
+                <span class="status-pill status-order">{{ order.status|title }}</span>
+                <span class="status-pill status-payment">{{ order.payment_status|title }}</span>
+            </div>
+        </div>
+        
+        <!-- Address Section -->
+        <div class="address-section">
+            <div class="address-box">
+                <h3>🛒 Shipping Address</h3>
+                <p class="name">{{ order.first_name }} {{ order.last_name }}</p>
+                <p>{{ order.address_line_1 }}{% if order.address_line_2 %}, {{ order.address_line_2 }}{% endif %}</p>
+                <p>{{ order.city }}, {{ order.state }} - {{ order.postal_code }}</p>
+                <p>{{ order.country }}</p>
+                <p>📞 {{ order.phone }}</p>
+            </div>
+            <div class="address-box">
+                <h3>📧 Contact Info</h3>
+                <p>Email: {{ order.email }}</p>
+                <p>Order ID: {{ order.order_number }}</p>
+                <p>Payment Method: 
+                    {% if order.payment_method == 'cod' %}Cash on Delivery
+                    {% elif order.payment_method == 'online' %}Online Payment
+                    {% elif order.payment_method == 'upi' %}UPI
+                    {% else %}{{ order.payment_method|title }}
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+        
+        <!-- Products Section -->
+        <div class="products-section">
+            <div class="section-header">Order Items ({{ order_items|length }})</div>
+            <table class="products-table">
+                <thead>
+                    <tr>
+                        <th>Product Details</th>
+                        <th>Qty</th>
+                        <th>Unit Price</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order_items %}
+                    <tr>
+                        <td>
+                            <div class="product-info">
+                                <div class="name">{{ item.product.name }}</div>
+                                {% if item.product.sku %}
+                                <div class="sku">SKU: {{ item.product.sku }}</div>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td><span class="product-qty">{{ item.quantity }}</span></td>
+                        <td>₹{{ item.price|floatformat:0 }}</td>
+                        <td>₹{{ item.subtotal|floatformat:0 }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Price Summary -->
+        <div class="price-section">
+            <div class="price-table">
+                <div class="price-row">
+                    <span class="label">Subtotal</span>
+                    <span class="value">₹{{ order.subtotal|floatformat:0 }}</span>
+                </div>
+                <div class="price-row">
+                    <span class="label">Shipping Charges</span>
+                    <span class="value">{% if order.shipping_cost == 0 %}<span style="color:#28a745;">FREE</span>{% else %}₹{{ order.shipping_cost|floatformat:0 }}{% endif %}</span>
+                </div>
+                {% if order.discount > 0 %}
+                <div class="price-row discount">
+                    <span class="label">Discount Applied</span>
+                    <span class="value">-₹{{ order.discount|floatformat:0 }}</span>
+                </div>
+                {% endif %}
+                <div class="price-row total">
+                    <span class="label">Total Amount</span>
+                    <span class="value">₹{{ order.total|floatformat:0 }}</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Payment Details -->
+        <div class="payment-section">
+            <div class="payment-item">
+                <label>Payment Method:</label>
+                <span>
+                    {% if order.payment_method == 'cod' %}Cash on Delivery
+                    {% elif order.payment_method == 'online' %}Online Payment
+                    {% elif order.payment_method == 'upi' %}UPI
+                    {% else %}{{ order.payment_method|title }}
+                    {% endif %}
+                </span>
+            </div>
+            <div class="payment-item">
+                <label>Payment Status:</label>
+                <span>{{ order.payment_status|title }}</span>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <h3>🙏 Thank You for Your Order!</h3>
+            <p>AgroConnect | Fresh Farm Products Delivered to Your Door</p>
+            <p>support@agroconnect.com | www.agroconnect.com</p>
+        </div>
+    </div>
+</body>
+</html>

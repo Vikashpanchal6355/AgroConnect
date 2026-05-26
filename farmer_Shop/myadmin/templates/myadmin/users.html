@@ -1,0 +1,49 @@
+{% extends 'myadmin/base.html' %}
+{% load static %}
+
+{% block page_title %}Users{% endblock %}
+{% block page_header %}User Directory{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+  <div class="col-md-6 col-xl-3"><div class="card h-100"><div class="card-body"><p class="text-muted mb-1">Total users</p><h3 class="mb-2">{{ users.count }}</h3><div class="small text-muted">Registered accounts</div></div></div></div>
+  <div class="col-md-6 col-xl-3"><div class="card h-100"><div class="card-body"><p class="text-muted mb-1">Active users</p><h3 class="mb-2 text-primary">{{ active_user_count }}</h3><div class="small text-muted">Enabled accounts</div></div></div></div>
+  <div class="col-md-6 col-xl-3"><div class="card h-100"><div class="card-body"><p class="text-muted mb-1">Farmers / Superusers</p><h3 class="mb-2 text-success">{{ superuser_count }}</h3><div class="small text-muted">Accounts with farmer access</div></div></div></div>
+  <div class="col-md-6 col-xl-3"><div class="card h-100"><div class="card-body"><p class="text-muted mb-1">Actions</p><h5 class="mb-2">Edit and Delete</h5><div class="small text-muted">Manage accounts directly from this page.</div></div></div></div>
+
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header"><h5 class="mb-1">All Users</h5><p class="text-muted small mb-0">Review names, email addresses, joined dates, and farmer access.</p></div>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead><tr><th>User</th><th>Username</th><th>Email</th><th>Joined</th><th>Role</th><th class="text-end">Actions</th></tr></thead>
+          <tbody>
+            {% for user in users %}
+            <tr>
+              <td><div class="d-flex align-items-center gap-2"><div class="avatar avatar-sm">{{ user.username|slice:":1"|upper }}</div><div><div class="fw-semibold">{{ user.get_full_name|default:user.username }}</div><div class="small text-muted">Account profile</div></div></div></td>
+              <td>{{ user.username }}</td>
+              <td>{% if user.email %}{{ user.email }}{% else %}<span class="text-muted">No email</span>{% endif %}</td>
+              <td>{{ user.date_joined|date:"d M Y" }}</td>
+              <td>{% if user.is_superuser %}<span class="badge bg-success">Farmer / Superuser</span>{% else %}<span class="badge bg-secondary">User</span>{% endif %}</td>
+              <td class="text-end">
+                <div class="d-inline-flex gap-2">
+                  <a href="{% url 'myadmin:edit_user' user.id %}" class="btn btn-sm btn-outline-primary">
+                    <i class="fas fa-pen me-1"></i>Edit
+                  </a>
+                  <form method="POST" action="{% url 'myadmin:delete_user' user.id %}" onsubmit="return confirm('Delete this user?');">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-outline-danger" {% if user.id == request.user.id %}disabled{% endif %}>
+                      <i class="fas fa-trash me-1"></i>Delete
+                    </button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+            {% empty %}<tr><td colspan="6" class="text-center py-5 text-muted">No users found.</td></tr>{% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

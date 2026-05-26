@@ -1,0 +1,44 @@
+{% extends 'myadmin/base.html' %}
+{% load static %}
+
+{% block page_title %}Products{% endblock %}
+{% block page_header %}Product Inventory{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+  <div class="col-xl-3 col-md-6"><div class="card h-100"><div class="card-body"><p class="text-muted mb-1">Visible products</p><h3 class="mb-2">{{ products.paginator.count }}</h3><div class="small text-muted">Total items in the catalog</div></div></div></div>
+  <div class="col-xl-3 col-md-6"><div class="card h-100"><div class="card-body"><p class="text-muted mb-1">Categories</p><h3 class="mb-2">{{ categories.count }}</h3><div class="small text-muted">Product groups available</div></div></div></div>
+  <div class="col-xl-3 col-md-6"><div class="card h-100"><div class="card-body"><p class="text-muted mb-1">Current page</p><h3 class="mb-2">{{ products.object_list|length }}</h3><div class="small text-muted">Items shown right now</div></div></div></div>
+  <div class="col-xl-3 col-md-6"><a href="{% url 'myadmin:add_product' %}" class="card h-100 d-block"><div class="card-body"><p class="text-muted mb-1">Quick action</p><h5 class="mb-2">Add Product</h5><div class="small text-muted">Create a new listing with price and stock details.</div></div></a></div>
+
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <div><h5 class="mb-1">Inventory List</h5><p class="text-muted small mb-0">Review pricing, stock, status, and edit actions in one table.</p></div>
+        <a href="{% url 'myadmin:add_product' %}" class="btn btn-success"><i class="fas fa-plus me-2"></i>Add Product</a>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Seller</th><th>Status</th><th class="text-end">Actions</th></tr></thead>
+          <tbody>
+            {% for product in products %}
+            <tr>
+              <td><div class="d-flex align-items-center gap-3">{% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }}" width="54" height="54" class="rounded-3 object-fit-cover">{% else %}<div class="avatar avatar-sm">{{ product.name|slice:":1"|upper }}</div>{% endif %}<div><div class="fw-semibold">{{ product.name }}</div><div class="small text-muted">{% if product.sku %}SKU: {{ product.sku }}{% else %}No SKU assigned{% endif %}</div></div></div></td>
+              <td>{{ product.category.name|default:"Uncategorized" }}</td>
+              <td class="fw-semibold text-success">&#8377;{{ product.price|floatformat:0 }}</td>
+              <td>{% if product.stock > 10 %}<span class="badge bg-success">{{ product.stock }} in stock</span>{% elif product.stock > 0 %}<span class="badge bg-warning text-dark">{{ product.stock }} low</span>{% else %}<span class="badge bg-danger">Out of stock</span>{% endif %}</td>
+              <td>{{ product.farmer.name|default:"Admin" }}</td>
+              <td>{% if product.stock > 0 %}<span class="badge bg-success">Active</span>{% else %}<span class="badge bg-secondary">Inactive</span>{% endif %}</td>
+              <td class="text-end"><div class="d-inline-flex gap-2"><a href="{% url 'myadmin:edit_product' product.id %}" class="btn btn-sm btn-outline-primary"><i class="fas fa-pen me-1"></i>Edit</a><form method="post" action="{% url 'myadmin:delete_product' product.id %}" class="d-inline">{% csrf_token %}<button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this product?')"><i class="fas fa-trash me-1"></i>Delete</button></form></div></td>
+            </tr>
+            {% empty %}<tr><td colspan="7" class="text-center py-5 text-muted">No products available yet.</td></tr>{% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% if products.has_other_pages %}
+      <div class="card-footer"><nav><ul class="pagination justify-content-center mb-0">{% if products.has_previous %}<li class="page-item"><a class="page-link" href="?page={{ products.previous_page_number }}">Previous</a></li>{% endif %}{% for num in products.paginator.page_range %}{% if products.number == num %}<li class="page-item active"><span class="page-link">{{ num }}</span></li>{% elif num > products.number|add:'-3' and num < products.number|add:'3' %}<li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>{% endif %}{% endfor %}{% if products.has_next %}<li class="page-item"><a class="page-link" href="?page={{ products.next_page_number }}">Next</a></li>{% endif %}</ul></nav></div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

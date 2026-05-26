@@ -1,0 +1,22 @@
+<div class="account-mobile-nav">
+    {% if active_page == 'dashboard' %}
+    <span class="is-active">Dashboard</span>
+    {% else %}
+    <a href="{% url 'my_account' %}">Dashboard</a>
+    {% endif %}
+    {% if active_page == 'orders' %}
+    <span class="is-active">Orders</span>
+    {% else %}
+    <a href="{% url 'my_account_orders' %}">Orders</a>
+    {% endif %}
+    {% if active_page == 'address' %}
+    <span class="is-active">Address</span>
+    {% else %}
+    <a href="{% url 'my_account_address' %}">Address</a>
+    {% endif %}
+    {% if active_page == 'edit' %}
+    <span class="is-active">Account Details</span>
+    {% else %}
+    <a href="{% url 'my_account_edit' %}">Account Details</a>
+    {% endif %}
+</div>

@@ -1,0 +1,223 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+{% include 'includes/account-shell-styles.html' %}
+<div class="page-title page-portfolio-details">
+    <div class="rellax" data-rellax-speed="5">
+        <img src="{% static 'images/page-title/shop-detail.jpg' %}" alt="">
+    </div>
+    <div class="content-wrap">
+        <div class="tf-container w-1290">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="content">
+                        <h1 class="title">My account</h1>
+                        <div class="icon-img">
+                            <img src="{% static 'images/item/line-throw-title.png' %}" alt="">
+                        </div>
+                        <div class="breadcrumb">
+                            <a href="{% url 'index' %}">Home</a>
+                            <div class="icon">
+                                <i class="icon-arrow-right1"></i>
+                            </div>
+                            <a href="javascript:void(0)">My account</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="img-item item-2">
+        <img src="{% static 'images/item/grass-6.png' %}" alt="">
+    </div>
+</div>
+
+<section class="flat-spacing-1 account-shell">
+    <div class="tf-container">
+        {% include 'includes/account-mobile-nav.html' with active_page='address' %}
+        <div class="account-layout">
+            {% include 'includes/account-sidebar-card.html' with active_page='address' %}
+            <div class="account-panel my-account-content account-address">
+                <div class="account-overview">
+                    <div class="account-overview-copy">
+                        <span class="account-kicker">Address</span>
+                        <h2>Saved addresses</h2>
+                        <p>Add, edit, or remove delivery addresses for faster checkout.</p>
+                    </div>
+                </div>
+
+                <div class="orders-summary">
+                    <div class="orders-summary-card">
+                        <strong>{{ addresses|length }}</strong>
+                        <span>Saved addresses</span>
+                    </div>
+                    <div class="orders-summary-card">
+                        <strong>{% if editing_address %}Editing{% else %}Ready{% endif %}</strong>
+                        <span>Form status</span>
+                    </div>
+                    <div class="orders-summary-card">
+                        <strong>{% if addresses %}1{% else %}0{% endif %}</strong>
+                        <span>Address setup available</span>
+                    </div>
+                </div>
+
+                <div class="address-toolbar mb-30">
+                    <div class="address-page-header">
+                        <h3 class="fw-5 mb-12">Saved addresses</h3>
+                        <p class="font-nunito">Add and manage the addresses you use during checkout.</p>
+                    </div>
+
+                    <div class="address-actions">
+                        <button type="button" class="tf-btn" id="show-address-form">Add new address</button>
+                    </div>
+                </div>
+
+                <div class="address-form-card" id="address-form-card"{% if not editing_address %} hidden{% endif %}>
+                    <div class="address-form-header">
+                        <h4 class="fw-5 mb-0">{% if editing_address %}Update address{% else %}Add a new address{% endif %}</h4>
+                        <button type="button" class="address-close-btn" id="hide-address-form" aria-label="Close form">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                    <form method="POST" action="{% url 'my_account_address' %}" class="address-form-grid">
+                        {% csrf_token %}
+                        {% if editing_address %}
+                        <input type="hidden" name="address_id" value="{{ editing_address.id }}">
+                        {% endif %}
+                        <div class="grid-2">
+                            <fieldset>
+                                <input type="text" name="first_name" placeholder="First name" value="{{ editing_address.first_name|default:'' }}" required>
+                            </fieldset>
+                            <fieldset>
+                                <input type="text" name="last_name" placeholder="Last name" value="{{ editing_address.last_name|default:'' }}" required>
+                            </fieldset>
+                        </div>
+
+                        <fieldset>
+                            <input type="text" name="address_line_1" placeholder="Address line 1" value="{{ editing_address.address_line_1|default:'' }}" required>
+                        </fieldset>
+
+                        <fieldset>
+                            <input type="text" name="address_line_2" placeholder="Address line 2 (optional)" value="{{ editing_address.address_line_2|default:'' }}">
+                        </fieldset>
+
+                        <div class="grid-3">
+                            <fieldset>
+                                <input type="text" name="city" placeholder="City" value="{{ editing_address.city|default:'' }}" required>
+                            </fieldset>
+                            <fieldset>
+                                <input type="text" name="state" placeholder="State" value="{{ editing_address.state|default:'' }}" required>
+                            </fieldset>
+                            <fieldset>
+                                <input type="text" name="postal_code" placeholder="Postal code" value="{{ editing_address.postal_code|default:'' }}" required>
+                            </fieldset>
+                        </div>
+
+                        <div class="grid-2">
+                            <fieldset>
+                                <input type="text" name="country" placeholder="Country" value="{{ editing_address.country|default:'India' }}" required>
+                            </fieldset>
+                            <fieldset>
+                                <input type="text" name="phone" placeholder="Phone number" value="{{ editing_address.phone|default:'' }}" required>
+                            </fieldset>
+                        </div>
+
+                        <label class="address-checkbox">
+                            <input type="checkbox" name="is_default"{% if editing_address and editing_address.is_default %} checked{% endif %}>
+                            <span>Set as default address</span>
+                        </label>
+
+                        <div class="address-form-actions">
+                            <button type="submit" class="account-pill-btn">{% if editing_address %}Update address{% else %}Save address{% endif %}</button>
+                            <button type="button" class="account-pill-btn alt" id="cancel-address-form">{% if editing_address %}Close{% else %}Cancel{% endif %}</button>
+                            {% if editing_address %}
+                            <a href="{% url 'my_account_address' %}" class="tf-btn-nor style-small style-2">Add new instead</a>
+                            {% endif %}
+                        </div>
+                    </form>
+                </div>
+
+                {% if addresses %}
+                <div class="address-grid">
+                    {% for address in addresses %}
+                    <div class="address-card{% if address.is_default %} is-default{% endif %}">
+                        <div class="address-card-top">
+                            <h5 class="fw-5 mb-0">{{ address.first_name }} {{ address.last_name }}</h5>
+                            {% if address.is_default %}
+                            <span class="address-badge">Default</span>
+                            {% endif %}
+                        </div>
+                        <div class="address-card-body">
+                            <p>{{ address.address_line_1 }}</p>
+                            {% if address.address_line_2 %}
+                            <p>{{ address.address_line_2 }}</p>
+                            {% endif %}
+                            <p>{{ address.city }}, {{ address.state }} {{ address.postal_code }}</p>
+                            <p>{{ address.country }}</p>
+                            {% if address.phone %}
+                            <p>{{ address.phone }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="address-card-actions">
+                            <a href="{% url 'my_account_address' %}?edit={{ address.id }}#address-form-card" class="tf-btn-nor style-small">Edit</a>
+                            <a href="{% url 'delete_address' address.id %}" class="tf-btn-nor style-small style-2" onclick="return confirm('Delete this address?')">Delete</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="address-empty-state">
+                    <h5 class="fw-5 mb-12">No saved addresses yet</h5>
+                    <p class="font-nunito mb-0">Add your first address above to make checkout faster.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const formCard = document.getElementById('address-form-card');
+    const showButton = document.getElementById('show-address-form');
+    const hideButton = document.getElementById('hide-address-form');
+    const cancelButton = document.getElementById('cancel-address-form');
+    const isEditing = Boolean(formCard && formCard.querySelector('input[name="address_id"]'));
+
+    if (!formCard || !showButton) {
+        return;
+    }
+
+    function openForm() {
+        formCard.hidden = false;
+        showButton.hidden = true;
+        const firstInput = formCard.querySelector('input[name="first_name"]');
+        if (firstInput) {
+            firstInput.focus();
+        }
+    }
+
+    function closeForm() {
+        formCard.hidden = true;
+        showButton.hidden = false;
+        if (isEditing) {
+            window.location.href = "{% url 'my_account_address' %}";
+        }
+    }
+
+    if (!formCard.hidden) {
+        showButton.hidden = true;
+    }
+
+    showButton.addEventListener('click', openForm);
+
+    if (hideButton) {
+        hideButton.addEventListener('click', closeForm);
+    }
+
+    if (cancelButton) {
+        cancelButton.addEventListener('click', closeForm);
+    }
+});
+</script>
+{% endblock %}

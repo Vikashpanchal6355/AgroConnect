@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<!-- Page-title -->
+<div class="page-title page-contact-us">
+    <div class="rellax" data-rellax-speed="5">
+        <img src="{% static 'images/page-title/contact-us.jpg' %}" alt="">
+    </div>
+    <div class="content-wrap">
+        <div class="tf-container w-1290">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="content">
+                        <p class="sub-title">
+                            Login to Your Account
+                        </p>
+                        <h1 class="title">
+                            Login
+                        </h1>
+                        <div class="icon-img">
+                            <img src="{% static 'images/item/line-throw-title.png' %}" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div><!-- /.Page-title -->
+
+<!-- Main-content -->
+<div class="main-content pt-0 pb-0 page-contact-us">
+    <!-- Section login -->
+    <section class="s-contact-us style-2 bg-white pt-118 pb-88">
+        <div class="section-wrap">
+            <div class="tf-container w-1290">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="content-section">
+                            <div class="heading-section has-text mb-50">
+                                <p class="sub-title">Welcome Back</p>
+                                <p class="title text-anime-style-2">Login to AgroConnect</p>
+                                <div class="img-item">
+                                    <img class="tf-animate-1" src="{% static 'images/item/rice-plant-2.png' %}" alt="" />
+                                </div>
+                            </div>
+                            <form method="post">
+                                {% csrf_token %}
+                                <div class="cols style-2 mb-15">
+                                    <fieldset>
+                                        <input type="text" class="form-control" id="username" name="username"
+                                            placeholder="Username*" aria-required="true" required />
+                                    </fieldset>
+                                </div>
+                                <div class="cols style-2 mb-15">
+                                    <fieldset>
+                                        <input type="password" class="form-control" id="password" name="password"
+                                            placeholder="Password*" required />
+                                    </fieldset>
+                                </div>
+                                <div class="checkbox-item send-wrap mb-15">
+                                    <label class="mb-0">
+                                        <span class="text font-nunito">Remember me</span>
+                                        <input type="checkbox" name="remember" class="checkbox-item">
+                                        <span class="btn-checkbox"></span>
+                                    </label>
+                                </div>
+                                <div class="send-wrap">
+                                    <button type="submit" class="tf-btn">
+                                        <span class="text-style">
+                                            Login
+                                        </span>
+                                        <div class="icon">
+                                            <i class="icon-arrow_right"></i>
+                                        </div>
+                                    </button>
+                                </div>
+                            </form>
+                            <p class="text-center mt-3">
+                                Don't have an account? <a href="#registerModal" data-bs-toggle="modal" data-bs-dismiss="modal">Register</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section><!-- /.Section login -->
+</div><!-- /.Main-content -->
+{% endblock %}

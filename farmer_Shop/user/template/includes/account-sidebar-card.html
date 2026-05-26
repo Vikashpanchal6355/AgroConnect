@@ -1,0 +1,30 @@
+<div class="account-sidebar-card">
+    <div class="account-user-badge">
+        <p>Account Center</p>
+        <h4>{% if user.first_name %}{{ user.first_name }} {{ user.last_name }}{% else %}{{ user.username }}{% endif %}</h4>
+        <span>{{ user.email }}</span>
+    </div>
+    <div class="account-nav-list">
+        {% if active_page == 'dashboard' %}
+        <span class="is-active">Dashboard <i class="fa-solid fa-house"></i></span>
+        {% else %}
+        <a href="{% url 'my_account' %}">Dashboard <i class="fa-solid fa-house"></i></a>
+        {% endif %}
+        {% if active_page == 'orders' %}
+        <span class="is-active">Orders <i class="fa-solid fa-bag-shopping"></i></span>
+        {% else %}
+        <a href="{% url 'my_account_orders' %}">Orders <i class="fa-solid fa-bag-shopping"></i></a>
+        {% endif %}
+        {% if active_page == 'address' %}
+        <span class="is-active">Address Book <i class="fa-solid fa-location-dot"></i></span>
+        {% else %}
+        <a href="{% url 'my_account_address' %}">Address Book <i class="fa-solid fa-location-dot"></i></a>
+        {% endif %}
+        {% if active_page == 'edit' %}
+        <span class="is-active">Account Details <i class="fa-solid fa-user-gear"></i></span>
+        {% else %}
+        <a href="{% url 'my_account_edit' %}">Account Details <i class="fa-solid fa-user-gear"></i></a>
+        {% endif %}
+        <a href="{% url 'logout' %}">Logout <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+    </div>
+</div>

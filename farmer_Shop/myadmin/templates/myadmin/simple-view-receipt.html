@@ -1,0 +1,461 @@
+{% extends 'myadmin/base.html' %}
+
+{% block page_title %}Receipt{% endblock %}
+{% block page_header %}Receipt {{ order.order_number }}{% endblock %}
+
+{% block content %}
+<div class="row g-3">
+  <div class="col-12">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2 no-print">
+      <div>
+        <h4 class="mb-1">Print Receipt</h4>
+        <p class="text-muted mb-0">Optimized to fit on a single A4 page.</p>
+      </div>
+      <div class="d-flex gap-2">
+        <button onclick="window.print()" class="btn btn-outline-primary">
+          <i class="fas fa-print me-2"></i>Print
+        </button>
+        <a href="{% url 'myadmin:orders' %}" class="btn btn-outline-secondary">Back to Orders</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12">
+    <article id="receipt-sheet" class="receipt-sheet">
+      <header class="receipt-top">
+        <div>
+          <div class="brand-row">
+            <div class="brand-badge">
+              <i class="fas fa-leaf"></i>
+            </div>
+            <div>
+              <h2 class="receipt-brand">AgroConnect</h2>
+              <p class="receipt-tagline">Order receipt and delivery summary</p>
+            </div>
+          </div>
+          <div class="status-pill status-{{ order.status|lower }}">{{ order.status|title }}</div>
+        </div>
+
+        <div class="receipt-meta">
+          <div class="meta-row">
+            <span>Receipt No</span>
+            <strong>#{{ order.order_number }}</strong>
+          </div>
+          <div class="meta-row">
+            <span>Order Date</span>
+            <strong>{{ order.created_at|date:"d M Y, h:i A" }}</strong>
+          </div>
+          <div class="meta-row">
+            <span>Payment</span>
+            <strong class="text-capitalize">{{ order.payment_method }}</strong>
+          </div>
+          <div class="meta-row">
+            <span>Payment Status</span>
+            <strong class="text-capitalize">{{ order.payment_status }}</strong>
+          </div>
+        </div>
+      </header>
+
+      <section class="receipt-grid">
+        <div class="info-card">
+          <p class="info-label">Customer</p>
+          <h6>{{ order.first_name }} {{ order.last_name }}</h6>
+          <p>{{ order.email }}</p>
+          <p>{{ order.phone }}</p>
+        </div>
+        <div class="info-card">
+          <p class="info-label">Shipping Address</p>
+          <h6>{{ order.address_line_1 }}</h6>
+          {% if order.address_line_2 %}<p>{{ order.address_line_2 }}</p>{% endif %}
+          <p>{{ order.city }}, {{ order.state }} {{ order.postal_code }}</p>
+          <p>{{ order.country }}</p>
+        </div>
+      </section>
+
+      <section class="receipt-table-wrap">
+        <table class="receipt-table">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th class="text-center">Qty</th>
+              <th class="text-end">Price</th>
+              <th class="text-end">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in order_items %}
+            <tr>
+              <td>
+                <strong>{{ item.product.name }}</strong>
+                <span>{{ item.product.category.name|default:"Product" }}</span>
+              </td>
+              <td class="text-center">{{ item.quantity }}</td>
+              <td class="text-end">&#8377;{{ item.price|floatformat:0 }}</td>
+              <td class="text-end strong">&#8377;{{ item.subtotal|floatformat:0 }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="4" class="text-center text-muted py-4">No order items found.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </section>
+
+      <section class="receipt-bottom">
+        <div class="receipt-note">
+          <p class="info-label">Notes</p>
+          <p>{% if order.notes %}{{ order.notes }}{% else %}Thank you for shopping with AgroConnect. Keep this receipt for your records.{% endif %}</p>
+        </div>
+
+        <div class="total-card">
+          <div class="total-row">
+            <span>Subtotal</span>
+            <strong>&#8377;{{ order.subtotal|floatformat:0 }}</strong>
+          </div>
+          <div class="total-row">
+            <span>Shipping</span>
+            <strong>&#8377;{{ order.shipping_cost|floatformat:0 }}</strong>
+          </div>
+          <div class="total-row grand-total">
+            <span>Total</span>
+            <strong>&#8377;{{ order.total|floatformat:0 }}</strong>
+          </div>
+        </div>
+      </section>
+    </article>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_head %}
+<style>
+  .receipt-sheet {
+    width: 100%;
+    max-width: 840px;
+    margin: 0 auto;
+    background: #fff;
+    border: 1px solid #dbe7dd;
+    border-radius: 26px;
+    box-shadow: 0 20px 45px rgba(20, 58, 37, 0.08);
+    padding: 28px;
+    color: #183326;
+  }
+
+  .receipt-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    border-bottom: 1px solid #e3ece5;
+    padding-bottom: 18px;
+    margin-bottom: 18px;
+  }
+
+  .brand-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+
+  .brand-badge {
+    width: 52px;
+    height: 52px;
+    border-radius: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1f7a3e, #34a853);
+    color: #fff;
+    font-size: 1.1rem;
+  }
+
+  .receipt-brand {
+    margin: 0;
+    font-size: 1.55rem;
+    color: #123524;
+  }
+
+  .receipt-tagline {
+    margin: 0.1rem 0 0;
+    color: #6b8272;
+    font-size: 0.92rem;
+  }
+
+  .status-pill {
+    display: inline-flex;
+    padding: 0.38rem 0.8rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+  }
+
+  .status-pending { background: #fff1cf; color: #8a5a00; }
+  .status-processing { background: #dcecff; color: #0a58ca; }
+  .status-delivered { background: #dff6e5; color: #166534; }
+  .status-cancelled { background: #fde4e7; color: #b42318; }
+  .status-shipped { background: #e5f3ff; color: #1d4ed8; }
+
+  .receipt-meta {
+    min-width: 280px;
+    background: #f7fbf7;
+    border: 1px solid #e2ece4;
+    border-radius: 18px;
+    padding: 14px 16px;
+  }
+
+  .meta-row,
+  .total-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+  }
+
+  .meta-row {
+    font-size: 0.9rem;
+    padding: 4px 0;
+  }
+
+  .meta-row span,
+  .info-label,
+  .total-row span {
+    color: #6b8272;
+  }
+
+  .receipt-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .info-card {
+    background: #f7fbf7;
+    border: 1px solid #e2ece4;
+    border-radius: 18px;
+    padding: 14px 16px;
+  }
+
+  .info-card h6,
+  .info-card p {
+    margin: 0;
+  }
+
+  .info-card h6 {
+    margin-bottom: 6px;
+    font-size: 1rem;
+  }
+
+  .info-card p {
+    color: #405a49;
+    line-height: 1.45;
+    font-size: 0.9rem;
+  }
+
+  .info-label {
+    margin: 0 0 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+
+  .receipt-table-wrap {
+    border: 1px solid #e2ece4;
+    border-radius: 18px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+
+  .receipt-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+
+  .receipt-table thead th {
+    background: #f4f8f4;
+    padding: 12px 14px;
+    color: #4d6656;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .receipt-table tbody td {
+    padding: 12px 14px;
+    border-top: 1px solid #edf3ee;
+    vertical-align: top;
+  }
+
+  .receipt-table tbody td span {
+    display: block;
+    margin-top: 3px;
+    color: #708675;
+    font-size: 0.8rem;
+  }
+
+  .receipt-table .strong {
+    font-weight: 700;
+  }
+
+  .receipt-bottom {
+    display: grid;
+    grid-template-columns: 1.3fr 0.9fr;
+    gap: 16px;
+    align-items: start;
+  }
+
+  .receipt-note,
+  .total-card {
+    background: #f7fbf7;
+    border: 1px solid #e2ece4;
+    border-radius: 18px;
+    padding: 14px 16px;
+  }
+
+  .receipt-note p:last-child {
+    margin: 0;
+    color: #405a49;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .total-card {
+    margin-left: auto;
+    width: 100%;
+  }
+
+  .total-row {
+    padding: 6px 0;
+    font-size: 0.94rem;
+  }
+
+  .grand-total {
+    margin-top: 6px;
+    padding-top: 12px;
+    border-top: 1px solid #dce8de;
+    font-size: 1.08rem;
+    color: #166534;
+  }
+
+  @media (max-width: 767.98px) {
+    .receipt-sheet {
+      padding: 18px;
+      border-radius: 20px;
+    }
+
+    .receipt-top,
+    .receipt-bottom,
+    .receipt-grid {
+      grid-template-columns: 1fr;
+      display: grid;
+    }
+
+    .receipt-top {
+      gap: 14px;
+    }
+
+    .receipt-meta {
+      min-width: 0;
+    }
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 8mm;
+  }
+
+  @media print {
+    html, body {
+      width: 210mm;
+      height: 297mm;
+      background: #fff !important;
+    }
+
+    .topbar,
+    .sidebar,
+    .sidebar-backdrop,
+    .btn,
+    .alert-stack,
+    .no-print {
+      display: none !important;
+    }
+
+    body,
+    .main-pane,
+    .content-frame {
+      background: #fff !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      box-shadow: none !important;
+      border: 0 !important;
+    }
+
+    .row,
+    .col-12 {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    .receipt-sheet {
+      max-width: 194mm;
+      min-height: 279mm;
+      margin: 0 auto !important;
+      border-radius: 0;
+      box-shadow: none !important;
+      border: 1px solid #d7dfd8;
+      padding: 10mm 9mm;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .receipt-top {
+      gap: 16px;
+      padding-bottom: 12px;
+      margin-bottom: 12px;
+    }
+
+    .receipt-brand {
+      font-size: 18pt;
+    }
+
+    .receipt-tagline,
+    .meta-row,
+    .info-card p,
+    .receipt-note p:last-child,
+    .receipt-table,
+    .total-row {
+      font-size: 9.5pt;
+    }
+
+    .receipt-grid,
+    .receipt-bottom {
+      gap: 10px;
+    }
+
+    .info-card,
+    .receipt-note,
+    .total-card,
+    .receipt-meta {
+      padding: 10px 12px;
+    }
+
+    .receipt-table thead th,
+    .receipt-table tbody td {
+      padding: 8px 10px;
+    }
+
+    .receipt-table tbody td span {
+      font-size: 8pt;
+    }
+
+    .grand-total {
+      font-size: 11pt;
+      padding-top: 8px;
+      margin-top: 4px;
+    }
+  }
+</style>
+{% endblock %}

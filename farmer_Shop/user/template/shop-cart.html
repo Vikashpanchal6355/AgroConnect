@@ -1,0 +1,294 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<!-- Page-title -->
+<div class="page-title page-shop-detail">
+    <div class="rellax" data-rellax-speed="5">
+        <img src="{% static 'images/page-title/shop-detail.jpg' %}" alt="">
+    </div>
+    <div class="content-wrap">
+        <div class="tf-container w-1290">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="content center">
+                        <p class="sub-title">
+                            Buy Health Foods At Our Store
+                        </p>
+                        <h1 class="title">
+                            Shop Cart
+                        </h1>
+                        <div class="icon-img">
+                            <img src="{% static 'images/item/line-throw-title.png' %}" alt="">
+                        </div>
+                        <div class="breadcrumb">
+                            <a href="{% url 'index' %}">Home</a>
+                            <div class="icon">
+                                <i class="icon-arrow-right1"></i>
+                            </div>
+                            <a href="javascript:void(0)"> Shop Cart </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="img-item item-2">
+        <img src="{% static 'images/item/grass-6.png' %}" alt="">
+    </div>
+</div><!-- /.Page-title -->
+
+<!-- Shop Cart -->
+<section class="flat-spacing-1 improved-cart-page">
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+    <div class="tf-container">
+        <div class="row">
+            <div class="col-lg-8">
+                {% if cart and cart.items.all %}
+                <div class="overflow-x-auto mb-30">
+                    <table class="tf-table-page-cart">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Subtotal</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in cart.items.all %}
+                            <tr class="tf-cart-item">
+                                <td class="tf-cart-item_product">
+                                    <a href="{% url 'shop_details' item.product.id %}" class="img-box">
+                                        {% if item.product.image %}
+                                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                                        {% else %}
+                                        <img src="{% static 'images/OIP.jpg' %}" alt="{{ item.product.name }}">
+                                        {% endif %}
+                                    </a>
+                                    <div class="cart-info">
+                                        <a href="{% url 'shop_details' item.product.id %}" class="cart-title link">
+                                            {{ item.product.name }}
+                                        </a>
+                                    </div>
+                                </td>
+                                <td data-cart-title="Price" class="tf-cart-item_price">
+                                    <p class="cart-price price-on-sale text-main-2">&#8377;{{ item.product.price }}</p>
+                                </td>
+                                <td data-cart-title="Quantity" class="tf-cart-item_quantity">
+                                    <div class="wg-quantity-2">
+                                        <input type="hidden" name="item_id" value="{{ item.id }}"
+                                            id="item-id-{{ item.id }}">
+                                        <span class="btn-quantity btn-decrease"
+                                            onclick="updateQuantity({{ item.id }}, -1)">
+                                            <i class="fa-solid fa-minus"></i>
+                                        </span>
+                                        <input class="quantity-product" type="text" name="quantity"
+                                            value="{{ item.quantity }}" min="1" id="quantity-{{ item.id }}"
+                                            onkeypress="handleEnter(event, {{ item.id }})">
+                                        <span class="btn-quantity btn-increase"
+                                            onclick="updateQuantity({{ item.id }}, 1)">
+                                            <i class="fa-solid fa-plus"></i>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td data-cart-title="Total" class="tf-cart-item_total">
+                                    <p class="cart-total total-price price-text fw-medium text-main-2"
+                                        id="subtotal-{{ item.id }}">&#8377;{{ item.subtotal|floatformat:2 }}</p>
+                                </td>
+                                <td data-cart-title="Remove" class="remove-cart text-xxl-end">
+                                    <a href="javascript:void(0)" class="remove icon icon-close link"
+                                        onclick="removeFromCart({{ item.id }}, '{{ item.product.name|escapejs }}')"></a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="empty-cart text-center">
+                    <h3>Your cart is empty</h3>
+                    <p>Looks like you haven't added any products to your cart yet.</p>
+                    <a href="{% url 'shop_products' %}" class="tf-btn">Continue Shopping</a>
+                </div>
+                {% endif %}
+                <div class="coupon-wrap polished-panel">
+                    <p class="title fw-medium">Discount Code</p>
+                    <form action="#" class="form-coupon form-def">
+                        <fieldset>
+                            <input type="text" placeholder="Enter promo code" required>
+                        </fieldset>
+                        <div class="button-submit">
+                            <button type="submit" class="link">
+                                <span class="font-worksans">Apply Coupon</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                {% if cart and cart.items.all %}
+                <div class="tf-sidebar-cart">
+                    <div class="box-order">
+                        <p class="title text-main-2 fw-bold">Order Summary</p>
+                        <div class="subtotal d-flex justify-content-between align-items-center">
+                            <p>Subtotal</p>
+                            <p class="total text-main-2" id="cart-subtotal">&#8377;{{ cart_subtotal|floatformat:2 }}</p>
+                        </div>
+                        <div class="discount d-flex justify-content-between align-items-center">
+                            <p>Shipping</p>
+                            <p class="total text-main-2" id="cart-shipping">
+                                {% if shipping_cost %}
+                                &#8377;{{ shipping_cost|floatformat:2 }}
+                                {% else %}
+                                Free
+                                {% endif %}
+                            </p>
+                        </div>
+                        {% if shipping_cost %}
+                        <p class="cart-policy-note">Free shipping is available on orders above &#8377;500.</p>
+                        {% endif %}
+                        <h5 class="total-order fw-medium d-flex justify-content-between align-items-center">
+                            <span>Total</span>
+                            <span class="total" id="cart-total">&#8377;{{ order_total|floatformat:2 }}</span>
+                        </h5>
+                        <div class="d-flex gap-2 mb-3">
+                            <a href="{% url 'empty_cart' %}" class="tf-btn-nor w-100 text-center"
+                                onclick="return confirm('Are you sure you want to empty your cart?')">Empty Cart</a>
+                        </div>
+                        <div class="box-progress-checkout">
+                            <fieldset class="check-agree">
+                                <input type="checkbox" id="check-agree" class="tf-check-rounded">
+                                <label for="check-agree" class="text-def">
+                                    I agree with the <a href="#" class="link">terms and
+                                        conditions</a>
+                                </label>
+                            </fieldset>
+                            {% if user.is_authenticated %}
+                            <a href="{% url 'checkout' %}" class="tf-btn-nor w-100">Proceed To Checkout</a>
+                            {% else %}
+                            <button type="button" class="tf-btn-nor w-100" onclick="alert('Please log in before checkout'); $('#loginModal').modal('show');">Proceed To Checkout</button>
+                            {% endif %}
+                            <p class="text-center">Or <a href="{% url 'shop_products' %}" class="link">continue shopping</a></p>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /Shop Cart -->
+
+<script>
+    // Get CSRF token for AJAX requests
+    function getCSRFToken() {
+        const tokenInput = document.querySelector('input[name="csrfmiddlewaretoken"]');
+        return tokenInput ? tokenInput.value : '';
+    }
+
+    // Update quantity using AJAX
+    function updateQuantity(itemId, change) {
+        const quantityInput = document.getElementById('quantity-' + itemId);
+        let newQuantity = parseInt(quantityInput.value) + change;
+
+        if (newQuantity < 1) {
+            newQuantity = 1;
+        }
+
+        updateCartAjax(itemId, newQuantity);
+    }
+
+    // Handle Enter key press
+    function handleEnter(event, itemId) {
+        if (event.key === 'Enter' || event.keyCode === 13) {
+            event.preventDefault();
+            const quantityInput = document.getElementById('quantity-' + itemId);
+            let newQuantity = parseInt(quantityInput.value);
+
+            if (newQuantity < 1 || isNaN(newQuantity)) {
+                newQuantity = 1;
+                quantityInput.value = 1;
+            }
+
+            updateCartAjax(itemId, newQuantity);
+        }
+    }
+
+    // AJAX function to update cart
+    function updateCartAjax(itemId, quantity) {
+        fetch('{% url "update_cart_ajax" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFToken': getCSRFToken()
+            },
+            body: 'item_id=' + itemId + '&quantity=' + quantity
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update item subtotal
+                    const subtotalElement = document.getElementById('subtotal-' + itemId);
+                    if (subtotalElement) {
+                        subtotalElement.textContent = '₹' + data.item_subtotal.toFixed(2);
+                    }
+
+                    // Update cart totals in order summary
+                    const cartSubtotal = document.getElementById('cart-subtotal');
+                    const cartShipping = document.getElementById('cart-shipping');
+                    const cartTotal = document.getElementById('cart-total');
+
+                    if (cartSubtotal) {
+                        cartSubtotal.textContent = '₹' + data.cart_subtotal.toFixed(2);
+                    }
+                    if (cartShipping) {
+                        cartShipping.textContent = data.shipping_cost > 0
+                            ? '₹' + data.shipping_cost.toFixed(2)
+                            : 'Free';
+                    }
+                    if (cartTotal) {
+                        cartTotal.textContent = '₹' + data.cart_total.toFixed(2);
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error updating cart:', error);
+            });
+    }
+
+    // AJAX function to remove item from cart
+    function removeFromCart(itemId, productName) {
+        if (!confirm('Are you sure you want to remove ' + productName + ' from your cart?')) {
+            return;
+        }
+
+        fetch('{% url "remove_from_cart_ajax" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFToken': getCSRFToken()
+            },
+            body: 'item_id=' + itemId
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    // Reload the page to show updated cart
+                    location.reload();
+                } else {
+                    alert(data.message || 'Error removing item from cart');
+                }
+            })
+            .catch(error => {
+                console.error('Error removing item from cart:', error);
+                // Fallback to redirect
+                window.location.href = '{% url "remove_from_cart" 0 %}'.replace('0', itemId);
+            });
+    }
+</script>
+{% endblock %}

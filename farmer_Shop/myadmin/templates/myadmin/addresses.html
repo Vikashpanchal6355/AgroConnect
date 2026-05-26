@@ -1,0 +1,94 @@
+{% extends 'myadmin/base.html' %}
+{% load static %}
+
+{% block page_title %}User Addresses{% endblock %}
+{% block page_header %}User Addresses{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+    <div class="card">
+      <div class="card-header p-3 pt-2">
+        <div class="icon icon-lg icon-shape bg-gradient-dark shadow-dark text-center border-radius-xl mt-n4 position-absolute">
+          <i class="material-icons opacity-10">location_on</i>
+        </div>
+        <div class="text-end pt-1">
+          <p class="text-sm mb-0 text-capitalize">Total Addresses</p>
+          <h4 class="mb-0">{{ addresses.count }}</h4>
+        </div>
+      </div>
+      <hr class="dark horizontal my-0">
+      <div class="card-footer p-3">
+        <p class="mb-0"><span class="text-success text-sm font-weight-bolder">Saved</span> addresses</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-4">
+  <div class="col-12">
+    <div class="card my-4">
+      <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+        <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+          <h6 class="text-white text-capitalize ps-3">All User Addresses</h6>
+        </div>
+      </div>
+      <div class="card-body px-0 pb-2">
+        <div class="table-responsive p-0">
+          <table class="table align-items-center mb-0">
+            <thead>
+              <tr>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">User</th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Address Type</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Full Address</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">City</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Default</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for address in addresses %}
+              <tr>
+                <td>
+                  <div class="d-flex px-2 py-1">
+                    <div class="avatar avatar-sm me-3 bg-gradient-primary rounded-circle">
+                      <span class="text-xs">{{ address.user.username|slice:":1"|upper }}</span>
+                    </div>
+                    <div class="d-flex flex-column justify-content-center">
+                      <h6 class="mb-0 text-sm">{{ address.user.username }}</h6>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <span class="badge badge-sm bg-gradient-{% if address.address_type == 'home' %}success{% else %}info{% endif %}">
+                    {{ address.get_address_type_display }}
+                  </span>
+                </td>
+                <td class="align-middle text-center text-sm">
+                  <span class="text-xs text-truncate d-inline-block" style="max-width: 150px;" title="{{ address.full_address }}">
+                    {{ address.full_address|truncatechars:30 }}
+                  </span>
+                </td>
+                <td class="align-middle text-center text-sm">
+                  <span class="text-xs">{{ address.city }}</span>
+                </td>
+                <td class="align-middle text-center text-sm">
+                  {% if address.is_default %}
+                  <span class="badge badge-sm bg-gradient-success">Yes</span>
+                  {% else %}
+                  <span class="badge badge-sm bg-gradient-secondary">No</span>
+                  {% endif %}
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="5" class="text-center text-sm text-muted py-4">No addresses found</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

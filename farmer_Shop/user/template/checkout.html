@@ -1,0 +1,861 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<!-- Page-title -->
+<div class="page-title page-shop-detail">
+    <div class="rellax" data-rellax-speed="5">
+        <img src="{% static 'images/page-title/shop-detail.jpg' %}" alt="">
+    </div>
+    <div class="content-wrap">
+        <div class="tf-container w-1290">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="content center">
+                        <p class="sub-title">
+                            Buy Health Foods At Our Store
+                        </p>
+                        <h1 class="title">
+                            Checkout
+                        </h1>
+                        <div class="icon-img">
+                            <img src="{% static 'images/item/line-throw-title.png' %}" alt="">
+                        </div>
+                        <div class="breadcrumb">
+                            <a href="{% url 'index' %}">Home</a>
+                            <div class="icon">
+                                <i class="icon-arrow-right1"></i>
+                            </div>
+                            <a href="{% url 'shop_cart' %}"> Cart </a>
+                            <div class="icon">
+                                <i class="icon-arrow-right1"></i>
+                            </div>
+                            <a href="javascript:void(0)"> Checkout </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="img-item item-2">
+        <img src="{% static 'images/item/grass-6.png' %}" alt="">
+    </div>
+</div><!-- /.Page-title -->
+
+<!-- Checkout -->
+<section class="flat-spacing-1 improved-checkout-page">
+    <div class="tf-container">
+        <div class="row">
+            <div class="col-lg-8">
+                <form action="{% url 'checkout' %}" method="POST" class="form-checkout" id="checkout-form" onsubmit="console.log('Form submitting...'); return true;">
+                    {% csrf_token %}
+                    <div class="wrap-form-checkout checkout-form-card">
+                        <div class="checkout-card-head">
+                            <div>
+                                <span class="checkout-step-label">Step 1</span>
+                                <h4 class="title-checkout fw-bold text-main-2">Shipping Address</h4>
+                            </div>
+                            <span class="checkout-card-icon">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </span>
+                        </div>
+                        {% if addresses %}
+                         <div class="saved-addresses mb-3">
+                             <fieldset class="field-row">
+                             <label id="saved-address-label">Use a saved address</label>
+                             <div class="checkout-address-select" data-checkout-address-select>
+                                 <input type="hidden" id="saved_address" value="">
+                                 <button type="button" class="checkout-address-select-button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="saved-address-label saved-address-selected">
+                                     <span id="saved-address-selected">-- Select Saved Address --</span>
+                                     <i class="fa-solid fa-chevron-down"></i>
+                                 </button>
+                                 <div class="checkout-address-options" role="listbox" aria-labelledby="saved-address-label" hidden>
+                                     <button type="button" class="checkout-address-option is-selected" role="option" aria-selected="true" data-address-id="" data-address-label="-- Select Saved Address --">
+                                         <span class="checkout-address-option-title">-- Select Saved Address --</span>
+                                     </button>
+                                     {% for address in addresses %}
+                                     <button type="button" class="checkout-address-option" role="option" aria-selected="false" data-address-id="{{ address.id }}" data-address-label="{{ address.first_name }} {{ address.last_name }}, {{ address.address_line_1 }}, {{ address.city }}, {{ address.state }}">
+                                         <span class="checkout-address-option-title">{{ address.first_name }} {{ address.last_name }}</span>
+                                         <span class="checkout-address-option-text">{{ address.address_line_1 }}, {{ address.city }}, {{ address.state }}</span>
+                                     </button>
+                                     {% endfor %}
+                                 </div>
+                             </div>
+                             </fieldset>
+                         </div>
+                        <script>
+                        var addressData = {
+                            {% for address in addresses %}
+                            "{{ address.id }}": {
+                                "first_name": "{{ address.first_name }}",
+                                "last_name": "{{ address.last_name }}",
+                                "address_line_1": "{{ address.address_line_1 }}",
+                                "address_line_2": "{{ address.address_line_2|default:'' }}",
+                                "city": "{{ address.city }}",
+                                "state": "{{ address.state }}",
+                                "postal_code": "{{ address.postal_code }}",
+                                "country": "{{ address.country }}",
+                                "phone": "{{ address.phone|default:'' }}"
+                            }{% if not forloop.last %},{% endif %}
+                            {% endfor %}
+                        };
+
+                        function fillAddress(addressId) {
+                            if (addressId && addressData[addressId]) {
+                                var addr = addressData[addressId];
+                                document.getElementById('first_name').value = addr.first_name;
+                                document.getElementById('last_name').value = addr.last_name;
+                                document.getElementById('address_line_1').value = addr.address_line_1;
+                                document.getElementById('address_line_2').value = addr.address_line_2;
+                                document.getElementById('city').value = addr.city;
+                                document.getElementById('state').value = addr.state;
+                                document.getElementById('postal_code').value = addr.postal_code;
+                                var countrySelect = document.getElementById('country');
+                                if (countrySelect) {
+                                    countrySelect.value = addr.country;
+                                }
+                                if (addr.phone) {
+                                    document.getElementById('phone').value = addr.phone;
+                                }
+                            }
+                        }
+
+                        document.addEventListener('DOMContentLoaded', function () {
+                            var select = document.querySelector('[data-checkout-address-select]');
+
+                            if (!select) {
+                                return;
+                            }
+
+                            var button = select.querySelector('.checkout-address-select-button');
+                            var buttonLabel = document.getElementById('saved-address-selected');
+                            var optionsList = select.querySelector('.checkout-address-options');
+                            var hiddenInput = document.getElementById('saved_address');
+                            var options = select.querySelectorAll('.checkout-address-option');
+
+                            function closeOptions() {
+                                optionsList.hidden = true;
+                                button.setAttribute('aria-expanded', 'false');
+                                select.classList.remove('is-open');
+                            }
+
+                            function openOptions() {
+                                optionsList.hidden = false;
+                                button.setAttribute('aria-expanded', 'true');
+                                select.classList.add('is-open');
+                            }
+
+                            button.addEventListener('click', function () {
+                                if (optionsList.hidden) {
+                                    openOptions();
+                                } else {
+                                    closeOptions();
+                                }
+                            });
+
+                            options.forEach(function (option) {
+                                option.addEventListener('click', function () {
+                                    var addressId = option.getAttribute('data-address-id');
+                                    var label = option.getAttribute('data-address-label');
+
+                                    hiddenInput.value = addressId;
+                                    buttonLabel.textContent = label;
+                                    options.forEach(function (item) {
+                                        item.classList.remove('is-selected');
+                                        item.setAttribute('aria-selected', 'false');
+                                    });
+                                    option.classList.add('is-selected');
+                                    option.setAttribute('aria-selected', 'true');
+                                    closeOptions();
+                                    fillAddress(addressId);
+                                });
+                            });
+
+                            document.addEventListener('click', function (event) {
+                                if (!select.contains(event.target)) {
+                                    closeOptions();
+                                }
+                            });
+
+                            document.addEventListener('keydown', function (event) {
+                                if (event.key === 'Escape') {
+                                    closeOptions();
+                                }
+                            });
+                        });
+                        </script>
+                        {% endif %}
+                        <div class="grid-2">
+                            <fieldset class="field-row">
+                                <label for="first_name">First Name *</label>
+                                <input type="text" id="first_name" name="first_name" placeholder="First Name" required 
+                                       value="{% if form_data %}{{ form_data.first_name }}{% else %}{{ request.user.first_name|default:'' }}{% endif %}">
+                            </fieldset>
+                            <fieldset class="field-row">
+                                <label for="last_name">Last Name *</label>
+                                <input type="text" id="last_name" name="last_name" placeholder="Last Name" required
+                                       value="{% if form_data %}{{ form_data.last_name }}{% else %}{{ request.user.last_name|default:'' }}{% endif %}">
+                            </fieldset>
+                        </div>
+                        <div class="grid-2">
+                            <fieldset class="field-row">
+                                <label for="email">Email Address *</label>
+                                <input type="email" id="email" name="email" placeholder="your@email.com" required
+                                       value="{% if form_data %}{{ form_data.email }}{% else %}{{ request.user.email|default:'' }}{% endif %}">
+                            </fieldset>
+                            <fieldset class="field-row">
+                                <label for="phone">Phone Number *</label>
+                                <input type="text" id="phone" name="phone" placeholder="+91 12345 67890" required value="{{ form_data.phone|default:'' }}">
+                            </fieldset>
+                        </div>
+                        <fieldset class="field-row">
+                            <label for="address_line_1">Address *</label>
+                            <input type="text" id="address_line_1" name="address_line_1" placeholder="Street address" required value="{{ form_data.address_line_1|default:'' }}">
+                        </fieldset>
+                        <fieldset class="field-row">
+                            <label for="address_line_2">Apartment, suite, etc. (optional)</label>
+                            <input type="text" id="address_line_2" name="address_line_2" placeholder="Apartment, suite, unit, etc." value="{{ form_data.address_line_2|default:'' }}">
+                        </fieldset>
+                        <div class="grid-3">
+                            <fieldset class="field-row">
+                                <label for="city">City *</label>
+                                <input type="text" id="city" name="city" placeholder="City" required value="{{ form_data.city|default:'' }}">
+                            </fieldset>
+                            <fieldset class="field-row">
+                                <label for="state">State *</label>
+                                <input type="text" id="state" name="state" placeholder="State" required value="{{ form_data.state|default:'' }}">
+                            </fieldset>
+                            <fieldset class="field-row">
+                                <label for="postal_code">Postal Code *</label>
+                                <input type="text" id="postal_code" name="postal_code" placeholder="123456" required value="{{ form_data.postal_code|default:'' }}">
+                            </fieldset>
+                        </div>
+                        <fieldset class="field-row">
+                            <label for="country">Country</label>
+                            <input type="text" id="country" name="country" placeholder="India" value="{{ form_data.country|default:'India' }}">
+                        </fieldset>
+                        <fieldset class="field-row">
+                            <label for="notes">Order Notes (optional)</label>
+                            <textarea id="notes" name="notes" rows="3" placeholder="Special notes for delivery">{{ form_data.notes|default:'' }}</textarea>
+                        </fieldset>
+                    </div>
+
+                    <div class="wrap-form-checkout checkout-form-card mt-4">
+                        <div class="checkout-card-head">
+                            <div>
+                                <span class="checkout-step-label">Step 2</span>
+                                <h4 class="title-checkout fw-bold text-main-2">Payment Method</h4>
+                            </div>
+                            <span class="checkout-card-icon">
+                                <i class="fa-solid fa-wallet"></i>
+                            </span>
+                        </div>
+                        <div class="payment-methods">
+                            <fieldset class="payment-item">
+                                <input type="radio" name="payment_method" value="cod" id="cod" {% if form_data.payment_method|default:'cod' == 'cod' %}checked{% endif %}>
+                                <label for="cod" class="payment-label">
+                                    <span class="payment-icon">
+                                        <i class="fa-solid fa-money-bill-wave"></i>
+                                    </span>
+                                    <span>Cash on Delivery (COD)</span>
+                                </label>
+                            </fieldset>
+                            <fieldset class="payment-item">
+                                <input type="radio" name="payment_method" value="online" id="online" {% if form_data.payment_method == 'online' %}checked{% endif %}>
+                                <label for="online" class="payment-label">
+                                    <span class="payment-icon">
+                                        <i class="fa-solid fa-credit-card"></i>
+                                    </span>
+                                    <span>Online Payment</span>
+                                </label>
+                            </fieldset>
+                            <fieldset class="payment-item">
+                                <input type="radio" name="payment_method" value="upi" id="upi" {% if form_data.payment_method == 'upi' %}checked{% endif %}>
+                                <label for="upi" class="payment-label">
+                                    <span class="payment-icon">
+                                        <i class="fa-solid fa-mobile-screen"></i>
+                                    </span>
+                                    <span>UPI Payment</span>
+                                </label>
+                            </fieldset>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-lg-4">
+                {% if cart and cart.items.all %}
+                <div class="tf-sidebar-cart">
+                    <div class="box-order">
+                        <p class="title text-main-2 fw-bold">Order Summary</p>
+                        
+                        <!-- Cart Items -->
+                        <div class="cart-items-summary">
+                            {% for item in cart.items.all %}
+                            <div class="cart-item-summary d-flex justify-content-between align-items-center mb-3">
+                                <div class="item-info d-flex align-items-center gap-2">
+                                    <div class="item-image">
+                                        {% if item.product.image %}
+                                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;">
+                                        {% else %}
+                                        <img src="{% static 'images/OIP.jpg' %}" alt="{{ item.product.name }}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;">
+                                        {% endif %}
+                                    </div>
+                                    <div>
+                                        <p class="item-name fw-medium">{{ item.product.name }}</p>
+                                        <p class="item-qty text-muted">x{{ item.quantity }}</p>
+                                    </div>
+                                </div>
+                                <div class="item-price text-end">
+                                    <p class="price">&#8377;{{ item.subtotal|floatformat:2 }}</p>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="divider"></div>
+                        
+                        <div class="subtotal d-flex justify-content-between align-items-center">
+                            <p>Subtotal</p>
+                            <p class="total text-main-2">&#8377;{{ cart.total_price|floatformat:2 }}</p>
+                        </div>
+                        <div class="shipping d-flex justify-content-between align-items-center">
+                            <p>Shipping</p>
+                            <p class="text-main-2">
+                                {% with subtotal=cart.total_price %}
+                                {% if subtotal >= 500 %}
+                                <span class="text-success">Free</span>
+                                {% else %}
+                                &#8377;50
+                                {% endif %}
+                                {% endwith %}
+                            </p>
+                        </div>
+                        
+                        {% with subtotal=cart.total_price %}
+                        {% if subtotal < 500 %}
+                        <p class="text-muted small mt-2">
+                            <i class="fa-solid fa-info-circle"></i> Free shipping on orders above &#8377;500
+                        </p>
+                        {% endif %}
+                        {% endwith %}
+                        
+                        <h5 class="total-order fw-medium d-flex justify-content-between align-items-center">
+                            <span>Total</span>
+                            <span class="total">
+                                {% with subtotal=cart.total_price %}
+                                {% if subtotal >= 500 %}
+                                &#8377;{{ subtotal }}
+                                {% else %}
+                                &#8377;{{ subtotal|add:50 }}
+                                {% endif %}
+                                {% endwith %}
+                            </span>
+                        </h5>
+                        
+                        <div class="box-progress-checkout mt-4">
+                            <div class="form-group mb-3">
+                                <div class="tf-check-agree">
+                                    <input type="checkbox" id="agree_terms" name="agree_terms" form="checkout-form" required>
+                                    <label for="agree_terms" class="text-def">
+                                        I agree with the <a href="#" class="link">terms and conditions</a>
+                                    </label>
+                                </div>
+                            </div>
+                            <button type="submit" class="tf-btn-nor w-100" id="place-order-btn" form="checkout-form">
+                                Place Order
+                            </button>
+                            <p class="text-center mt-3">
+                                <a href="{% url 'shop_cart' %}" class="link text-underline">
+                                    <i class="fa-solid fa-arrow-left"></i> Back to Cart
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="empty-cart text-center">
+                    <h3>Your cart is empty</h3>
+                    <p>Looks like you haven't added any products to your cart yet.</p>
+                    <a href="{% url 'shop_products' %}" class="tf-btn">Continue Shopping</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /Checkout -->
+
+<style>
+.improved-checkout-page .checkout-form-card,
+.improved-checkout-page .box-order,
+.improved-checkout-page .empty-cart {
+    background: #fff;
+    border: 1px solid rgba(21, 98, 68, 0.1);
+    border-radius: 14px;
+    box-shadow: 0 10px 28px rgba(16, 41, 28, 0.06);
+}
+
+.improved-checkout-page .checkout-form-card {
+    padding: 26px;
+}
+
+.improved-checkout-page .checkout-card-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 22px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(21, 98, 68, 0.1);
+}
+
+.improved-checkout-page .checkout-step-label {
+    display: block;
+    margin-bottom: 6px;
+    color: #1f7c53;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.improved-checkout-page .title-checkout {
+    margin: 0;
+    color: #1d3527;
+    font-size: 22px;
+}
+
+.improved-checkout-page .checkout-card-icon {
+    width: 42px;
+    height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: #eef8f1;
+    color: #1f7c53;
+    flex: 0 0 auto;
+}
+
+.improved-checkout-page .saved-addresses {
+    padding: 16px;
+    border: 1px dashed rgba(21, 98, 68, 0.18);
+    border-radius: 12px;
+    background: #f8fcf9;
+    overflow: visible;
+}
+
+.improved-checkout-page .checkout-address-select {
+    position: relative;
+    z-index: 20;
+}
+
+.improved-checkout-page .checkout-address-select-button {
+    width: 100%;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    border: 1px solid #dce7df;
+    border-radius: 10px;
+    background: #fff;
+    color: #1d3527;
+    text-align: left;
+    box-shadow: none;
+    transform: none;
+}
+
+.improved-checkout-page .checkout-address-select-button span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.improved-checkout-page .checkout-address-select-button i {
+    color: #567161;
+    font-size: 12px;
+    flex: 0 0 auto;
+    transition: transform 0.2s ease;
+}
+
+.improved-checkout-page .checkout-address-select.is-open .checkout-address-select-button {
+    border-color: #1f7c53;
+    box-shadow: 0 0 0 3px rgba(31, 124, 83, 0.12);
+}
+
+.improved-checkout-page .checkout-address-select.is-open .checkout-address-select-button i {
+    transform: rotate(180deg);
+}
+
+.improved-checkout-page .checkout-address-options {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(100% + 8px);
+    z-index: 50;
+    max-height: 240px;
+    overflow-y: auto;
+    padding: 6px;
+    border: 1px solid #dce7df;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 18px 40px rgba(16, 41, 28, 0.14);
+}
+
+.improved-checkout-page .checkout-address-option {
+    width: 100%;
+    display: grid;
+    gap: 3px;
+    padding: 10px 12px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: #1d3527;
+    text-align: left;
+    box-shadow: none;
+    transform: none;
+}
+
+.improved-checkout-page .checkout-address-option:hover,
+.improved-checkout-page .checkout-address-option.is-selected {
+    background: #eef8f1;
+    color: #1f7c53;
+}
+
+.improved-checkout-page .checkout-address-option-title {
+    font-weight: 700;
+}
+
+.improved-checkout-page .checkout-address-option-text {
+    color: #66786b;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.improved-checkout-page .field-row {
+    margin-bottom: 18px;
+}
+
+.improved-checkout-page .field-row label {
+    display: block;
+    margin-bottom: 7px;
+    color: #253d2f;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.improved-checkout-page .field-row input,
+.improved-checkout-page .field-row textarea,
+.improved-checkout-page .tf-select select {
+    width: 100%;
+    min-height: 50px;
+    padding: 12px 14px;
+    border: 1px solid #dce7df;
+    border-radius: 10px;
+    background: #fff;
+    color: #1d3527;
+    font-size: 15px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.improved-checkout-page .field-row textarea {
+    min-height: 96px;
+    resize: vertical;
+}
+
+.improved-checkout-page .field-row input:focus,
+.improved-checkout-page .field-row textarea:focus,
+.improved-checkout-page .tf-select select:focus {
+    outline: none;
+    border-color: #1f7c53;
+    box-shadow: 0 0 0 3px rgba(31, 124, 83, 0.12);
+    background: #fbfffc;
+}
+
+.improved-checkout-page .grid-2,
+.improved-checkout-page .grid-3 {
+    display: grid;
+    gap: 16px;
+}
+
+.improved-checkout-page .grid-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.improved-checkout-page .grid-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.improved-checkout-page .tf-select select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23567161' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.6' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 12px center;
+    background-repeat: no-repeat;
+    background-size: 18px;
+    padding-right: 42px;
+}
+
+.improved-checkout-page .payment-methods {
+    display: grid;
+    gap: 12px;
+}
+
+.improved-checkout-page .payment-item {
+    position: relative;
+    padding: 0;
+    border: 1px solid #dce7df;
+    border-radius: 12px;
+    background: #fff;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.improved-checkout-page .payment-item:hover {
+    border-color: rgba(31, 124, 83, 0.45);
+    background: #fbfffc;
+}
+
+.improved-checkout-page .payment-item input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.improved-checkout-page .payment-label {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    min-height: 64px;
+    padding: 14px 16px;
+    cursor: pointer;
+    color: #253d2f;
+    font-weight: 700;
+}
+
+.improved-checkout-page .payment-icon {
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: #f3f7f4;
+    color: #567161;
+    font-size: 18px;
+    flex: 0 0 auto;
+}
+
+.improved-checkout-page .payment-item:has(input:checked) {
+    border-color: #1f7c53;
+    background: #f4fbf6;
+    box-shadow: inset 0 0 0 1px rgba(31, 124, 83, 0.16);
+}
+
+.improved-checkout-page .payment-item:has(input:checked) .payment-icon {
+    background: #1f7c53;
+    color: #fff;
+}
+
+.improved-checkout-page .payment-item:has(input:checked) .payment-label {
+    color: #1f7c53;
+}
+
+.improved-checkout-page .cart-items-summary {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.improved-checkout-page .divider {
+    height: 1px;
+    background: #e0e0e0;
+    margin: 15px 0;
+}
+
+.improved-checkout-page .text-success {
+    color: #28a745;
+}
+
+.improved-checkout-page .empty-cart {
+    padding: 48px 20px;
+}
+
+@media (max-width: 991px) {
+    .improved-checkout-page .tf-sidebar-cart {
+        margin-top: 28px;
+    }
+}
+
+@media (max-width: 768px) {
+    .improved-checkout-page .checkout-form-card {
+        padding: 20px;
+    }
+
+    .improved-checkout-page .checkout-card-head {
+        align-items: center;
+    }
+
+    .improved-checkout-page .grid-2,
+    .improved-checkout-page .grid-3 {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+<!-- Razorpay Checkout Script -->
+{% if razorpay_order_id %}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log("Razorpay script loaded");
+
+        const razorpayOrderId = '{{ razorpay_order_id }}';
+        const razorpayKey = '{{ razorpay_key }}';
+        const totalAmount = {{ total_amount }} * 100; // Convert to paise
+        const customerName = '{{ customer_name|default:""|escapejs }}';
+        const customerEmail = '{{ customer_email|default:""|escapejs }}';
+        const customerPhone = '{{ customer_phone|default:""|escapejs }}';
+        const selectedPaymentMethod = '{{ selected_payment_method|default:"online" }}';
+
+        console.log("Razorpay Order ID:", razorpayOrderId);
+        console.log("Razorpay Key:", razorpayKey);
+        console.log("Total Amount:", totalAmount);
+
+        const options = {
+            key: razorpayKey,
+            amount: totalAmount,
+            currency: "INR",
+            name: "AgroConnect",
+            description: selectedPaymentMethod === "upi" ? "UPI Payment" : "Secure Order Payment",
+            order_id: razorpayOrderId,
+            method: selectedPaymentMethod === "upi" ? {
+                upi: true,
+                card: false,
+                netbanking: false,
+                wallet: false,
+                paylater: false
+            } : {
+                upi: true,
+                card: true,
+                netbanking: true,
+                wallet: true,
+                paylater: true
+            },
+            config: selectedPaymentMethod === "upi" ? {
+                display: {
+                    blocks: {
+                        upi_block: {
+                            name: "Pay with UPI",
+                            instruments: [
+                                {
+                                    method: "upi"
+                                }
+                            ]
+                        }
+                    },
+                    sequence: ["block.upi_block"],
+                    preferences: {
+                        show_default_blocks: false
+                    }
+                }
+            } : {},
+            handler: function(response) {
+                console.log("Payment successful:", response);
+                const form = document.getElementById('checkout-form');
+
+                let paymentIdInput = document.createElement('input');
+                paymentIdInput.type = 'hidden';
+                paymentIdInput.name = 'razorpay_payment_id';
+                paymentIdInput.value = response.razorpay_payment_id;
+                form.appendChild(paymentIdInput);
+
+                let orderIdInput = document.createElement('input');
+                orderIdInput.type = 'hidden';
+                orderIdInput.name = 'razorpay_order_id';
+                orderIdInput.value = response.razorpay_order_id;
+                form.appendChild(orderIdInput);
+
+                let signatureInput = document.createElement('input');
+                signatureInput.type = 'hidden';
+                signatureInput.name = 'razorpay_signature';
+                signatureInput.value = response.razorpay_signature;
+                form.appendChild(signatureInput);
+
+                form.submit();
+            },
+            prefill: {
+                name: customerName,
+                email: customerEmail,
+                contact: customerPhone
+            },
+            theme: {
+                color: "#1f7c53",
+                backdrop_color: "rgba(13, 32, 21, 0.72)"
+            },
+            retry: {
+                enabled: true,
+                max_count: 3
+            },
+            remember_customer: false,
+            modal: {
+                ondismiss: function() {
+                    console.warn("Payment dismissed by user");
+                    window.location.href = '{% url "checkout" %}';
+                }
+            }
+        };
+
+        try {
+            const rzp = new Razorpay(options);
+            console.log("Opening Razorpay modal");
+            rzp.open();
+        } catch (error) {
+            console.error("Error initializing Razorpay:", error);
+        }
+    });
+</script>
+{% endif %}
+
+<!-- Payment Method Selection Script -->
+{% if not razorpay_order_id %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const placeOrderBtn = document.getElementById('place-order-btn');
+    const checkoutForm = document.getElementById('checkout-form');
+    const paymentMethodRadios = document.querySelectorAll('input[name="payment_method"]');
+    const agreeTerms = document.getElementById('agree_terms');
+    
+    placeOrderBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // Check if terms are agreed
+        if (!agreeTerms.checked) {
+            alert('Please agree to the terms and conditions');
+            return;
+        }
+        
+        // Get selected payment method
+        let selectedPaymentMethod = null;
+        paymentMethodRadios.forEach(function(radio) {
+            if (radio.checked) {
+                selectedPaymentMethod = radio.value;
+            }
+        });
+        
+        if (selectedPaymentMethod === 'online') {
+            // For online payment, submit the form to initiate Razorpay
+            checkoutForm.submit();
+        } else {
+            // For COD, submit normally
+            checkoutForm.submit();
+        }
+    });
+});
+</script>
+{% endif %}
+{% endblock %}
+

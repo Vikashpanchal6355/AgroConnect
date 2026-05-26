@@ -1,0 +1,254 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+      <!-- Page-title -->
+        <div class="page-title page-portfolio-details  ">
+            <div class="rellax" data-rellax-speed="5">
+                <img src="{% static 'images/page-title/portfolio.jpg' %}" alt="">
+            </div>
+
+            <div class="content-wrap">
+                <div class="tf-container w-1290">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="content">
+                                <p class="sub-title">
+                                    See Featured Products on AgroConnect
+                                </p>
+                                <h1 class="title">
+                                    AgroConnect Products
+                                </h1>
+                                <div class="icon-img">
+                                    <img src="{% static 'images/item/line-throw-title.png' %}" alt="">
+                                </div>
+                                <div class="breadcrumb">
+                                    <a href="{% url 'index' %}">Home</a>
+                                    <div class="icon">
+                                        <i class="icon-arrow-right1"></i>
+                                    </div>
+                                     <a href="javascript:void(0)"> AgroConnect Products</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="img-item item-2">
+                <img src="{% static 'images/item/grass.png' %}" alt="">
+            </div>
+        </div><!-- /.Page-title -->
+
+        <!-- Main-content -->
+        <div class="main-content page-portfolio-1 flat-portfolio">
+            <div class="tf-container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="col-lg-12 mb-40">
+                            <div class="wg-tabs">
+                                <ul class="overflow-x-auto menu-tab mb-65 portfolio-filter">
+                                    <li class="item active">
+                                        <a href="#" class="btn-tab active" data-filter="*"> All Products</a>
+                                    </li>
+                                    <li class="item"><a href="#" class="btn-tab" data-filter=".organic">Organic</a></li>
+                                    <li class="item"><a href="#" class="btn-tab" data-filter=".farm">Farm Products</a></li>
+                                    <li class="item"><a href="#" class="btn-tab" data-filter=".harvest">Harvest</a></li>
+                                    <li class="item"><a href="#" class="btn-tab" data-filter=".vegetable">Vegetables</a>
+                                    </li>
+                                    <li class="item"><a href="#" class="btn-tab" data-filter=".fruit">Fruits</a></li>
+                                    <li class="item"><a href="#" class="btn-tab" data-filter=".cattle">Livestock</a></li>
+                                </ul>
+                                <ul class="portfolio-wrap2 grid-isotope-1">
+                                    <li class="item organic farm">
+                                        <div class="box-portfolio-style-2 img-hover tf-img-hover">
+                                            <div class="image hover-item hover14 ">
+                                                <img src="{% static 'images/widget/portfolio-1-style-2.jpg' %}"
+                                                    data-src="{% static 'images/widget/portfolio-1-style-2.jpg' %}" alt=""
+                                                    class=" lazyload">
+                                            </div>
+                                            <div class="content">
+                                                <p class="sub font-farmhouse text-upper">Farm Products</p>
+                                                <a href="#"
+                                                    class="title fs-23 font-worksans fw-6 hover-text-secondary">Fresh
+                                                    Produce
+                                                    from Local
+                                                    Farms</a>
+                                                <p class="text font-nunito">Discover high-quality agricultural products
+                                                    from verified farmers on AgroConnect.</p>
+                                                <a href="#" class="tf-btn-read text-white hover-text-secondary">
+                                                    Read More
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="item farm harvest">
+                                        <div class="box-portfolio-style-2 img-hover tf-img-hover">
+                                            <div class="content">
+                                                <p class="sub font-farmhouse text-upper">Agriculture - Fruit</p>
+                                                <a href="#"
+                                                    class="title fs-23 font-worksans fw-6 hover-text-secondary">Fresh
+                                                    Produce
+                                                    from Local
+                                                    Farms</a>
+                                                <p class="text font-nunito">Discover high-quality agricultural products
+                                                    from verified farmers on AgroConnect.</p>
+                                                <a href="#" class="tf-btn-read text-white hover-text-secondary">
+                                                    Read More
+                                                </a>
+                                            </div>
+                                            <div class="image hover-item hover14">
+                                                <img src="{% static 'images/widget/portfolio-2-style-2.jpg' %}"
+                                                    data-src="{% static 'images/widget/portfolio-2-style-2.jpg' %}" alt=""
+                                                    class=" lazyload">
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="item harvest vegetable">
+                                        <div class="box-portfolio-style-2 img-hover tf-img-hover">
+                                            <div class="image hover-item hover14">
+                                                <img src="{% static 'images/widget/portfolio-3-style-2.jpg' %}"
+                                                    data-src="{% static 'images/widget/portfolio-3-style-2.jpg' %}" alt=""
+                                                    class=" lazyload">
+                                            </div>
+                                            <div class="content">
+                                                <p class="sub font-farmhouse text-upper">Cow - farm</p>
+                                                <a href="#"
+                                                    class="title fs-23 font-worksans fw-6 hover-text-secondary">Provides
+                                                    The Best Grass For Cows</a>
+                                                <p class="text font-nunito">Discover high-quality agricultural products
+                                                    from verified farmers on AgroConnect.</p>
+                                                <a href="#" class="tf-btn-read text-white hover-text-secondary">
+                                                    Read More
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="item vegetable fruit">
+                                        <div class="box-portfolio-style-2 img-hover tf-img-hover">
+
+                                            <div class="content">
+                                                <p class="sub font-farmhouse text-upper">Agriculture - Wheat</p>
+                                                <a href="#"
+                                                    class="title fs-23 font-worksans fw-6 hover-text-secondary">Harvest
+                                                    Wheat At The End
+                                                    Of The Season</a>
+                                                <p class="text font-nunito">Discover high-quality agricultural products
+                                                    from verified farmers on AgroConnect.</p>
+                                                <a href="#" class="tf-btn-read text-white hover-text-secondary">
+                                                    Read More
+                                                </a>
+                                            </div>
+                                            <div class="image hover-item hover14">
+                                                <img src="{% static 'images/widget/portfolio-4-style-2.jpg' %}"
+                                                    data-src="{% static 'images/widget/portfolio-4-style-2.jpg' %}" alt=""
+                                                    class=" lazyload">
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="item fruit cattle">
+                                        <div class="box-portfolio-style-2 img-hover tf-img-hover">
+                                            <div class="image hover-item hover14">
+                                                <img src="{% static 'images/widget/portfolio-1-style-2.jpg' %}"
+                                                    data-src="{% static 'images/widget/portfolio-1-style-2.jpg' %}" alt=""
+                                                    class=" lazyload">
+                                            </div>
+                                            <div class="content">
+                                                <p class="sub font-farmhouse text-upper">Farm Products</p>
+                                                <a href="#"
+                                                    class="title fs-23 font-worksans fw-6 hover-text-secondary">Fresh
+                                                    Produce
+                                                    from Local
+                                                    Farms</a>
+                                                <p class="text font-nunito">Discover high-quality agricultural products
+                                                    from verified farmers on AgroConnect.</p>
+                                                <a href="#" class="tf-btn-read text-white hover-text-secondary">
+                                                    Read More
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="item cattle organic">
+                                        <div class="box-portfolio-style-2 img-hover tf-img-hover">
+                                            <div class="content">
+                                                <p class="sub font-farmhouse text-upper">Agriculture - Fruit</p>
+                                                <a href="#"
+                                                    class="title fs-23 font-worksans fw-6 hover-text-secondary">Fresh
+                                                    Produce
+                                                    from Local
+                                                    Farms</a>
+                                                <p class="text font-nunito">Discover high-quality agricultural products
+                                                    from verified farmers on AgroConnect.</p>
+                                                <a href="#" class="tf-btn-read text-white hover-text-secondary">
+                                                    Read More
+                                                </a>
+                                            </div>
+                                            <div class="image hover-item hover14">
+                                                <img src="{% static 'images/widget/portfolio-2-style-2.jpg' %}"
+                                                    data-src="{% static 'images/widget/portfolio-2-style-2.jpg' %}" alt=""
+                                                    class=" lazyload">
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="item fruit cattle hidden">
+                                        <div class="box-portfolio-style-2 img-hover tf-img-hover">
+                                            <div class="image hover-item hover14">
+                                                <img src="{% static 'images/widget/portfolio-1-style-2.jpg' %}"
+                                                    data-src="{% static 'images/widget/portfolio-1-style-2.jpg' %}" alt=""
+                                                    class=" lazyload">
+                                            </div>
+                                            <div class="content">
+                                                <p class="sub font-farmhouse text-upper">Farm Products</p>
+                                                <a href="#"
+                                                    class="title fs-23 font-worksans fw-6 hover-text-secondary">Fresh
+                                                    Produce
+                                                    from Local
+                                                    Farms</a>
+                                                <p class="text font-nunito">Discover high-quality agricultural products
+                                                    from verified farmers on AgroConnect.</p>
+                                                <a href="#" class="tf-btn-read text-white hover-text-secondary">
+                                                    Read More
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="item cattle organic hidden">
+                                        <div class="box-portfolio-style-2 img-hover tf-img-hover">
+                                            <div class="content">
+                                                <p class="sub font-farmhouse text-upper">Agriculture - Fruit</p>
+                                                <a href="#"
+                                                    class="title fs-23 font-worksans fw-6 hover-text-secondary">Fresh
+                                                    Produce
+                                                    from Local
+                                                    Farms</a>
+                                                <p class="text font-nunito">Discover high-quality agricultural products
+                                                    from verified farmers on AgroConnect.</p>
+                                                <a href="#" class="tf-btn-read text-white hover-text-secondary">
+                                                    Read More
+                                                </a>
+                                            </div>
+                                            <div class="image hover-item hover14">
+                                                <img src="{% static 'images/widget/portfolio-2-style-2.jpg' %}"
+                                                    data-src="{% static 'images/widget/portfolio-2-style-2.jpg' %}" alt=""
+                                                    class=" lazyload">
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <div class="d-flex justify-center">
+                                    <button id="load-more2" class="tf-btn btn-loadMore mt-20 scale-40">
+                                        <span class="text-style">
+                                            Load More Products
+                                        </span>
+                                        <div class="icon">
+                                            <i class="icon-arrow_right"></i>
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div><!-- /.Main-content -->
+{% endblock %}

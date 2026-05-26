@@ -1,0 +1,80 @@
+{% extends 'myadmin/base.html' %}
+{% load static %}
+
+{% block page_title %}Add Category{% endblock %}
+{% block page_header %}Add Category{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12">
+    <div class="card my-4">
+      <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+        <div class="bg-gradient-success shadow-success border-radius-lg pt-4">
+          <h6 class="text-white text-capitalize ps-3 mb-0">Add New Category</h6>
+        </div>
+      </div>
+      <div class="card-body">
+        <form method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          
+          <!-- Basic Info -->
+          <div class="card mb-4">
+            <div class="card-header bg-light">
+              <h6 class="mb-0 text-success">Category Information</h6>
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <label class="form-label fw-bold">Category Name <span class="text-danger">*</span></label>
+                <input type="text" name="name" class="form-control border-success" placeholder="Enter category name" required>
+              </div>
+              
+              <div class="mb-3">
+                <label class="form-label fw-bold">Description</label>
+                <textarea name="description" class="form-control border-success" rows="3" placeholder="Enter category description"></textarea>
+              </div>
+              
+              <div class="mb-3">
+                <label class="form-label fw-bold">Category Image</label>
+                <div class="input-group">
+                  <input type="file" name="image" class="form-control border-success" accept="image/*">
+                </div>
+                <small class="text-muted">Recommended size: 400x400 pixels</small>
+              </div>
+            </div>
+          </div>
+          
+          <!-- SEO -->
+          <div class="card mb-4">
+            <div class="card-header bg-light">
+              <h6 class="mb-0 text-success">SEO Settings</h6>
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <label class="form-label fw-bold">Meta Title</label>
+                <input type="text" name="meta_title" class="form-control border-success" placeholder="SEO title for search engines">
+                <small class="text-muted">Recommended: 50-60 characters</small>
+              </div>
+              
+              <div class="mb-3">
+                <label class="form-label fw-bold">Meta Description</label>
+                <textarea name="meta_description" class="form-control border-success" rows="2" placeholder="SEO description for search engines"></textarea>
+                <small class="text-muted">Recommended: 150-160 characters</small>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Actions -->
+          <div class="text-end">
+            <a href="{% url 'myadmin:categories' %}" class="btn btn-secondary btn-lg me-2">
+              <i class="fas fa-times"></i> Cancel
+            </a>
+            <button type="submit" class="btn btn-success btn-lg">
+              <i class="fas fa-plus"></i> Add Category
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

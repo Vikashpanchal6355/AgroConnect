@@ -1,0 +1,209 @@
+# Spanish translations for AgroConnect
+# Copyright (C) 2026
+# This file is distributed under the same license as the AgroConnect project.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: AgroConnect 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-02-23 12:00+0530\n"
+"PO-Revision-Date: 2026-02-23 12:00+0530\n"
+"Last-Translator: \n"
+"Language-Team: Spanish\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: user/template/base.html:229
+msgid "Search Product..."
+msgstr "Buscar Producto..."
+
+#: user/template/base.html
+msgid "Search for anything"
+msgstr "Buscar cualquier cosa"
+
+#: user/template/base.html:180
+msgid "English"
+msgstr "Inglés"
+
+#: user/template/base.html
+msgid "Spanish"
+msgstr "Español"
+
+#: user/template/base.html:185
+msgid "Home"
+msgstr "Inicio"
+
+#: user/template/base.html:186
+msgid "About Us"
+msgstr "Sobre Nosotros"
+
+#: user/template/base.html:187
+msgid "Portfolio"
+msgstr "Portafolio"
+
+#: user/template/base.html:188
+msgid "Shop"
+msgstr "Tienda"
+
+#: user/template/base.html:189
+msgid "Services"
+msgstr "Servicios"
+
+#: user/template/base.html:190
+msgid "Contact"
+msgstr "Contacto"
+
+#: user/template/base.html:345
+msgid "Search Products"
+msgstr "Buscar Productos"
+
+#: user/template/base.html:350
+msgid "Search for anything"
+msgstr "Buscar cualquier cosa"
+
+#: user/template/shop-products.html:18
+msgid "Search Results"
+msgstr "Resultados de Búsqueda"
+
+#: user/template/shop-products.html:23
+msgid "Showing %s products"
+msgstr "Mostrando %s productos"
+
+#: user/template/shop-products.html:23
+msgid "No products found"
+msgstr "No se encontraron productos"
+
+#: user/template/shop-products.html:230
+msgid "Buy Health Foods At Our Store"
+msgstr "Compre Alimentos Saludables En Nuestra Tienda"
+
+#: user/template/shop-products.html:231
+msgid "Shop Products"
+msgstr "Productos de la Tienda"
+
+#: user/template/shop-products.html:260
+msgid "Categories"
+msgstr "Categorías"
+
+#: user/template/shop-products.html:275
+msgid "All Categories"
+msgstr "Todas las Categorías"
+
+#: user/template/shop-products.html:290
+msgid "Price"
+msgstr "Precio"
+
+#: user/template/shop-products.html:340
+msgid "Filter By"
+msgstr "Filtrar Por"
+
+#: user/template/shop-products.html:355
+msgid "Clear All"
+msgstr "Limpiar Todo"
+
+#: user/template/shop-products.html:380
+msgid "Showing"
+msgstr "Mostrando"
+
+#: user/template/shop-products.html:380
+msgid "products"
+msgstr "productos"
+
+#: user/template/shop-products.html:420
+msgid "Add to Cart"
+msgstr "Añadir al Carrito"
+
+#: user/template/shop-products.html:450
+msgid "View Details"
+msgstr "Ver Detalles"
+
+#: user/template/shop-cart.html
+msgid "Shopping Cart"
+msgstr "Carrito de Compras"
+
+#: user/template/shop-cart.html
+msgid "Your cart is empty"
+msgstr "Tu carrito está vacío"
+
+#: user/template/shop-cart.html
+msgid "Continue Shopping"
+msgstr "Continuar Comprando"
+
+#: user/template/shop-cart.html
+msgid "Subtotal"
+msgstr "Subtotal"
+
+#: user/template/shop-cart.html
+msgid "Total"
+msgstr "Total"
+
+#: user/template/shop-cart.html
+msgid "Proceed to Checkout"
+msgstr "Proceder al Pago"
+
+#: user/template/wishlist.html
+msgid "My Wishlist"
+msgstr "Mi Lista de Deseos"
+
+#: user/template/wishlist.html
+msgid "Your wishlist is empty"
+msgstr "Tu lista de deseos está vacía"
+
+#: user/template/order-tracking.html
+msgid "Order Tracking"
+msgstr "Seguimiento del Pedido"
+
+#: user/template/order-tracking.html
+msgid "Track Your Order"
+msgstr "Rastrea Tu Pedido"
+
+#: user/template/order-tracking.html
+msgid "Order ID"
+msgstr "ID del Pedido"
+
+#: user/template/order-tracking.html
+msgid "Track"
+msgstr "Rastrear"
+
+#: user/template/base.html
+msgid "My Account"
+msgstr "Mi Cuenta"
+
+#: user/template/base.html
+msgid "My Orders"
+msgstr "Mis Pedidos"
+
+#: user/template/base.html
+msgid "Logout"
+msgstr "Cerrar Sesión"
+
+#: user/template/base.html
+msgid "Login"
+msgstr "Iniciar Sesión"
+
+#: user/template/base.html
+msgid "Register"
+msgstr "Registrarse"
+
+#: user/template/base.html
+msgid "Welcome"
+msgstr "Bienvenido"
+
+#: user/template/base.html
+msgid "Call and Order in"
+msgstr "Llama y Ordena"
+
+#: user/template/base.html
+msgid "Order Online Now"
+msgstr "Ordena Ahora en Línea"
+
+#: user/template/base.html
+msgid "Your Cart"
+msgstr "Tu Carrito"
+
+#: user/template/base.html
+msgid "Find a Store"
+msgstr "Encontrar una Tienda"

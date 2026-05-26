@@ -1,0 +1,823 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- Page-title -->
+<div class="page-title page-portfolio-details  ">
+    <div class="rellax" data-rellax-speed="5">
+        <img src="{% static 'images/page-title/shop-detail.jpg' %}" alt="">
+    </div>
+    <div class="content-wrap">
+        <div class="tf-container w-1290">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="content center">
+                        <p class="sub-title">
+                            Buy Health Foods At Our Store
+                        </p>
+                        <h1 class="title">
+                            Product details
+                        </h1>
+                        <div class="icon-img">
+                            <img src="{% static 'images/item/line-throw-title.png' %}" alt="">
+                        </div>
+                        <div class="breadcrumb">
+                            <a href="{% url 'index' %}">Home</a>
+                            <div class="icon">
+                                <i class="icon-arrow-right1"></i>
+                            </div>
+                            <a href="{% url 'shop_products' %}"> Shop Products </a>
+                            <div class="icon">
+                                <i class="icon-arrow-right1"></i>
+                            </div>
+                            <a href="javascript:void(0)">{{ product.name }}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="img-item item-2">
+        <img src="{% static 'images/item/grass-6.png' %}" alt="">
+    </div>
+</div><!-- /.Page-title -->
+
+
+<!-- Main-content -->
+<div class="main-content page-shop-detail pt-0">
+
+    <!-- Section box icon wrap -->
+    <section class="s-box-wrap">
+        <div class="tf-container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="wrap">
+                        <div class="box-icon style-2 ic-hover wow fadeInUp" data-wow-delay="0s ">
+                            <div class="icon style-circle hover-icon">
+                                <i class="fa-solid fa-rocket"></i>
+                            </div>
+                            <a href="#" class="caption fw-6  font-worksans hover-text-secondary">
+                                Free Shipping
+                            </a>
+                            <p class="text font-nunito">
+                                Ultrices sagittis orci a scelerisque <br> purus semper eget duis at.
+                            </p>
+                        </div>
+                        <div class="box-icon style-2 ic-hover wow fadeInUp" data-wow-delay="0.1s ">
+                            <div class="icon style-circle hover-icon">
+                                <i class="fa-solid fa-coins"></i>
+                            </div>
+                            <a href="#" class="caption fw-6  font-worksans hover-text-secondary">
+                                100% Secure Payment
+                            </a>
+                            <p class="text font-nunito">
+                                Ultrices sagittis orci a scelerisque <br> purus semper eget duis at.
+                            </p>
+                        </div>
+                        <div class="box-icon style-2 ic-hover wow fadeInUp" data-wow-delay="0.2s ">
+                            <div class="icon style-circle hover-icon">
+                                <i class="fa-solid fa-comment-dots"></i>
+                            </div>
+                            <a href="#" class="caption fw-6  font-worksans hover-text-secondary">
+                                24/7 Dedicated Support
+                            </a>
+                            <p class="text font-nunito">
+                                Ultrices sagittis orci a scelerisque <br> purus semper eget duis at.
+                            </p>
+                        </div>
+                        <div class="box-icon style-2 ic-hover wow fadeInUp" data-wow-delay="0.3s ">
+                            <div class="icon style-circle hover-icon">
+                                <i class="fa-solid fa-tag"></i>
+                            </div>
+                            <a href="#" class="caption fw-6  font-worksans hover-text-secondary">
+                                Daily Offers
+                            </a>
+                            <p class="text font-nunito">
+                                Ultrices sagittis orci a scelerisque <br> purus semper eget duis at.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="s-img-item item-1">
+            <img src="{% static 'images/item/silo-2.png' %}" alt="">
+        </div>
+        <div class="s-img-item item-2">
+            <img src="{% static 'images/item/page-title-top.png' %}" alt="">
+        </div>
+    </section><!-- Section box icon wrap -->
+
+    <!-- Section product detail -->
+    <section class="s-product-detail section-image-zoom zoom-active">
+        <div class="tf-container w-1290">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="thumbs-slider sticky-top">
+                        <div class="swiper-container tf-product-media-main">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide">
+                                    <div class="image item">
+                                        {% if product.image %}
+                                        <img src="{{ product.image.url }}" data-src="{{ product.image.url }}"
+                                            data-zoom="{{ product.image.url }}" alt="{{ product.name }}"
+                                            class="lazyload tf-image-zoom">
+                                        {% else %}
+                                        <img src="{% static 'images/section/shop-detail-1.jpg' %}"
+                                            data-src="{% static 'images/section/shop-detail-1.jpg' %}"
+                                            data-zoom="{% static 'images/section/shop-detail-1.jpg' %}"
+                                            alt="{{ product.name }}" class="lazyload tf-image-zoom">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="swiper-slide">
+                                    <div class="image item ">
+                                        <img src="{% static 'images/section/shop-detail-2.jpg' %}"
+                                            data-src="{% static 'images/section/shop-detail-2.jpg' %}"
+                                            data-zoom="./images/section/shop-detail-2.jpg" alt=""
+                                            class="lazyload  tf-image-zoom">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="swiper-container tf-product-media-thumbs" data-direction="horizontal">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide">
+                                    <div class="image item">
+                                        {% if product.image %}
+                                        <img src="{{ product.image.url }}" data-src="{{ product.image.url }}"
+                                            alt="{{ product.name }}" class="lazyload">
+                                        {% else %}
+                                        <img src="{% static 'images/section/shop-detail-1.jpg' %}"
+                                            data-src="{% static './images/section/shop-detail-1.jpg' %}"
+                                            alt="{{ product.name }}" class="lazyload">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="tf-zoom-main"></div>
+                    <div class="content-inner">
+                        <h3 class="fw-6 name font-worksans title">
+                            {{ product.name }}
+                        </h3>
+                        <div class="rating-wrap">
+                            <div class="wg-rating">
+                                {% for i in "12345" %}
+                                {% if i|add:"0" <= product.rating %} <i class="fa-solid fa-star"></i>
+                                    {% else %}
+                                    <i class="fa-regular fa-star"></i>
+                                    {% endif %}
+                                    {% endfor %}
+                            </div>
+                            <p class="font-nunito">
+                                {{ product.rating }}/5
+                            </p>
+                        </div>
+                        <div class="price-wrap price-left">
+                            {% if product.original_price %}
+                            <span class=" price-1">&#8377;{{ product.original_price }}</span>
+                            {% endif %}
+
+                            <span class=" price-2">&#8377;{{ product.price }}</span>
+                        </div>
+                        <p class="sub font-nunito">
+                            {{ product.description|default:"No description available." }}
+                        </p>
+                        <ul class="notice-list">
+                            <li>
+                                <svg id="Layer_1" height="24" viewBox="0 0 512 512" width="24"
+                                    xmlns="http://www.w3.org/2000/svg" data-name="Layer 1">
+                                    <path
+                                        d="m441.667 118.253-192-85.333a10.687 10.687 0 0 0 -8.667 0l-192 85.333a10.669 10.669 0 0 0 -6.333 9.747v234.667a10.669 10.669 0 0 0 6.333 9.747l192 85.333a10.673 10.673 0 0 0 8.667 0l192-85.333a10.669 10.669 0 0 0 6.333-9.747v-234.667a10.669 10.669 0 0 0 -6.333-9.747z"
+                                        fill="#ff9500" />
+                                    <path
+                                        d="m249.667 457.747 192-85.333a10.669 10.669 0 0 0 6.333-9.747v-234.667a10.669 10.669 0 0 0 -6.333-9.747l-192-85.333a10.687 10.687 0 0 0 -4.334-.92v426.667a10.7 10.7 0 0 0 4.334-.92z"
+                                        fill="#fbab01" />
+                                    <path
+                                        d="m245.333 213.333 201.65-89.622a10.572 10.572 0 0 0 -5.316-5.459l-192-85.333a10.687 10.687 0 0 0 -8.667 0l-192 85.334a10.572 10.572 0 0 0 -5.316 5.459z"
+                                        fill="#fac100" />
+                                    <path d="m156.467 173.837 205.133-91.17-26.265-11.673-205.133 91.17z"
+                                        fill="#fbab01" />
+                                    <circle cx="373.333" cy="362.667" fill="#00cf66" r="96" />
+                                    <path
+                                        d="m389.333 437.333a90.608 90.608 0 0 1 -56.1-161.807 95.949 95.949 0 1 0 127.241 127.238 90.434 90.434 0 0 1 -71.141 34.569z"
+                                        fill="#00b157" />
+                                    <path
+                                        d="m362.667 405.333a10.632 10.632 0 0 1 -7.542-3.125l-26.667-26.667a10.666 10.666 0 0 1 15.083-15.083l19.125 19.122 45.792-45.789a10.666 10.666 0 1 1 15.083 15.083l-53.333 53.333a10.632 10.632 0 0 1 -7.541 3.126z"
+                                        fill="#eaeff0" />
+                                </svg>
+                                <p>
+                                    Available: {{ product.stock }} KG
+                                </p>
+                            </li>
+                            <li>
+                                <svg height="18" viewBox="0 0 58 44" width="24" xmlns="http://www.w3.org/2000/svg">
+                                    <g id="Page-1" fill="none" fill-rule="evenodd">
+                                        <g>
+                                            <ellipse cx="14.5" cy="22" fill="#ecf0f1" rx="14.5" ry="22" />
+                                            <ellipse cx="43.5" cy="22" fill="#ecf0f1" rx="14.5" ry="22" />
+                                            <ellipse cx="12" cy="22" fill="#2fa8cc" rx="10" ry="15" />
+                                            <ellipse cx="41" cy="22" fill="#2fa8cc" rx="10" ry="15" />
+                                            <ellipse cx="11" cy="22" fill="#35495e" rx="7" ry="10" />
+                                            <ellipse cx="40" cy="22" fill="#35495e" rx="7" ry="10" />
+                                            <g fill="#ecf0f1">
+                                                <circle cx="16" cy="15" r="3" />
+                                                <circle cx="45" cy="15" r="3" />
+                                            </g>
+                                        </g>
+                                    </g>
+                                </svg>
+                                <p>
+                                    {{ product.view_count }} people currently viewing this item
+                                </p>
+                            </li>
+                            <li>
+                                <svg height="21" preserveAspectRatio="xMidYMid" viewBox="-33 0 255 255" width="24"
+                                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/199/xlink">
+                                    <linearGradient id="linear-gradient-1" gradientUnits="userSpaceOnUse" x1="94.141"
+                                        x2="94.141" y1="255" y2=".188">
+                                        <stop offset="0" stop-color="#ff4c0d" />
+                                        <stop offset="1" stop-color="#fc9502" />
+                                    </linearGradient>
+                                    <g id="fire" fill-rule="evenodd">
+                                        <path id="path-1"
+                                            d="m187.899 164.809c-2.096 50.059-43.325 90.003-93.899 90.003-51.915 0-94-43.5-94-94 0-6.75-.121-20.24 10-43 6.057-13.621 9.856-22.178 12-30 1.178-4.299 3.469-11.129 10 0 3.851 6.562 4 16 4 16s14.328-10.995 24-32c14.179-30.793 2.866-49.2-1-62-1.338-4.428-2.178-12.386 7-9 9.352 3.451 34.076 20.758 47 39 18.445 26.035 25 51 25 51s5.906-7.33 8-15c2.365-8.661 2.4-17.239 9.999-7.999 7.227 8.787 17.96 25.3 24.001 40.999 10.969 28.509 7.899 55.997 7.899 55.997z"
+                                            fill="url(#linear-gradient-1)" />
+                                        <path id="path-2"
+                                            d="m94 254.812c-35.899 0-65-29.101-65-65 0-21.661 8.729-34.812 26.896-52.646 11.632-11.419 22.519-25.444 27.146-34.994.911-1.88 2.984-11.677 10.977-.206 4.193 6.016 10.766 16.715 14.981 25.846 7.266 15.743 9 31 9 31s7.121-4.196 12-15c1.573-3.482 4.753-16.664 13.643-3.484 6.523 9.672 15.484 27.062 15.357 49.484 0 35.899-29.102 65-65 65z"
+                                            fill="#fc9502" />
+                                        <path id="path-3"
+                                            d="m95 183.812c9.25 0 9.25 17.129 21 40 7.824 15.229-3.879 31-21 31s-26-13.879-26-31c0-17.12 16.75-40 26-40z"
+                                            fill="#fce202" />
+                                    </g>
+                                </svg>
+                                <p>
+                                    {{ product.sold_count }} items sold in last 3 hours
+                                </p>
+                            </li>
+                        </ul>
+                        <form action="{% url 'add_to_cart' %}" method="POST" data-login-required data-login-message="Kindly login before add to cart product">
+                            {% csrf_token %}
+                            <input type="hidden" name="product_id" value="{{ product.id }}">
+                            <div class="wrap-quantity">
+                                <div class="wg-quantity">
+                                    <span class="btn-quantity minus-btn"><i class="icon-arrow_down"></i></span>
+                                    <input class="font-worksans fw-5" type="text" name="quantity" value="1">
+                                    <span class="btn-quantity plus-btn"> <i class="icon-arrow_up"></i></span>
+                                </div>
+                                <button type="submit" class="tf-btn btn-add-cart">
+                                    <span class="text-style">
+                                        Add To Cart
+                                    </span>
+                                    <span class="icon">
+                                        <i class="fa-solid fa-cart-shopping"></i>
+                                    </span>
+                                </button>
+                            </div>
+                        </form>
+                        <div class="white-list-wrap">
+                            <form action="{% url 'add_to_wishlist' %}" method="POST" class="d-inline" data-login-required data-login-message="Kindly login before add to wishlist product">
+                                {% csrf_token %}
+                                <input type="hidden" name="product_id" value="{{ product.id }}">
+                                <button type="submit" class="icon style-circle"
+                                    style="background: none; border: none; cursor: pointer;">
+                                    <i class="fa-solid fa-heart"></i>
+                                    <span class="tt-text">
+                                        Add Wishlist
+                                    </span>
+                                </button>
+                            </form>
+                            <a href="{% url 'shop_products' %}?category={{ product.category.id }}" class="icon style-circle">
+                                <i class="fa-solid fa-layer-group"></i>
+                                <span class="tt-text">
+                                    More In Category
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                    <ul class="more-infor">
+                        <li>
+                            <p>SKU:{{ product.sku }}</p>
+                        </li>
+                        <li>
+                            <p>Category:<a href="{% url 'shop_products' %}?category={{ product.category.id }}">{{ product.category.name }}</a>
+                            </p>
+                        </li>
+                        <li>
+                            <p>Tags:{{ product.tags|default:"FOOD,NUTS,ORGANIC" }}</p>
+                        </li>
+
+                    </ul>
+                    <div class="bot">
+                        <p class="font-worksans fw-5 text">Share:</p>
+                        <div class="wg-social style-3">
+                            <ul class="list">
+                                <li class="item">
+                                    <a href="#"><i class="icon-facebook1"></i></a>
+                                </li>
+                                <li class="item">
+                                    <a href="#"><i class="icon-twitter"></i></a>
+                                </li>
+                                <li class="item">
+                                    <a href="#"><i class="icon-instagram2"></i></a>
+                                </li>
+                                <li class="item">
+                                    <a href="#"><i class="icon-pinterest"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+
+
+<!-- <div class="tf-sticky-btn">
+                    <div class="tf-container">
+                        <div class="row">
+                            <div class="col-12">
+
+                                <div class="content w-100 flex item-center">
+
+                                    <div class="tf-atc-product">
+                                        <div class="img-product">
+                                            <img src="{% static 'images/section/shop-detail-1.jpg' %}" alt="">
+                                        </div>
+                                        <span class="name-product">
+                                            Bag Of Succulent Oranges
+                                        </span>
+                                    </div>
+                                    <div class="tf-atc-btn">
+                                        <div class="wrap-quantity">
+                                            <div class="wg-quantity">
+                                                <span class="btn-quantity plus-btn"> <i
+                                                        class="icon-arrow_up"></i></span>
+                                                <input class="font-worksans fw-5" type="text" name="number" value="1">
+                                                <span class="btn-quantity minus-btn"><i
+                                                        class="icon-arrow_down"></i></span>
+                                            </div>
+                                            <button type="submit" class="tf-btn btn-add-cart">
+                                                <span class="text-style">
+                                                    Add To Cart
+                                                </span>
+                                                <span class="icon">
+                                                    <i class="fa-solid fa-cart-shopping"></i>
+                                                </span>
+                                            </button>
+                                            <div class="white-list-wrap">
+                                                <a href="#wishlist" class="icon style-circle" data-bs-toggle="modal">
+                                                    <i class="fa-solid fa-heart"></i>
+                                                    <span class="tt-text">
+                                                        Add Wishlist
+                                                    </span>
+                                                </a>
+                                                <a href="#" class="icon style-circle">
+                                                    <i class="fa-solid fa-repeat"></i>
+                                                    <span class="tt-text">
+                                                        Compare
+                                                    </span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+</section><!-- Section product detail -->
+
+<!-- Section tab -->
+<section class="s-tab">
+    <div class="tf-container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="wg-tabs style-2">
+                    <div class="flex justify-center">
+                        <ul class="menu-tab">
+                            <li class="item active"><a href="javascript:void(0)" class="btn-tab">Description</a></li>
+                            <li class="item"><a href="javascript:void(0)" class="btn-tab">Additional
+                                    information</a>
+                            </li>
+                            <li class="item"><a href="javascript:void(0)" class="btn-tab">Review ( 1
+                                    )</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="widget-content-tab">
+                        <div class="widget-content-inner active">
+                            <p class="text-1">{{ product.description|default:"No description available." }}</p>
+                        </div>
+                        <div class="widget-content-inner">
+                            <div class="table-infor">
+                                <table>
+                                    <tbody>
+                                        {% if product.additional_info %}
+                                        {% for key, value in additional_info_items %}
+                                        <tr>
+                                            <th>{{ key|title }}</th>
+                                            <td><p>{{ value }}</p></td>
+                                        </tr>
+                                        {% endfor %}
+                                        {% else %}
+                                        <tr>
+                                            <th>Additional Info</th>
+                                            <td><p>No additional information available.</p></td>
+                                        </tr>
+                                        {% endif %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="widget-content-inner">
+                            <div class="comment-wrap text-left">
+                                <h2 class=" fw-bold font-worksans">
+                                    Comments <span style="color: #888; font-size: 14px;">({{ reviews_list|length }} reviews)</span>
+                                </h2>
+                                {% if reviews_list %}
+                                <div class="reviews-content">
+                                    {% for review in reviews_list %}
+                                    <div class="review-item" style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #4CAF50;">
+                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                            <p class="reviewer-name" style="margin: 0; font-size: 16px;"><strong>{{ review.name }}</strong></p>
+                                            <div>
+                                                {% if review.rating %}
+                                                <span class="review-rating">
+                                                    {% for i in "12345" %}
+                                                    {% if i|add:"0" <= review.rating %}
+                                                    <i class="fa-solid fa-star" style="color: #ffc107;"></i>
+                                                    {% else %}
+                                                    <i class="fa-regular fa-star" style="color: #ffc107;"></i>
+                                                    {% endif %}
+                                                    {% endfor %}
+                                                </span>
+                                                {% endif %}
+                                                <span class="review-date" style="color: #888; font-size: 13px; margin-left: 10px;">{{ review.date }}</span>
+                                            </div>
+                                        </div>
+                                        <p class="review-comment" style="margin: 0; color: #555; line-height: 1.6;">{{ review.comment }}</p>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                {% else %}
+                                <p class="comment font-nunito">
+                                    No reviews yet. Be the first to review this product!
+                                </p>
+                                {% endif %}
+                            </div>
+                            <div class="post-comment-wrap text-left">
+                                <h2 class="fw-bold font-worksans">
+                                    Leave a Review
+                                </h2>
+
+                                <p class="sub-title font-nunito">
+                                    Your rating of this product *
+                                </p>
+                                <div class="star-rating" style="margin-bottom: 20px;">
+                                    <input type="radio" id="star5" name="rating" value="5" required/>
+                                    <label for="star5" title="5 stars"><i class="fa-solid fa-star"></i></label>
+                                    <input type="radio" id="star4" name="rating" value="4" />
+                                    <label for="star4" title="4 stars"><i class="fa-solid fa-star"></i></label>
+                                    <input type="radio" id="star3" name="rating" value="3" />
+                                    <label for="star3" title="3 stars"><i class="fa-solid fa-star"></i></label>
+                                    <input type="radio" id="star2" name="rating" value="2" />
+                                    <label for="star2" title="2 stars"><i class="fa-solid fa-star"></i></label>
+                                    <input type="radio" id="star1" name="rating" value="1" />
+                                    <label for="star1" title="1 star"><i class="fa-solid fa-star"></i></label>
+                                </div>
+                                <style>
+                                    .star-rating {
+                                        display: flex;
+                                        flex-direction: row-reverse;
+                                        justify-content: flex-end;
+                                    }
+                                    .star-rating input {
+                                        display: none;
+                                    }
+                                    .star-rating label {
+                                        font-size: 24px;
+                                        color: #ddd;
+                                        cursor: pointer;
+                                        transition: color 0.2s;
+                                    }
+                                    .star-rating label:hover,
+                                    .star-rating label:hover ~ label,
+                                    .star-rating input:checked ~ label {
+                                        color: #ffc107;
+                                    }
+                                </style>
+
+                                <form action="{% url 'submit_review' product.id %}" method="POST" class="form-post-comment" style="background: #f9f9f9; padding: 25px; border-radius: 10px;">
+                                    {% csrf_token %}
+                                    <div class="cols ">
+                                        <fieldset style="margin-bottom: 15px;">
+                                            <input type="text" name="name" placeholder="Name*" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px;">
+                                        </fieldset>
+                                        <fieldset style="margin-bottom: 15px;">
+                                            <input type="email" name="email" placeholder="Email*" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px;">
+                                        </fieldset>
+                                    </div>
+                                    <div class="cols field-text">
+                                        <textarea name="comment" id="message" placeholder="Your Review..."
+                                            required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; min-height: 100px;"></textarea>
+                                    </div>
+                                    <div class="flex justify-center">
+                                        <button type="submit" class="tf-btn" style="background: #4CAF50; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">
+                                            <span class="text-style">
+                                                Post Review
+                                            </span>
+                                            <span class="icon">
+                                                <i class="icon-arrow_right"></i>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section><!-- /.Section tab -->
+
+<style>
+    .s-categories {
+        padding: 90px 0 100px;
+        background:
+            radial-gradient(circle at top right, rgba(76, 175, 80, 0.14), transparent 28%),
+            linear-gradient(180deg, #f8fcf6 0%, #ffffff 100%);
+    }
+
+    .s-categories .section-heading {
+        max-width: 620px;
+        margin: 0 auto 42px;
+        text-align: center;
+    }
+
+    .s-categories .section-heading .title {
+        margin-bottom: 12px;
+        color: #0c2f1d;
+    }
+
+    .s-categories .section-heading .subtext {
+        margin: 0;
+        color: #5d6f64;
+        font-size: 17px;
+        line-height: 1.7;
+    }
+
+    .s-categories .category-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 24px;
+    }
+
+    .s-categories .category-link {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 180px;
+        padding: 26px 24px;
+        border-radius: 24px;
+        background: #ffffff;
+        border: 1px solid rgba(33, 82, 52, 0.1);
+        box-shadow: 0 18px 45px rgba(20, 54, 33, 0.08);
+        text-decoration: none;
+        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+
+    .s-categories .category-link:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 24px 55px rgba(20, 54, 33, 0.14);
+        border-color: rgba(46, 191, 122, 0.35);
+    }
+
+    .s-categories .category-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 54px;
+        height: 54px;
+        border-radius: 18px;
+        margin-bottom: 26px;
+        background: linear-gradient(135deg, #2ebf7a, #7adf7f);
+        color: #ffffff;
+        font-size: 20px;
+        box-shadow: 0 12px 25px rgba(46, 191, 122, 0.28);
+    }
+
+    .s-categories .category-name {
+        margin-bottom: 8px;
+        color: #163222;
+        font-size: 28px;
+        line-height: 1.2;
+    }
+
+    .s-categories .category-count {
+        margin: 0;
+        color: #587061;
+        font-size: 18px;
+        line-height: 1.5;
+    }
+
+    .s-categories .category-arrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 24px;
+        color: #2ebf7a;
+        font-size: 15px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
+
+    .s-categories .category-arrow i {
+        font-size: 14px;
+    }
+
+    @media (max-width: 767.98px) {
+        .s-categories {
+            padding: 70px 0 80px;
+        }
+
+        .s-categories .category-grid {
+            grid-template-columns: 1fr;
+            gap: 18px;
+        }
+
+        .s-categories .category-link {
+            min-height: auto;
+            padding: 22px 20px;
+        }
+
+        .s-categories .category-name {
+            font-size: 24px;
+        }
+
+        .s-categories .category-count {
+            font-size: 16px;
+        }
+    }
+</style>
+
+<!-- Section All Categories -->
+<section class="s-categories">
+    <div class="tf-container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-heading">
+                    <h2 class="title fw-7 fs-45">
+                        All Categories
+                    </h2>
+                    <p class="subtext font-nunito">
+                        Explore more fresh farm collections and jump straight into the category that matches what you need.
+                    </p>
+                </div>
+                <div class="category-grid">
+                    {% for category in categories %}
+                    <div class="category-item">
+                        <a href="{% url 'shop_products' %}?category={{ category.id }}" class="category-link">
+                            <div>
+                                <span class="category-badge">
+                                    <i class="fa-solid fa-seedling"></i>
+                                </span>
+                                <h4 class="category-name">{{ category.name }}</h4>
+                                <p class="category-count">{{ category.product_count }} products</p>
+                            </div>
+                            <span class="category-arrow">
+                                Explore
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section><!-- /.Section All Categories -->
+
+<!-- Section relate product  -->
+<section class="s-relate-product">
+    <div class="tf-container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2 class="title fw-7 fs-45 text-center">
+                    Related Products
+                </h2>
+                <div class="swiper-container slider-relate-product">
+                    <div class="swiper-wrapper">
+                        {% if related_products %}
+                        {% for product in related_products %}
+                        <div class="swiper-slide ">
+                            <div class="card-product style-2 mw-unset">
+                                {% if product.original_price %}
+                                <ul class="trendy-list">
+                                    <li class="trendy-item">
+                                        <p class="color-1">Sale</p>
+                                    </li>
+                                </ul>
+                                {% endif %}
+                                <div class="image">
+                                    {% if product.image %}
+                                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="lazyload">
+                                    {% else %}
+                                    <img src="{% static 'images/OIP.jpg' %}" alt="{{ product.name }}" class="lazyload">
+                                    {% endif %}
+                                </div>
+                                <a href="{% url 'shop_details' product.id %}"
+                                    class="name-product font-worksans hover-text-4">
+                                    {{ product.name }}
+                                </a>
+                                <div class="pricing-star">
+                                    <div class="price-wrap">
+                                        {% if product.original_price %}
+                                        <span class="price-1">&#8377;{{ product.original_price }}</span>
+                                        {% endif %}
+                                        <span class="price-2">&#8377;{{ product.price }}</span>
+                                    </div>
+                                    <div class="wg-rating">
+                                        {% for i in "12345" %}
+                                        {% if i|add:"0" <= product.rating %} <i class="fa-solid fa-star"></i>
+                                            {% else %}
+                                            <i class="fa-regular fa-star"></i>
+                                            {% endif %}
+                                            {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="product-btn-list">
+                                    <form action="{% url 'add_to_cart' %}" method="POST" style="display: inline;" data-login-required data-login-message="Kindly login before add to cart product">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="product_id" value="{{ product.id }}">
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button type="submit" class="icon shoping"
+                                            style="background: none; border: none; cursor: pointer;">
+                                            <div class="tt-text">
+                                                <p>
+                                                    Add to cart
+                                                </p>
+                                            </div>
+                                            <i class="fa-solid fa-cart-shopping"></i>
+                                        </button>
+                                    </form>
+                                    <a href="#wishlist" class="icon white-list" data-bs-toggle="modal">
+                                        <div class="tt-text">
+                                            <p>
+                                                Add Wishlist
+                                            </p>
+                                        </div>
+                                        <i class="fa-solid fa-heart"></i>
+                                    </a>
+                                    <a href="{% url 'shop_details' product.id %}" class="icon view-product">
+                                        <div class="tt-text">
+                                            <p>
+                                                Quick View
+                                            </p>
+                                        </div>
+                                        <i class="fa-solid fa-eye"></i>
+                                    </a>
+                                    <a href="{% url 'shop_products' %}?category={{ product.category.id }}" class="icon">
+                                        <div class="tt-text">
+                                            <p>
+                                                More In Category
+                                            </p>
+                                        </div>
+                                        <i class="fa-solid fa-layer-group"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="btn-slide-product btn-next">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </div>
+                <div class="btn-slide-product btn-prev">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </div>
+            </div>
+        </div>
+    </div> 
+</section>
+    <!-- /.Section relate product  -->
+
+    </div>
+    <!-- /.Main-content -->
+    {% endblock %}

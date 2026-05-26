@@ -1,0 +1,158 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="apple-touch-icon" sizes="76x76" href="{% static 'myadmin/img/apple-icon.png' %}">
+  <link rel="icon" type="image/png" href="{% static 'myadmin/img/favicon.png' %}">
+  <title>Login - AgroConnect Admin</title>
+  <!-- Fonts and icons -->
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
+  <!-- Nucleo Icons -->
+  <link href="{% static 'myadmin/css/nucleo-icons.css' %}" rel="stylesheet" />
+  <link href="{% static 'myadmin/css/nucleo-svg.css' %}" rel="stylesheet" />
+  <!-- Font Awesome Icons -->
+  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  <!-- Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+  <!-- CSS Files -->
+  <link id="pagestyle" href="{% static 'myadmin/css/material-dashboard.css' %}" rel="stylesheet" />
+  <style>
+    /* Agriculture Theme - White, Green, Yellow */
+    :root {
+      --primary-green: #2E7D32;
+      --secondary-green: #4CAF50;
+      --accent-yellow: #FFC107;
+      --accent-yellow-light: #FFF176;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #f5f5f5 0%, #e8f5e9 100%) !important;
+    }
+    
+    .card {
+      border: none;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+    
+    .card-header {
+      background: linear-gradient(310deg, #2E7D32 0%, #4CAF50 100%);
+      border-radius: 0 !important;
+    }
+    
+    .form-control {
+      border: 1px solid #4CAF50;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+    
+    .form-control:focus {
+      border-color: #2E7D32;
+      box-shadow: 0 0 5px rgba(46, 125, 50, 0.5);
+    }
+    
+    .btn {
+      transition: all 0.3s ease;
+    }
+    
+    .btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    
+    .btn-success {
+      background: linear-gradient(310deg, #2E7D32 0%, #4CAF50 100%);
+      border: none;
+    }
+    
+    .btn-success:hover {
+      background: linear-gradient(310deg, #1B5E20 0%, #2E7D32 100%);
+    }
+    
+    .text-success {
+      color: #2E7D32 !important;
+    }
+    
+    input.form-control {
+      border: 1px solid #4CAF50;
+    }
+    
+    input.form-control:focus {
+      border-color: #2E7D32;
+    }
+    
+    .logo-container {
+      background: linear-gradient(310deg, #2E7D32 0%, #4CAF50 100%);
+    }
+    
+    .nav-link {
+      color: #2E7D32 !important;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-100">
+  <div class="page-header align-items-start min-vh-100" style="background: linear-gradient(135deg, #f5f5f5 0%, #e8f5e9 100%);">
+    <span class="mask bg-gradient-success opacity-8"></span>
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col-lg-4 col-md-8 col-12 mx-auto">
+          <div class="card z-index-0 fadeIn3 fadeInBottom">
+            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+              <div class="logo-container border-radius-lg py-3 pe-1">
+                <h4 class="text-white text-center font-weight-bold mb-0">AgroConnect</h4>
+                <p class="text-white text-center text-sm">Farmers Login</p>
+              </div>
+            </div>
+            <div class="card-body">
+              <form role="form" method="post" action="/myadmin/login/">
+                {% csrf_token %}
+                <div class="input-group input-group-outline mb-3">
+                  <label class="form-label">Username</label>
+                  <input type="text" name="username" class="form-control" required>
+                </div>
+                <div class="input-group input-group-outline mb-3">
+                  <label class="form-label">Password</label>
+                  <input type="password" name="password" class="form-control" required>
+                </div>
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-danger text-white text-sm mb-3">
+                  {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %}
+                <div class="text-center">
+                  <button type="submit" class="btn bg-gradient-success w-100 my-4 mb-2 text-white">Sign In</button>
+                </div>
+              </form>
+              <div class="text-center mt-3">
+                <a href="/" class="text-success text-sm font-weight-bold">Back to Website</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!--   Core JS Files   -->
+  <script src="{% static 'myadmin/js/core/popper.min.js' %}"></script>
+  <script src="{% static 'myadmin/js/core/bootstrap.min.js' %}"></script>
+  <script src="{% static 'myadmin/js/plugins/perfect-scrollbar.min.js' %}"></script>
+  <script src="{% static 'myadmin/js/plugins/smooth-scrollbar.min.js' %}"></script>
+  <script>
+    var win = navigator.platform.indexOf('Win') > -1;
+    if (win && document.querySelector('#sidenav-scrollbar')) {
+      var options = {
+        damping: '0.5'
+      }
+      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+    }
+  </script>
+  <script src="{% static 'myadmin/js/material-dashboard.min.js' %}"></script>
+</body>
+
+</html>

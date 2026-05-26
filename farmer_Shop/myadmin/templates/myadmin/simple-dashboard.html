@@ -1,0 +1,332 @@
+{% extends 'myadmin/base.html' %}
+{% load static %}
+
+{% block page_title %}Dashboard{% endblock %}
+{% block page_header %}Operations Dashboard{% endblock %}
+{% block extra_head %}
+<style>
+  .compact-chart-card {
+    height: 100%;
+  }
+
+  .compact-chart-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .compact-chart-meta p {
+    margin: 0;
+  }
+
+  .compact-chart-wrap {
+    position: relative;
+    height: 220px;
+  }
+
+  .compact-chart-note {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin-top: 0.9rem;
+  }
+
+  .compact-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.4rem 0.7rem;
+    border-radius: 999px;
+    background: #f6faf6;
+    color: #456556;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .mini-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    display: inline-block;
+  }
+
+  .trend-list {
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  .trend-row {
+    display: grid;
+    grid-template-columns: minmax(84px, 110px) 1fr auto;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .trend-bar-shell {
+    height: 10px;
+    border-radius: 999px;
+    background: #edf5ee;
+    overflow: hidden;
+  }
+
+  .trend-bar-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #1f7a3e, #34a853);
+  }
+
+  .chart-empty {
+    height: 100%;
+    display: grid;
+    place-items: center;
+    border-radius: 18px;
+    background: #f7faf7;
+    color: #708777;
+    font-weight: 500;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+  <div class="col-12">
+    <div class="card border-0 overflow-hidden">
+      <div class="card-body p-4 p-lg-5" style="background: linear-gradient(135deg, #1f7a3e 0%, #34a853 55%, #f5c451 140%); color: #fff;">
+        <div class="row align-items-center g-4">
+          <div class="col-lg-8">
+            <span class="badge" style="background: rgba(255,255,255,0.16); color: #fff;">Live control room</span>
+            <h3 class="mt-3 mb-2 text-white">
+              Welcome back, {% if request.user.get_full_name %}{{ request.user.get_full_name }}{% else %}{{ request.user.username|default:"Admin" }}{% endif %}!
+            </h3>
+            <p class="mb-2" style="color: rgba(255,255,255,0.82);">
+              {% if is_farmer %}
+              Your farm dashboard is ready with today's order flow, stock health, and revenue snapshot.
+              {% else %}
+              Your admin dashboard is ready with today's store activity, order flow, and product readiness.
+              {% endif %}
+            </p>
+            <p class="mb-0 small" style="color: rgba(255,255,255,0.72);">Track store health, order flow, and product readiness from one place.</p>
+          </div>
+          <div class="col-lg-4">
+            <div class="p-4 rounded-4" style="background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.16);">
+              <div class="d-flex justify-content-between align-items-center mb-3"><span style="color: rgba(255,255,255,0.78);">Delivered revenue</span><i class="fas fa-arrow-trend-up"></i></div>
+              <div class="display-6 fw-bold mb-2">&#8377;{{ total_revenue|floatformat:0 }}</div>
+              <div class="small" style="color: rgba(255,255,255,0.82);">{{ delivered_orders }} delivered order{{ delivered_orders|pluralize }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-xl-3"><div class="card h-100"><div class="card-body"><p class="text-muted mb-1">Products</p><h3 class="mb-2">{{ total_products }}</h3><div class="small text-muted">{{ low_stock_products }} low-stock item{{ low_stock_products|pluralize }}</div></div></div></div>
+  <div class="col-md-6 col-xl-3"><div class="card h-100"><div class="card-body"><p class="text-muted mb-1">Orders</p><h3 class="mb-2">{{ total_orders }}</h3><div class="small text-muted">{{ pending_orders }} awaiting action</div></div></div></div>
+  <div class="col-md-6 col-xl-3"><div class="card h-100"><div class="card-body"><p class="text-muted mb-1">{% if is_farmer %}Workspace{% else %}Users{% endif %}</p><h3 class="mb-2">{{ total_users }}</h3><div class="small text-muted">{% if is_farmer %}Your admin access{% else %}Registered accounts{% endif %}</div></div></div></div>
+  <div class="col-md-6 col-xl-3"><div class="card h-100"><div class="card-body"><p class="text-muted mb-1">{% if is_farmer %}Active statuses{% else %}Farmers{% endif %}</p><h3 class="mb-2">{% if is_farmer %}{{ processing_orders|add:delivered_orders }}{% else %}{{ total_farmers }}{% endif %}</h3><div class="small text-muted">{% if is_farmer %}Processing + delivered{% else %}Active sellers on platform{% endif %}</div></div></div></div>
+
+  <div class="col-lg-8">
+    <div class="card compact-chart-card">
+      <div class="card-header">
+        <div class="compact-chart-meta">
+          <div>
+            <h5 class="mb-1">Revenue Trend</h5>
+            <p class="text-muted small">Delivered revenue across the last 7 days.</p>
+          </div>
+          <span class="badge" style="background: #ecf8ef; color: #1f7a3e;">7-day view</span>
+        </div>
+      </div>
+      <div class="card-body">
+        {% if weekly_revenue_series %}
+        <div class="compact-chart-wrap">
+          <canvas id="revenueTrendChart"></canvas>
+        </div>
+        <div class="compact-chart-note">
+          <span class="compact-chip"><span class="mini-dot" style="background: #1f7a3e;"></span>Delivered sales only</span>
+          <span class="compact-chip"><span class="mini-dot" style="background: #f5c451;"></span>Total: &#8377;{{ total_revenue|floatformat:0 }}</span>
+        </div>
+        {% else %}
+        <div class="chart-empty">No revenue data available yet.</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card compact-chart-card">
+      <div class="card-header">
+        <h5 class="mb-1">Status Mix</h5>
+        <p class="text-muted small mb-0">Current order distribution.</p>
+      </div>
+      <div class="card-body">
+        <div class="compact-chart-wrap">
+          <canvas id="orderStatusChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-8">
+    <div class="card h-100">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <div><h5 class="mb-1">Recent Orders</h5><p class="text-muted small mb-0">Latest customer activity across the store.</p></div>
+        <a href="{% url 'myadmin:orders' %}" class="btn btn-sm btn-outline-primary">Open orders</a>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead><tr><th>Order</th><th>Customer</th><th>Status</th><th>Total</th><th>Date</th></tr></thead>
+          <tbody>
+            {% for order in recent_orders %}
+            <tr>
+              <td><strong>{{ order.order_number|default:order.id }}</strong><div class="small text-muted">ID #{{ order.id }}</div></td>
+              <td><div class="fw-semibold">{{ order.first_name }} {{ order.last_name }}</div><div class="small text-muted">{{ order.email }}</div></td>
+              <td>{% if order.status == 'delivered' %}<span class="badge bg-success">{{ order.status|title }}</span>{% elif order.status == 'pending' %}<span class="badge bg-warning text-dark">{{ order.status|title }}</span>{% elif order.status == 'cancelled' %}<span class="badge bg-danger">{{ order.status|title }}</span>{% else %}<span class="badge bg-info">{{ order.status|title }}</span>{% endif %}</td>
+              <td class="fw-semibold text-success">&#8377;{{ order.total|floatformat:0 }}</td>
+              <td><div>{{ order.created_at|date:"d M Y" }}</div><div class="small text-muted">{{ order.created_at|time:"h:i A" }}</div></td>
+            </tr>
+            {% empty %}<tr><td colspan="5" class="text-center py-5 text-muted">No recent orders to display.</td></tr>{% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card h-100">
+      <div class="card-header"><h5 class="mb-1">Order Pipeline</h5><p class="text-muted small mb-0">A quick snapshot of what needs attention.</p></div>
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center p-3 rounded-4 mb-3" style="background: #fff8e7;"><div><div class="fw-semibold">Pending</div><div class="small text-muted">Awaiting action</div></div><span class="badge bg-warning text-dark">{{ pending_orders }}</span></div>
+        <div class="d-flex justify-content-between align-items-center p-3 rounded-4 mb-3" style="background: #eefbf1;"><div><div class="fw-semibold">Delivered</div><div class="small text-muted">Completed successfully</div></div><span class="badge bg-success">{{ delivered_orders }}</span></div>
+        <div class="d-flex justify-content-between align-items-center p-3 rounded-4 mb-3" style="background: #eef4ff;"><div><div class="fw-semibold">Processing</div><div class="small text-muted">In progress</div></div><span class="badge bg-info">{{ processing_orders }}</span></div>
+        <div class="d-flex justify-content-between align-items-center p-3 rounded-4" style="background: #fff1f3;"><div><div class="fw-semibold">Cancelled</div><div class="small text-muted">Stopped orders</div></div><span class="badge bg-danger">{{ cancelled_orders }}</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-5">
+    <div class="card h-100">
+      <div class="card-header">
+        <h5 class="mb-1">Category Footprint</h5>
+        <p class="text-muted small mb-0">Product distribution by top categories.</p>
+      </div>
+      <div class="card-body">
+        {% if top_category_series %}
+        <div class="trend-list">
+          {% for item in top_category_series %}
+          <div class="trend-row">
+            <div class="fw-semibold small text-truncate">{{ item.label }}</div>
+            <div class="trend-bar-shell">
+              <div class="trend-bar-fill" style="width: {% widthratio item.value top_category_series.0.value 100 %}%"></div>
+            </div>
+            <div class="small text-muted fw-semibold">{{ item.value }}</div>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <div class="chart-empty">Add products to see category distribution.</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-7">
+    <div class="row g-4">
+      <div class="col-md-6 col-xl-3"><a href="{% url 'myadmin:products' %}" class="card h-100 d-block"><div class="card-body"><h5 class="mb-2">Manage Products</h5><p class="text-muted mb-0">Update stock, pricing, and availability in a cleaner list view.</p></div></a></div>
+      <div class="col-md-6 col-xl-3"><a href="{% url 'myadmin:orders' %}" class="card h-100 d-block"><div class="card-body"><h5 class="mb-2">Manage Orders</h5><p class="text-muted mb-0">Review customer orders and update statuses without friction.</p></div></a></div>
+      <div class="col-md-6 col-xl-3"><a href="{% url 'myadmin:users' %}" class="card h-100 d-block"><div class="card-body"><h5 class="mb-2">Review Users</h5><p class="text-muted mb-0">See account activity and jump into role management quickly.</p></div></a></div>
+      <div class="col-md-6 col-xl-3"><a href="{% url 'myadmin:farmers' %}" class="card h-100 d-block"><div class="card-body"><h5 class="mb-2">Manage Farmers</h5><p class="text-muted mb-0">Handle farmer accounts, activity, and onboarding from one screen.</p></div></a></div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+{{ weekly_revenue_series|json_script:"weekly-revenue-series" }}
+{{ order_status_series|json_script:"order-status-series" }}
+<script>
+  const revenueData = JSON.parse(document.getElementById('weekly-revenue-series').textContent);
+  const statusData = JSON.parse(document.getElementById('order-status-series').textContent);
+
+  const revenueCanvas = document.getElementById('revenueTrendChart');
+  if (revenueCanvas && revenueData.length) {
+    new Chart(revenueCanvas, {
+      type: 'line',
+      data: {
+        labels: revenueData.map(item => item.label),
+        datasets: [{
+          data: revenueData.map(item => item.value),
+          borderColor: '#1f7a3e',
+          backgroundColor: 'rgba(31, 122, 62, 0.12)',
+          fill: true,
+          tension: 0.35,
+          borderWidth: 2,
+          pointRadius: 3,
+          pointHoverRadius: 4,
+          pointBackgroundColor: '#1f7a3e'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: (context) => `Revenue: Rs. ${Number(context.raw || 0).toFixed(0)}`
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: { color: '#6b7f72', font: { size: 11 } }
+          },
+          y: {
+            beginAtZero: true,
+            ticks: {
+              color: '#6b7f72',
+              font: { size: 11 },
+              callback: (value) => `Rs. ${value}`
+            },
+            grid: { color: 'rgba(24, 51, 38, 0.08)' }
+          }
+        }
+      }
+    });
+  }
+
+  const statusCanvas = document.getElementById('orderStatusChart');
+  if (statusCanvas && statusData.length) {
+    new Chart(statusCanvas, {
+      type: 'doughnut',
+      data: {
+        labels: statusData.map(item => item.label),
+        datasets: [{
+          data: statusData.map(item => item.value),
+          backgroundColor: ['#f5c451', '#4f8df7', '#22a55a', '#dc4c64'],
+          borderWidth: 0,
+          hoverOffset: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '68%',
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              boxWidth: 10,
+              boxHeight: 10,
+              usePointStyle: true,
+              padding: 16
+            }
+          }
+        }
+      }
+    });
+  }
+</script>
+{% endblock %}

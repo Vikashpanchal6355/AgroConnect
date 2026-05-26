@@ -1,0 +1,685 @@
+{% extends 'myadmin/base.html' %}
+{% load static %}
+
+{% block page_title %}Orders{% endblock %}
+{% block page_header %}Orders{% endblock %}
+
+{% block content %}
+<!-- Enhanced Statistics Cards -->
+<div class="row">
+  <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+    <div class="card card-stats shadow-lg">
+      <div class="card-header p-3 pt-2 bg-gradient-dark position-relative">
+        <div class="icon icon-lg icon-shape bg-white shadow text-center border-radius-xl mt-n4 position-absolute">
+          <i class="material-icons opacity-10 text-dark">shopping_cart</i>
+        </div>
+        <div class="text-end pt-1">
+          <p class="text-sm mb-0 text-capitalize text-white opacity-8">Total Orders</p>
+          <h4 class="mb-0 text-white font-weight-bolder">{{ total_orders }}</h4>
+        </div>
+      </div>
+      <hr class="horizontal light my-0">
+      <div class="card-footer p-3">
+        <p class="mb-0"><span class="text-success text-sm font-weight-bolder">{{ total_orders }}</span> orders in system</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+    <div class="card card-stats shadow-lg">
+      <div class="card-header p-3 pt-2 bg-gradient-warning position-relative">
+        <div class="icon icon-lg icon-shape bg-white shadow text-center border-radius-xl mt-n4 position-absolute">
+          <i class="material-icons opacity-10 text-warning">hourglass_empty</i>
+        </div>
+        <div class="text-end pt-1">
+          <p class="text-sm mb-0 text-capitalize text-white opacity-8">Pending</p>
+          <h4 class="mb-0 text-white font-weight-bolder">{{ pending_orders|default:0 }}</h4>
+        </div>
+      </div>
+      <hr class="horizontal light my-0">
+      <div class="card-footer p-3">
+        <p class="mb-0"><span class="text-warning text-sm font-weight-bolder">Awaiting processing</span></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+    <div class="card card-stats shadow-lg">
+      <div class="card-header p-3 pt-2 bg-gradient-success position-relative">
+        <div class="icon icon-lg icon-shape bg-white shadow text-center border-radius-xl mt-n4 position-absolute">
+          <i class="material-icons opacity-10 text-success">check_circle</i>
+        </div>
+        <div class="text-end pt-1">
+          <p class="text-sm mb-0 text-capitalize text-white opacity-8">Delivered</p>
+          <h4 class="mb-0 text-white font-weight-bolder">{{ delivered_orders|default:0 }}</h4>
+        </div>
+      </div>
+      <hr class="horizontal light my-0">
+      <div class="card-footer p-3">
+        <p class="mb-0"><span class="text-success text-sm font-weight-bolder">Successfully completed</span></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-3 col-sm-6">
+    <div class="card card-stats shadow-lg">
+      <div class="card-header p-3 pt-2 bg-gradient-info position-relative">
+        <div class="icon icon-lg icon-shape bg-white shadow text-center border-radius-xl mt-n4 position-absolute">
+          <i class="material-icons opacity-10 text-info">currency_rupee</i>
+        </div>
+        <div class="text-end pt-1">
+          <p class="text-sm mb-0 text-capitalize text-white opacity-8">Revenue</p>
+          <h4 class="mb-0 text-white font-weight-bolder">₹{{ total_revenue|default:0|floatformat:0 }}</h4>
+        </div>
+      </div>
+      <hr class="horizontal light my-0">
+      <div class="card-footer p-3">
+        <p class="mb-0"><span class="text-success text-sm font-weight-bolder">Total earnings</span></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Advanced Filters and Search -->
+<div class="row mt-4">
+  <div class="col-12">
+    <div class="card shadow-lg border-0">
+      <div class="card-header pb-0 bg-gradient-primary">
+        <div class="d-flex justify-content-between align-items-center">
+          <h6 class="mb-0 text-white font-weight-bolder">
+            <i class="fas fa-shopping-bag me-2"></i>Order Management Center
+          </h6>
+          <div class="d-flex gap-2">
+            <button class="btn btn-outline-light btn-sm" onclick="exportOrders()">
+              <i class="fas fa-download me-1"></i>Export CSV
+            </button>
+            <button class="btn btn-light btn-sm" onclick="refreshOrders()">
+              <i class="fas fa-sync-alt me-1"></i>Refresh
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="card-body pt-4">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <div class="input-group input-group-outline">
+              <label class="form-label">🔍 Search orders...</label>
+              <input type="text" class="form-control" id="orderSearch" placeholder="Order ID, Customer name, Email..." value="{{ search_query }}">
+            </div>
+          </div>
+          <div class="col-md-2">
+            <select class="form-select" id="statusFilter">
+              <option value="">📊 All Status</option>
+              <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>⏳ Pending</option>
+              <option value="processing" {% if status_filter == 'processing' %}selected{% endif %}>⚙️ Processing</option>
+              <option value="shipped" {% if status_filter == 'shipped' %}selected{% endif %}>🚚 Shipped</option>
+              <option value="delivered" {% if status_filter == 'delivered' %}selected{% endif %}>✅ Delivered</option>
+              <option value="cancelled" {% if status_filter == 'cancelled' %}selected{% endif %}>❌ Cancelled</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <input type="date" class="form-control" id="dateFrom" placeholder="From date" value="{{ date_from }}">
+          </div>
+          <div class="col-md-2">
+            <input type="date" class="form-control" id="dateTo" placeholder="To date" value="{{ date_to }}">
+          </div>
+          <div class="col-md-2">
+            <button class="btn btn-success w-100" onclick="applyFilters()">
+              <i class="fas fa-filter me-1"></i>Apply Filters
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Orders Table with Enhanced Features -->
+<div class="row mt-4">
+  <div class="col-12">
+    <div class="card shadow-lg border-0">
+      <div class="card-header bg-gradient-success">
+        <div class="d-flex justify-content-between align-items-center">
+          <h6 class="mb-0 text-white font-weight-bolder">
+            <i class="fas fa-list me-2"></i>Orders Overview
+          </h6>
+          <div class="text-white">
+            <small>Showing {{ orders|length }} of {{ orders.paginator.count }} orders</small>
+          </div>
+        </div>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover align-items-center mb-0">
+            <thead class="bg-gray-100">
+              <tr>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-3">
+                  <i class="fas fa-hashtag me-1"></i>Order Details
+                </th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                  <i class="fas fa-user me-1"></i>Customer
+                </th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                  <i class="fas fa-calendar me-1"></i>Date & Time
+                </th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                  <i class="fas fa-info-circle me-1"></i>Status
+                </th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                  <i class="fas fa-rupee-sign me-1"></i>Amount
+                </th>
+                <th class="text-center text-secondary opacity-7">
+                  <i class="fas fa-cogs me-1"></i>Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for order in orders %}
+              <tr class="hover-row" style="transition: all 0.2s ease;">
+                <td class="ps-3">
+                  <div class="d-flex align-items-center">
+                    <div class="avatar avatar-sm me-3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+                      {{ order.order_number|slice:":2"|upper }}
+                    </div>
+                    <div>
+                      <h6 class="mb-0 text-sm font-weight-bold">{{ order.order_number }}</h6>
+                      <p class="text-xs text-secondary mb-0">Internal ID: #{{ order.id }}</p>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <div class="avatar avatar-sm me-2" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+                      {{ order.first_name|slice:":1"|upper }}
+                    </div>
+                    <div>
+                      <p class="text-sm font-weight-bold mb-0">{{ order.first_name }} {{ order.last_name }}</p>
+                      <p class="text-xs text-secondary mb-0">
+                        <i class="fas fa-envelope me-1"></i>{{ order.email }}
+                      </p>
+                      <p class="text-xs text-secondary mb-0">
+                        <i class="fas fa-phone me-1"></i>{{ order.phone }}
+                      </p>
+                    </div>
+                  </div>
+                </td>
+                <td class="text-center">
+                  <span class="text-sm font-weight-bold">{{ order.created_at|date:"M d, Y" }}</span>
+                  <br>
+                  <small class="text-muted">{{ order.created_at|time:"H:i" }}</small>
+                </td>
+                <td class="text-center">
+                  {% if order.status == 'delivered' %}
+                  <span class="badge badge-lg bg-gradient-success">
+                    <i class="fas fa-check-circle me-1"></i>{{ order.status|title }}
+                  </span>
+                  {% elif order.status == 'pending' %}
+                  <span class="badge badge-lg bg-gradient-warning">
+                    <i class="fas fa-clock me-1"></i>{{ order.status|title }}
+                  </span>
+                  {% elif order.status == 'processing' %}
+                  <span class="badge badge-lg bg-gradient-info">
+                    <i class="fas fa-cog me-1"></i>{{ order.status|title }}
+                  </span>
+                  {% elif order.status == 'shipped' %}
+                  <span class="badge badge-lg bg-gradient-primary">
+                    <i class="fas fa-truck me-1"></i>{{ order.status|title }}
+                  </span>
+                  {% else %}
+                  <span class="badge badge-lg bg-gradient-danger">
+                    <i class="fas fa-times-circle me-1"></i>{{ order.status|title }}
+                  </span>
+                  {% endif %}
+                </td>
+                <td class="text-center">
+                  <span class="text-lg font-weight-bold text-success">₹{{ order.total|floatformat:0 }}</span>
+                  <br>
+                  <small class="text-muted">{{ order.items.all|length }} items</small>
+                </td>
+                <td class="text-center">
+                  <div class="btn-group" role="group">
+                    <a href="{% url 'myadmin:view_receipt_page' order.id %}" class="btn btn-sm btn-outline-info" title="View Receipt">
+                      <i class="fas fa-eye"></i>
+                    </a>
+                    <div class="dropdown">
+                      <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" title="More Actions">
+                        <i class="fas fa-ellipsis-h"></i>
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#" onclick="printReceipt({{ order.id }})">
+                          <i class="fas fa-print me-2"></i>Print Receipt
+                        </a></li>
+                        <li><a class="dropdown-item" href="#" onclick="updateStatus({{ order.id }}, 'processing')">
+                          <i class="fas fa-play me-2"></i>Mark Processing
+                        </a></li>
+                        <li><a class="dropdown-item" href="#" onclick="updateStatus({{ order.id }}, 'shipped')">
+                          <i class="fas fa-truck me-2"></i>Mark Shipped
+                        </a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="#" onclick="cancelOrder({{ order.id }})">
+                          <i class="fas fa-times me-2"></i>Cancel Order
+                        </a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="6" class="text-center py-5">
+                  <div class="empty-state">
+                    <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+                    <h6 class="text-muted">No orders found</h6>
+                    <p class="text-sm text-muted">Orders will appear here once customers place them.</p>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        {% if orders.has_other_pages %}
+        <div class="card-footer">
+          <nav aria-label="Orders pagination">
+            <ul class="pagination justify-content-center mb-0">
+              {% if orders.has_previous %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ orders.previous_page_number }}">
+                  <i class="fas fa-chevron-left"></i>
+                </a>
+              </li>
+              {% endif %}
+
+              {% for num in orders.paginator.page_range %}
+              {% if orders.number == num %}
+              <li class="page-item active">
+                <span class="page-link">{{ num }}</span>
+              </li>
+              {% elif num > orders.number|add:'-3' and num < orders.number|add:'3' %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+              </li>
+              {% endif %}
+              {% endfor %}
+
+              {% if orders.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ orders.next_page_number }}">
+                  <i class="fas fa-chevron-right"></i>
+                </a>
+              </li>
+              {% endif %}
+            </ul>
+          </nav>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Hidden CSRF token for AJAX -->
+<form style="display: none;">
+  {% csrf_token %}
+</form>
+
+<!-- JavaScript for Enhanced Functionality -->
+<script>
+function applyFilters() {
+  const searchTerm = document.getElementById('orderSearch').value;
+  const statusFilter = document.getElementById('statusFilter').value;
+  const dateFrom = document.getElementById('dateFrom').value;
+  const dateTo = document.getElementById('dateTo').value;
+
+  // Build query parameters
+  const params = new URLSearchParams();
+  if (searchTerm) params.append('search', searchTerm);
+  if (statusFilter) params.append('status', statusFilter);
+  if (dateFrom) params.append('date_from', dateFrom);
+  if (dateTo) params.append('date_to', dateTo);
+
+  // Redirect with filters
+  window.location.href = `?${params.toString()}`;
+}
+
+function refreshOrders() {
+  location.reload();
+}
+
+function exportOrders() {
+  // Implement export functionality
+  alert('Export functionality will be implemented');
+}
+
+function printReceipt(orderId) {
+  window.open(`/myadmin/orders/view-receipt/${orderId}/`, '_blank');
+}
+
+function updateStatus(orderId, newStatus) {
+  if (confirm(`Are you sure you want to mark this order as ${newStatus}?`)) {
+    // Implement status update
+    fetch(`/myadmin/orders/update/${orderId}/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+      },
+      body: JSON.stringify({ status: newStatus })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        location.reload();
+      } else {
+        alert('Error updating status: ' + (data.error || 'Unknown error'));
+      }
+    })
+    .catch(error => {
+      alert('Network error occurred');
+      console.error('Error:', error);
+    });
+  }
+}
+
+function cancelOrder(orderId) {
+  if (confirm('Are you sure you want to cancel this order?')) {
+    updateStatus(orderId, 'cancelled');
+  }
+}
+
+// Toast notification system
+function showToast(message, type = 'success') {
+  const toastContainer = document.querySelector('.toast-container') || createToastContainer();
+  const toast = document.createElement('div');
+  toast.className = `toast ${type === 'error' ? 'toast-error' : ''}`;
+  toast.textContent = message;
+
+  toastContainer.appendChild(toast);
+
+  setTimeout(() => {
+    toast.style.animation = 'slideOut 0.3s ease-out forwards';
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
+}
+
+function createToastContainer() {
+  const container = document.createElement('div');
+  container.className = 'toast-container';
+  document.body.appendChild(container);
+  return container;
+}
+
+// Enhanced table interactions
+document.addEventListener('DOMContentLoaded', function() {
+  // Add hover effects
+  const rows = document.querySelectorAll('.hover-row');
+  rows.forEach(row => {
+    row.addEventListener('mouseenter', function() {
+      this.style.backgroundColor = '#f8f9fa';
+    });
+    row.addEventListener('mouseleave', function() {
+      this.style.backgroundColor = '';
+    });
+  });
+
+  // Add click effects to rows
+  rows.forEach(row => {
+    row.addEventListener('click', function(e) {
+      // Don't trigger if clicking on buttons or links
+      if (e.target.tagName !== 'A' && e.target.tagName !== 'BUTTON' && !e.target.closest('.btn-group')) {
+        const viewBtn = this.querySelector('.btn-outline-info');
+        if (viewBtn) {
+          viewBtn.click();
+        }
+      }
+    });
+  });
+
+  // Keyboard shortcuts
+  document.addEventListener('keydown', function(e) {
+    // Ctrl/Cmd + F for search focus
+    if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+      e.preventDefault();
+      document.getElementById('orderSearch').focus();
+    }
+
+    // Ctrl/Cmd + R for refresh
+    if ((e.ctrlKey || e.metaKey) && e.key === 'r') {
+      e.preventDefault();
+      refreshOrders();
+    }
+  });
+
+  // Auto-save filter preferences (optional)
+  const filterInputs = ['orderSearch', 'statusFilter', 'dateFrom', 'dateTo'];
+  filterInputs.forEach(id => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.addEventListener('input', function() {
+        localStorage.setItem(`order_filter_${id}`, this.value);
+      });
+
+      // Restore saved values
+      const saved = localStorage.getItem(`order_filter_${id}`);
+      if (saved && !this.value) {
+        this.value = saved;
+      }
+    }
+  });
+
+  // Initialize tooltips for better UX
+  const tooltipTriggerList = [].slice.call(document.querySelectorAll('[title]'));
+  tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl);
+  });
+});
+
+// Loading overlay functions
+function showLoading() {
+  const overlay = document.createElement('div');
+  overlay.className = 'loading-overlay';
+  overlay.innerHTML = '<div class="spinner"></div>';
+  overlay.id = 'loading-overlay';
+  document.body.appendChild(overlay);
+}
+
+function hideLoading() {
+  const overlay = document.getElementById('loading-overlay');
+  if (overlay) {
+    overlay.remove();
+  }
+}
+
+// Enhanced status update with loading
+function updateStatus(orderId, newStatus) {
+  if (confirm(`Are you sure you want to mark this order as ${newStatus}?`)) {
+    showLoading();
+    fetch(`/myadmin/orders/update/${orderId}/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+      },
+      body: JSON.stringify({ status: newStatus })
+    })
+    .then(response => response.json())
+    .then(data => {
+      hideLoading();
+      if (data.success) {
+        showToast(`Order status updated to ${newStatus}`, 'success');
+        setTimeout(() => location.reload(), 1000);
+      } else {
+        showToast('Error updating status: ' + (data.error || 'Unknown error'), 'error');
+      }
+    })
+    .catch(error => {
+      hideLoading();
+      showToast('Network error occurred', 'error');
+      console.error('Error:', error);
+    });
+  }
+}
+</script>
+
+<style>
+.hover-row:hover {
+  background-color: #f8f9fa !important;
+  cursor: pointer;
+}
+
+.empty-state {
+  padding: 2rem;
+}
+
+.badge-lg {
+  font-size: 0.75rem;
+  padding: 0.5rem 0.75rem;
+}
+
+.card-stats {
+  transition: all 0.3s ease;
+}
+
+.card-stats:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+}
+
+.dropdown-menu {
+  border: none;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.page-link {
+  color: #4CAF50;
+}
+
+.page-link:hover {
+  color: #2E7D32;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .card-stats {
+    margin-bottom: 1rem;
+  }
+
+  .btn-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .btn-group .btn {
+    border-radius: 0 !important;
+    margin-bottom: 0.25rem;
+  }
+
+  .btn-group .btn:first-child {
+    border-top-left-radius: 8px !important;
+    border-top-right-radius: 8px !important;
+  }
+
+  .btn-group .btn:last-child {
+    border-bottom-left-radius: 8px !important;
+    border-bottom-right-radius: 8px !important;
+  }
+
+  .address-section {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .table-responsive {
+    font-size: 0.875rem;
+  }
+}
+
+/* Loading Animation */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #4CAF50;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Toast Notifications */
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 10000;
+}
+
+.toast {
+  background: #4CAF50;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOut {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(100%); opacity: 0; }
+}
+
+.toast-error {
+  background: #f44336 !important;
+}
+
+/* Enhanced Card Animations */
+.card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+/* Status Badge Animations */
+.badge {
+  transition: all 0.2s ease;
+}
+
+.badge:hover {
+  transform: scale(1.05);
+}
+
+/* Search and Filter Animations */
+.input-group-outline .form-control {
+  transition: all 0.3s ease;
+}
+
+.input-group-outline .form-control:focus + .form-label,
+.input-group-outline .form-control:not(:placeholder-shown) + .form-label {
+  transform: translateY(-1.5rem) scale(0.85);
+  color: #4CAF50;
+}
+</style>
+{% endblock %}

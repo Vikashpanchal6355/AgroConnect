@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+{% include 'includes/account-shell-styles.html' %}
+<div class="page-title page-portfolio-details">
+    <div class="rellax" data-rellax-speed="5">
+        <img src="{% static 'images/page-title/shop-detail.jpg' %}" alt="">
+    </div>
+    <div class="content-wrap">
+        <div class="tf-container w-1290">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="content">
+                        <h1 class="title">My account</h1>
+                        <div class="icon-img">
+                            <img src="{% static 'images/item/line-throw-title.png' %}" alt="">
+                        </div>
+                        <div class="breadcrumb">
+                            <a href="{% url 'index' %}">Home</a>
+                            <div class="icon">
+                                <i class="icon-arrow-right1"></i>
+                            </div>
+                            <a href="javascript:void(0)">My account</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="img-item item-2">
+        <img src="{% static 'images/item/grass-6.png' %}" alt="">
+    </div>
+</div>
+
+<section class="flat-spacing-1 account-shell">
+    <div class="tf-container">
+        {% include 'includes/account-mobile-nav.html' with active_page='edit' %}
+        <div class="account-layout">
+            {% include 'includes/account-sidebar-card.html' with active_page='edit' %}
+            <div class="account-panel my-account-content account-edit">
+                <div class="account-overview">
+                    <div class="account-overview-copy">
+                        <span class="account-kicker">Account Details</span>
+                        <h2>Edit account details</h2>
+                        <p>Update your profile information or change your password.</p>
+                    </div>
+                </div>
+
+                <div class="account-edit-grid">
+                    <div class="account-profile-card">
+                        <h4>Current Profile</h4>
+                        <div class="account-meta-list">
+                            <div class="account-meta-item">
+                                <span class="account-meta-label">Username</span>
+                                <span class="account-meta-value">{{ user.username }}</span>
+                            </div>
+                            <div class="account-meta-item">
+                                <span class="account-meta-label">Name</span>
+                                <span class="account-meta-value">{% if user.first_name %}{{ user.first_name }} {{ user.last_name }}{% else %}Not set yet{% endif %}</span>
+                            </div>
+                            <div class="account-meta-item">
+                                <span class="account-meta-label">Email</span>
+                                <span class="account-meta-value">{{ user.email }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="account-security-card">
+                        <h4>Security Tip</h4>
+                        <p>Use a strong password with a mix of letters, numbers, and symbols. Only fill the password section below if you want to change it right now.</p>
+                    </div>
+                </div>
+
+                <form method="POST" action="{% url 'my_account_edit' %}" class="account-edit-form" style="margin-top: 24px;">
+                    {% csrf_token %}
+                    <div class="account-form-card">
+                        <div class="account-form-heading">
+                            <h5 class="mb-0">Personal Information</h5>
+                            <p>These details are used across your account and orders.</p>
+                        </div>
+                        <div class="account-field-grid">
+                            <fieldset>
+                                <input type="text" name="first_name" placeholder="First Name" value="{{ user.first_name }}" required>
+                            </fieldset>
+                            <fieldset>
+                                <input type="text" name="last_name" placeholder="Last Name" value="{{ user.last_name }}" required>
+                            </fieldset>
+                            <fieldset class="full-span">
+                                <input type="email" name="email" placeholder="Email" value="{{ user.email }}" required>
+                            </fieldset>
+                        </div>
+                    </div>
+
+                    <div class="account-form-card">
+                        <div class="account-form-heading">
+                            <h5 class="mb-0">Password Change</h5>
+                            <p>Leave these fields empty if you only want to save profile updates.</p>
+                        </div>
+                        <div class="account-field-grid">
+                            <fieldset class="full-span">
+                                <input type="password" name="current_password" placeholder="Current Password">
+                            </fieldset>
+                            <fieldset>
+                                <input type="password" name="new_password" placeholder="New Password">
+                            </fieldset>
+                            <fieldset>
+                                <input type="password" name="confirm_password" placeholder="Confirm Password">
+                            </fieldset>
+                        </div>
+                    </div>
+
+                    <div class="account-edit-actions" style="margin-top: 18px;">
+                        <button type="submit" class="account-pill-btn">Save Changes</button>
+                        <a href="{% url 'my_account' %}" class="account-pill-btn alt">Back to Dashboard</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,553 @@
+<style>
+.account-shell {
+    --account-text: #1f3529;
+    --account-muted: #66786b;
+    --account-border: #e5ece5;
+    --account-soft: #f7faf7;
+    --account-main: #2b6a46;
+    --account-main-dark: #1f5137;
+}
+
+.account-shell .account-layout {
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: 24px;
+    align-items: flex-start;
+}
+
+.account-shell .account-sidebar-card,
+.account-shell .account-panel,
+.account-shell .account-stat-card,
+.account-shell .account-note,
+.account-shell .account-profile-card,
+.account-shell .account-security-card,
+.account-shell .orders-summary-card,
+.account-shell .order-empty-state,
+.account-shell .address-form-card,
+.account-shell .address-card,
+.account-shell .address-empty-state,
+.account-shell .account-form-card {
+    background: #fff;
+    border: 1px solid var(--account-border);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(31, 53, 41, 0.05);
+}
+
+.account-shell .account-sidebar-card {
+    position: sticky;
+    top: 110px;
+    padding: 18px;
+}
+
+.account-shell .account-user-badge {
+    padding: 0 0 16px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--account-border);
+}
+
+.account-shell .account-user-badge p {
+    margin: 0 0 6px;
+    color: var(--account-muted);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.account-shell .account-user-badge h4 {
+    margin-bottom: 6px;
+    color: var(--account-text);
+    font-size: 20px;
+    line-height: 1.25;
+}
+
+.account-shell .account-user-badge span {
+    color: var(--account-muted);
+    font-size: 14px;
+    word-break: break-word;
+}
+
+.account-shell .account-nav-list {
+    display: grid;
+    gap: 6px;
+}
+
+.account-shell .account-nav-list a,
+.account-shell .account-nav-list span {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 8px;
+    color: var(--account-text);
+    font-weight: 600;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.account-shell .account-nav-list a:hover {
+    background: var(--account-soft);
+    color: var(--account-main-dark);
+}
+
+.account-shell .account-nav-list .is-active {
+    background: var(--account-main);
+    color: #fff;
+}
+
+.account-shell .account-mobile-nav {
+    display: none;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+    scrollbar-width: none;
+}
+
+.account-shell .account-mobile-nav::-webkit-scrollbar {
+    display: none;
+}
+
+.account-shell .account-mobile-nav a,
+.account-shell .account-mobile-nav span {
+    min-width: max-content;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--account-border);
+    background: #fff;
+    color: var(--account-text);
+    font-weight: 600;
+}
+
+.account-shell .account-mobile-nav .is-active {
+    background: var(--account-main);
+    border-color: var(--account-main);
+    color: #fff;
+}
+
+.account-shell .account-panel {
+    padding: 26px;
+}
+
+.account-shell .account-overview {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 22px;
+}
+
+.account-shell .account-overview-copy {
+    max-width: 720px;
+}
+
+.account-shell .account-kicker {
+    display: inline-flex;
+    margin-bottom: 10px;
+    color: var(--account-main);
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.account-shell .account-overview h2 {
+    margin: 0 0 8px;
+    color: var(--account-text);
+    font-size: 28px;
+    line-height: 1.25;
+}
+
+.account-shell .account-overview p,
+.account-shell .account-note p,
+.account-shell .account-security-card p,
+.account-shell .account-form-heading p,
+.account-shell .address-page-header p,
+.account-shell .address-card-body p {
+    color: var(--account-muted);
+    line-height: 1.65;
+}
+
+.account-shell .account-overview p,
+.account-shell .account-note p,
+.account-shell .account-security-card p,
+.account-shell .account-form-heading p,
+.account-shell .address-page-header p {
+    margin: 0;
+}
+
+.account-shell .account-overview-actions,
+.account-shell .account-panel-actions,
+.account-shell .address-form-actions,
+.account-shell .account-edit-actions,
+.account-shell .order-actions,
+.account-shell .address-card-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.account-shell .account-pill-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 10px 18px;
+    border: 0;
+    border-radius: 8px;
+    background: var(--account-main);
+    color: #fff;
+    font-weight: 700;
+}
+
+.account-shell .account-pill-btn:hover {
+    background: var(--account-main-dark);
+    color: #fff;
+}
+
+.account-shell .account-pill-btn.alt {
+    background: var(--account-soft);
+    color: var(--account-text);
+    border: 1px solid var(--account-border);
+}
+
+.account-shell .account-stats-grid,
+.account-shell .orders-summary,
+.account-shell .account-dashboard-grid,
+.account-shell .account-edit-grid,
+.account-shell .grid-2,
+.account-shell .grid-3,
+.account-shell .account-field-grid,
+.account-shell .address-grid {
+    display: grid;
+    gap: 16px;
+}
+
+.account-shell .account-stats-grid,
+.account-shell .orders-summary {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-bottom: 20px;
+}
+
+.account-shell .account-dashboard-grid,
+.account-shell .account-edit-grid,
+.account-shell .grid-2,
+.account-shell .account-field-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.account-shell .grid-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.account-shell .account-field-grid .full-span {
+    grid-column: 1 / -1;
+}
+
+.account-shell .account-stat-card,
+.account-shell .orders-summary-card,
+.account-shell .account-note,
+.account-shell .account-profile-card,
+.account-shell .account-security-card,
+.account-shell .account-form-card,
+.account-shell .address-card {
+    padding: 20px;
+}
+
+.account-shell .account-stat-label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--account-muted);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.account-shell .account-stat-value,
+.account-shell .orders-summary-card strong {
+    display: block;
+    color: var(--account-text);
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.account-shell .account-stat-meta,
+.account-shell .orders-summary-card span {
+    display: block;
+    margin-top: 8px;
+    color: var(--account-muted);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.account-shell .account-note h4,
+.account-shell .account-profile-card h4,
+.account-shell .account-security-card h4 {
+    margin-bottom: 12px;
+    color: var(--account-text);
+}
+
+.account-shell .account-meta-list {
+    display: grid;
+    gap: 12px;
+}
+
+.account-shell .account-meta-item {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--account-border);
+}
+
+.account-shell .account-meta-item:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+}
+
+.account-shell .account-meta-label {
+    color: var(--account-muted);
+    font-weight: 600;
+}
+
+.account-shell .account-meta-value {
+    color: var(--account-text);
+    font-weight: 600;
+    text-align: right;
+    word-break: break-word;
+}
+
+.account-shell .orders-table-wrap {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid var(--account-border);
+}
+
+.account-shell .orders-table {
+    width: 100%;
+    min-width: 760px;
+    border-collapse: collapse;
+    background: #fff;
+}
+
+.account-shell .orders-table th,
+.account-shell .orders-table td {
+    padding: 16px;
+    border-bottom: 1px solid var(--account-border);
+    text-align: left;
+    vertical-align: middle;
+}
+
+.account-shell .orders-table th {
+    background: var(--account-soft);
+    color: var(--account-text);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.account-shell .orders-table tr:last-child td {
+    border-bottom: 0;
+}
+
+.account-shell .order-id {
+    color: var(--account-text);
+    font-weight: 700;
+}
+
+.account-shell .status-badge,
+.account-shell .address-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: #edf7ef;
+    color: var(--account-main-dark);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.account-shell .status-processing,
+.account-shell .status-pending {
+    background: #fff6df;
+    color: #8a6200;
+}
+
+.account-shell .status-completed,
+.account-shell .status-delivered {
+    background: #e9f8ef;
+    color: #287144;
+}
+
+.account-shell .status-cancelled,
+.account-shell .status-failed {
+    background: #fdecec;
+    color: #a53d3d;
+}
+
+.account-shell .order-empty-state,
+.account-shell .address-empty-state {
+    padding: 34px 24px;
+    text-align: center;
+}
+
+.account-shell .address-toolbar {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.account-shell .address-page-header {
+    max-width: 620px;
+}
+
+.account-shell .address-form-card {
+    padding: 22px;
+    margin-bottom: 22px;
+}
+
+.account-shell .address-form-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.account-shell .address-close-btn {
+    width: 38px;
+    height: 38px;
+    border: 1px solid var(--account-border);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--account-text);
+}
+
+.account-shell .address-form-grid fieldset,
+.account-shell .account-edit-form fieldset {
+    margin-bottom: 14px;
+}
+
+.account-shell .address-form-grid input[type="text"],
+.account-shell .account-edit-form input {
+    width: 100%;
+    min-height: 50px;
+    padding: 12px 14px;
+    border: 1px solid var(--account-border);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--account-text);
+}
+
+.account-shell .address-form-grid input[type="text"]:focus,
+.account-shell .account-edit-form input:focus {
+    outline: none;
+    border-color: var(--account-main);
+    box-shadow: 0 0 0 3px rgba(43, 106, 70, 0.12);
+}
+
+.account-shell .address-checkbox {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin: 2px 0 18px;
+    color: var(--account-text);
+    font-weight: 600;
+}
+
+.account-shell .address-grid {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.account-shell .address-card.is-default {
+    border-color: rgba(43, 106, 70, 0.28);
+}
+
+.account-shell .address-card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.account-shell .address-card-body p {
+    margin-bottom: 6px;
+}
+
+.account-shell .address-card-actions {
+    margin-top: 14px;
+}
+
+.account-shell .account-form-card + .account-form-card {
+    margin-top: 16px;
+}
+
+.account-shell .account-form-heading {
+    margin-bottom: 16px;
+}
+
+@media (max-width: 1199px) {
+    .account-shell .account-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .account-shell .account-sidebar-card {
+        display: none;
+    }
+
+    .account-shell .account-mobile-nav {
+        display: flex;
+    }
+}
+
+@media (max-width: 991px) {
+    .account-shell .account-panel {
+        padding: 20px;
+    }
+
+    .account-shell .account-overview,
+    .account-shell .address-toolbar {
+        flex-direction: column;
+    }
+
+    .account-shell .account-stats-grid,
+    .account-shell .orders-summary,
+    .account-shell .account-dashboard-grid,
+    .account-shell .account-edit-grid,
+    .account-shell .grid-2,
+    .account-shell .grid-3,
+    .account-shell .account-field-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .account-shell .account-overview h2 {
+        font-size: 24px;
+    }
+
+    .account-shell .account-overview-actions,
+    .account-shell .address-actions,
+    .account-shell .address-form-actions,
+    .account-shell .account-edit-actions {
+        width: 100%;
+    }
+
+    .account-shell .account-overview-actions a,
+    .account-shell .address-actions .tf-btn,
+    .account-shell .address-form-actions > *,
+    .account-shell .account-edit-actions > * {
+        width: 100%;
+    }
+
+    .account-shell .account-meta-item {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .account-shell .account-meta-value {
+        text-align: left;
+    }
+}
+</style>

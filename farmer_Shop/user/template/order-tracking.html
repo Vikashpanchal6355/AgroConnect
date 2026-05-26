@@ -1,0 +1,261 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<!-- Page-title -->
+        <div class="page-title page-shop-detail">
+            <div class="rellax" data-rellax-speed="5">
+                <img src="{% static 'images/page-title/shop-detail.jpg' %}" alt="">
+            </div>
+            <div class="content-wrap">
+                <div class="tf-container w-1290">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="content center">
+                                <p class="sub-title">
+                                    Buy Health Foods At Our Store
+                                </p>
+                                <h1 class="title">
+                                    Order Tracking
+                                </h1>
+                                <div class="icon-img">
+                                    <img src="{% static 'images/item/line-throw-title.png' %}" alt="">
+                                </div>
+                                <div class="breadcrumb">
+                                    <a href="{% url 'index' %}">Home</a>
+                                    <div class="icon">
+                                        <i class="icon-arrow-right1"></i>
+                                    </div>
+                                    <a href="javascript:void(0)"> Order Tracking </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="img-item item-2">
+                <img src="{% static 'images/item/grass-6.png' %}" alt="">
+            </div>
+        </div><!-- /.Page-title -->
+
+        <!-- Order Tracking -->
+        <section class="flat-spacing-1">
+            <div class="tf-container">
+                <div class="container-2">
+                    {% if error_message %}
+                    <div class="alert alert-danger mb-4">
+                        <i class="fa-solid fa-circle-exclamation"></i> {{ error_message }}
+                    </div>
+                    {% endif %}
+                    
+                    {% if not order %}
+                    <p class="text-center mb-30">To track your order please enter your Order ID in the box below and
+                        press the
+                        "Track" button. This
+                        was given to you on your receipt and in the confirmation email you should have received.</p>
+                    <form action="{% url 'order_tracking' %}" method="POST" class="form-def">
+                        {% csrf_token %}
+                        <div class="form-content">
+                            <fieldset>
+                                <label for="orderid">
+                                    Order ID
+                                </label>
+                                <input name="orderid" id="orderid" type="text"
+                                    placeholder="Found in your order confirmation email." required>
+                            </fieldset>
+                            <fieldset>
+                                <label for="order_email">
+                                    Billing email
+                                </label>
+                                <input type="text" name="order_email" id="order_email"
+                                    placeholder="Email you used during checkout." required>
+                            </fieldset>
+                        </div>
+                        <div class="button-submit">
+                            <button type="submit" class="tf-btn-nor w-100">
+                                Track
+                            </button>
+                        </div>
+                    </form>
+                    {% else %}
+                    <!-- Order Found - Show Details -->
+                    <div class="order-tracking-result">
+                        <div class="alert alert-success mb-4">
+                            <i class="fa-solid fa-circle-check"></i> Order found! Here are your order details.
+                        </div>
+                        
+                        <div class="order-info-card">
+                            <div class="order-header">
+                                <h3>Order #{{ order.order_number }}</h3>
+                                <span class="order-status status-{{ order.status }}">{{ order.get_status_display }}</span>
+                            </div>
+                            
+                            <div class="order-meta">
+                                <div class="meta-item">
+                                    <label>Order Date</label>
+                                    <span>{{ order.created_at|date:"d M Y, h:i A" }}</span>
+                                </div>
+                                <div class="meta-item">
+                                    <label>Payment Status</label>
+                                    <span>{{ order.payment_status|title }}</span>
+                                </div>
+                                <div class="meta-item">
+                                    <label>Payment Method</label>
+                                    <span>{{ order.get_payment_method_display|default:order.payment_method|title }}</span>
+                                </div>
+                            </div>
+                            
+                            <h4 class="mt-4 mb-3">Order Items</h4>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Quantity</th>
+                                            <th>Price</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for item in order_items %}
+                                        <tr>
+                                            <td>{{ item.product.name }}</td>
+                                            <td>{{ item.quantity }}</td>
+                                            <td>₹{{ item.price|floatformat:0 }}</td>
+                                            <td>₹{{ item.subtotal|floatformat:0 }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="3"><strong>Subtotal</strong></td>
+                                            <td><strong>₹{{ order.subtotal|floatformat:0 }}</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">Shipping</td>
+                                            <td>{% if order.shipping_cost == 0 %}Free{% else %}₹{{ order.shipping_cost|floatformat:0 }}{% endif %}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3"><strong>Total</strong></td>
+                                            <td><strong>₹{{ order.total|floatformat:0 }}</strong></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            
+                            <div class="order-actions mt-4">
+                                <a href="{% url 'print_receipt' order.id %}" class="tf-btn-nor" target="_blank">
+                                    <i class="fa-solid fa-print"></i> Print Receipt
+                                </a>
+                                <a href="{% url 'order_tracking' %}" class="tf-btn-nor btn-outline">
+                                    <i class="fa-solid fa-magnifying-glass"></i> Track Another Order
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+        <!-- /Order Tracking -->
+
+<style>
+    .alert {
+        padding: 15px 20px;
+        border-radius: 8px;
+    }
+    .alert-danger {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+    .alert-success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+    .order-tracking-result {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    .order-info-card {
+        background: #fff;
+        border: 1px solid #eee;
+        border-radius: 10px;
+        padding: 25px;
+    }
+    .order-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #2d5016;
+    }
+    .order-header h3 {
+        margin: 0;
+        color: #2d5016;
+    }
+    .order-status {
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+    .status-pending { background: #fff3cd; color: #856404; }
+    .status-processing { background: #cce5ff; color: #004085; }
+    .status-shipped { background: #d4edda; color: #155724; }
+    .status-delivered { background: #d1ecf1; color: #0c5460; }
+    .order-meta {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+    .meta-item label {
+        display: block;
+        font-size: 11px;
+        color: #777;
+        text-transform: uppercase;
+        margin-bottom: 3px;
+    }
+    .meta-item span {
+        font-weight: 600;
+        color: #333;
+    }
+    .table {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+    .table thead th {
+        background: #2d5016;
+        color: #fff;
+        padding: 12px;
+        text-align: left;
+    }
+    .table tbody td {
+        padding: 12px;
+        border-bottom: 1px solid #eee;
+    }
+    .table tfoot td {
+        padding: 8px 12px;
+    }
+    .table tfoot tr:last-child td {
+        font-size: 16px;
+        color: #2d5016;
+    }
+    .order-actions {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+    .btn-outline {
+        background: transparent !important;
+        border: 1px solid #2d5016 !important;
+        color: #2d5016 !important;
+    }
+    .btn-outline:hover {
+        background: #2d5016 !important;
+        color: #fff !important;
+    }
+</style>
+{% endblock %}

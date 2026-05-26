@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+{% include 'includes/account-shell-styles.html' %}
+<div class="page-title page-portfolio-details">
+    <div class="rellax" data-rellax-speed="5">
+        <img src="{% static 'images/page-title/shop-detail.jpg' %}" alt="">
+    </div>
+    <div class="content-wrap">
+        <div class="tf-container w-1290">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="content">
+                        <h1 class="title">My account</h1>
+                        <div class="icon-img">
+                            <img src="{% static 'images/item/line-throw-title.png' %}" alt="">
+                        </div>
+                        <div class="breadcrumb">
+                            <a href="{% url 'index' %}">Home</a>
+                            <div class="icon">
+                                <i class="icon-arrow-right1"></i>
+                            </div>
+                            <a href="javascript:void(0)">My account</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="img-item item-2">
+        <img src="{% static 'images/item/grass-6.png' %}" alt="">
+    </div>
+</div>
+
+<section class="flat-spacing-1 account-shell">
+    <div class="tf-container">
+        {% include 'includes/account-mobile-nav.html' with active_page='orders' %}
+        <div class="account-layout">
+            {% include 'includes/account-sidebar-card.html' with active_page='orders' %}
+            <div class="account-panel">
+                <div class="account-overview">
+                    <div class="account-overview-copy">
+                        <span class="account-kicker">Orders</span>
+                        <h2>Your orders</h2>
+                        <p>Check order status, totals, and receipts.</p>
+                    </div>
+                    <div class="account-overview-actions">
+                        <a href="{% url 'shop_products' %}" class="account-pill-btn">Shop More</a>
+                    </div>
+                </div>
+
+                <div class="orders-summary">
+                    <div class="orders-summary-card">
+                        <strong>{{ orders|length }}</strong>
+                        <span>Total orders</span>
+                    </div>
+                    <div class="orders-summary-card">
+                        <strong>{% if orders %}{{ orders.0.created_at|date:"M j" }}{% else %}0{% endif %}</strong>
+                        <span>Latest order date</span>
+                    </div>
+                    <div class="orders-summary-card">
+                        <strong>{% if orders %}{{ orders.0.get_status_display }}{% else %}None{% endif %}</strong>
+                        <span>Latest order status</span>
+                    </div>
+                </div>
+
+                {% if orders %}
+                <div class="orders-table-wrap">
+                    <table class="orders-table">
+                        <thead>
+                            <tr>
+                                <th>Order</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Total</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders %}
+                            <tr>
+                                <td><span class="order-id">{{ order.order_number }}</span></td>
+                                <td>{{ order.created_at|date:"F j, Y" }}</td>
+                                <td><span class="status-badge status-{{ order.status }}">{{ order.get_status_display }}</span></td>
+                                <td>Rs. {{ order.total|floatformat:2 }} for {{ order.items.count }} items</td>
+                                <td>
+                                    <div class="order-actions">
+                                        <a href="{% url 'order_details' order.id %}" class="tf-btn-nor style-small">View</a>
+                                        <a href="{% url 'print_receipt' order.id %}" target="_blank" class="tf-btn-nor style-small style-2">Print</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="order-empty-state">
+                    <h4 class="fw-5 mb-12">No orders yet</h4>
+                    <p class="mb-20">Once you place an order, its status and receipt links will appear here.</p>
+                    <a href="{% url 'shop_products' %}" class="account-pill-btn">Start Shopping</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Order #{{ order.order_number }} - AgroConnect</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 12px;
+      line-height: 1.4;
+      color: #0f1111;
+      background: #f7f7f7;
+      padding: 20px;
+    }
+    
+    .amazon-receipt {
+      max-width: 750px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+    
+    /* Top Bar - Amazon Orange Style */
+    .top-bar {
+      background: linear-gradient(90deg, #FF9900, #FF8F00);
+      padding: 8px 20px;
+      color: white;
+      font-weight: 600;
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    /* Logo Header */
+    .logo-header {
+      padding: 25px 30px;
+      background: #232f3e;
+      color: white;
+      text-align: center;
+      position: relative;
+    }
+    
+    .logo-main {
+      font-size: 28px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #10b981, #34d399);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 5px;
+      letter-spacing: -0.5px;
+    }
+    
+    .tagline {
+      font-size: 14px;
+      opacity: 0.9;
+      margin: 0;
+    }
+    
+    /* Order Summary */
+    .order-summary {
+      background: #fafafa;
+      padding: 25px 30px;
+      border-bottom: 1px solid #e7e7e7;
+    }
+    
+    .order-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #0f1111;
+      margin-bottom: 20px;
+    }
+    
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    
+    .summary-item {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .summary-label {
+      font-size: 12px;
+      color: #565959;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+    
+    .summary-value {
+      font-size: 16px;
+      font-weight: 700;
+      color: #0f1111;
+    }
+    
+    .status {
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 12px;
+      text-transform: capitalize;
+    }
+    
+    .status.shipped { background: #c8f3e7; color: #0d9488; }
+    .status.delivered { background: #86efac; color: #065f46; }
+    .status.pending { background: #fef3c7; color: #92400e; }
+    
+    /* Divider */
+    .divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, #d1d5db, transparent);
+      margin: 25px 0;
+    }
+    
+    /* Items Section */
+    .items-header {
+      padding: 0 30px 20px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #0f1111;
+      margin-bottom: 10px;
+    }
+    
+    .items-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 25px;
+    }
+    
+    .items-table th {
+      background: #f7f7f7;
+      padding: 14px 16px;
+      text-align: left;
+      font-weight: 600;
+      color: #374151;
+      font-size: 13px;
+      border-bottom: 2px solid #e5e7eb;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .items-table td {
+      padding: 16px;
+      border-bottom: 1px solid #e7e7e7;
+      vertical-align: top;
+    }
+    
+    .items-table tr:nth-child(even) {
+      background: #fafafa;
+    }
+    
+    .product-info {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    
+    .product-name {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 2px;
+    }
+    
+    .product-sku {
+      font-size: 12px;
+      color: #6b7280;
+    }
+    
+    .price {
+      font-weight: 700;
+      color: #059669;
+      font-size: 14px;
+    }
+    
+    /* Totals */
+    .totals-section {
+      padding: 25px 30px 20px;
+      background: #fafafa;
+      border-top: 3px solid #10b981;
+    }
+    
+    .total-line {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      font-size: 14px;
+    }
+    
+    .total-line.total {
+      font-size: 18px;
+      font-weight: 800;
+      color: #059669;
+      border-top: 2px solid #e5e7eb;
+      padding-top: 12px;
+      margin-top: 8px;
+    }
+    
+    /* Footer */
+    .footer {
+      padding: 25px 30px;
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      text-align: center;
+      border-top: 1px solid #e7e7e7;
+    }
+    
+    .footer-brand {
+      font-size: 18px;
+      font-weight: 700;
+      color: #10b981;
+      margin-bottom: 10px;
+    }
+    
+    .footer-text {
+      color: #6b7280;
+      font-size: 13px;
+    }
+    
+    /* Print Styles */
+    @media print {
+      body { 
+        background: white !important; 
+        padding: 0; 
+        margin: 0; 
+      }
+      .amazon-receipt { 
+        box-shadow: none !important; 
+        border-radius: 0 !important;
+        max-width: none;
+      }
+      button, a { display: none !important; }
+    }
+    
+    @media (max-width: 768px) {
+      .summary-grid { grid-template-columns: 1fr; }
+      .items-table th, .items-table td { padding: 12px 10px; font-size: 12px; }
+      body { font-size: 11px; padding: 10px; }
+    }
+  </style>
+</head>
+<body onload="setTimeout(window.print, 1000)">
+  <div class="amazon-receipt">
+    <!-- Amazon-style Top Bar -->
+    <div class="top-bar">
+      <span>Order Summary</span>
+      <span>Print Date: {{ order.created_at|date:"d M Y" }}</span>
+    </div>
+    
+    <!-- Main Logo Header -->
+    <div class="logo-header">
+      <div class="logo-main">AgroConnect</div>
+      <div class="tagline">Fresh Farms • Direct Delivery</div>
+    </div>
+    
+    <!-- Order Summary -->
+    <div class="order-summary">
+      <div class="order-title">
+        Order Placed <span style="color:#10b981">#{{ order.order_number }}</span>
+      </div>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="summary-label">Order Date</div>
+          <div class="summary-value">{{ order.created_at|date:"MMMM d, yyyy h:mm a" }}</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-label">Billing Address</div>
+          <div class="summary-value">AgroConnect Farms Ltd.</div>
+          <div>{{ order.address_line_1 }}</div>
+          <div>{{ order.city }}, {{ order.state }} {{ order.postal_code }}</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-label">Ship To</div>
+          <div class="summary-value">{{ order.first_name }} {{ order.last_name }}</div>
+          <div>{{ order.phone }}</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="divider"></div>
+    
+    <!-- Items -->
+    <div style="padding: 0 30px 25px">
+      <div class="items-header">
+        Your Items ({{ order_items|length }}) • Delivered by AgroConnect
+      </div>
+      <table class="items-table">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Qty</th>
+            <th>Price</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in order_items %}
+          <tr>
+            <td class="product-info">
+              <div class="product-name">{{ item.product.name }}</div>
+              {% if item.product.sku %}
+                <div class="product-sku">SKU: {{ item.product.sku }}</div>
+              {% endif %}
+            </td>
+            <td>{{ item.quantity }}</td>
+            <td class="price">₹{{ item.price|floatformat:0 }}</td>
+            <td class="price">₹{{ item.subtotal|floatformat:0 }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- Totals -->
+    <div class="totals-section">
+      <div class="total-line">
+        <span>Subtotal</span>
+        <span>₹{{ order.subtotal|floatformat:0 }}</span>
+      </div>
+      <div class="total-line">
+        <span>Shipping & Handling</span>
+        <span>{% if order.shipping_cost == 0 %}FREE{% else %}₹{{ order.shipping_cost|floatformat:0 }}{% endif %}</span>
+      </div>
+      <div class="total-line total">
+        <span>Order Total</span>
+        <span>₹{{ order.total|floatformat:0 }}</span>
+      </div>
+    </div>
+    
+    <!-- Footer -->
+    <div class="footer">
+      <div class="footer-brand">🌱 AgroConnect Farms Ltd.</div>
+      <div class="footer-text">
+        Thank you for choosing fresh from farm! 
+        support@agroconnect.in | 1800-FRESH-FARM
+      </div>
+    </div>
+  </div>
+</body>
+</html>

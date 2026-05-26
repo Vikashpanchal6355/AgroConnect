@@ -1,0 +1,579 @@
+{% extends 'myadmin/base.html' %}
+{% load static %}
+
+{% block page_title %}Dashboard{% endblock %}
+{% block page_header %}Dashboard{% endblock %}
+
+{% block content %}
+<!-- Welcome Header -->
+<div class="row mb-4">
+  <div class="col-12">
+    <div class="card border-0" style="background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-light) 100%); color: white;">
+      <div class="card-body p-4">
+        <div class="row align-items-center">
+          <div class="col-lg-8">
+            <h2 class="mb-2">
+              <i class="fas fa-tachometer-alt me-2"></i>Welcome back, Admin!
+            </h2>
+            <p class="opacity-75 mb-0">
+              Here's what's happening with your AgroConnect platform today.
+            </p>
+          </div>
+          <div class="col-lg-4 text-end">
+            <div class="text-center">
+              <div class="avatar avatar-xl mx-auto mb-2" style="background: rgba(255, 255, 255, 0.2);">
+                <i class="material-icons" style="font-size: 2rem;">admin_panel_settings</i>
+              </div>
+              <small class="opacity-75">Administrator</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Statistics Cards -->
+      <div class="row g-4 mb-4">
+        <div class="col-xl-3 col-sm-6">
+          <div class="premium-card premium-animate-fade-in-up" style="animation-delay: 100ms;">
+            <div class="premium-card__content">
+              <div class="premium-badge">Revenue</div>
+              <h3 class="premium-card__title">₹{{ total_revenue|floatformat:0 }}</h3>
+              <p class="mb-0">Total Revenue</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-sm-6">
+          <div class="premium-card premium-animate-fade-in-up" style="animation-delay: 200ms;">
+            <div class="premium-card__content">
+              <div class="premium-badge">Users</div>
+              <h3 class="premium-card__title">{{ total_users }}</h3>
+              <p class="mb-0">Total Users</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-sm-6">
+          <div class="premium-card premium-animate-fade-in-up" style="animation-delay: 300ms;">
+            <div class="premium-card__content">
+              <div class="premium-badge">Orders</div>
+              <h3 class="premium-card__title">{{ total_orders }}</h3>
+              <p class="mb-0">Total Orders</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-sm-6">
+          <div class="premium-card premium-animate-fade-in-up" style="animation-delay: 400ms;">
+            <div class="premium-card__content">
+              <div class="premium-badge">Products</div>
+              <h3 class="premium-card__title">{{ total_products }}</h3>
+              <p class="mb-0">Total Products</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <!-- Recent Orders -->
+        <div class="col-lg-8">
+          <div class="premium-card premium-animate-fade-in-up" style="animation-delay: 500ms;">
+            <div class="premium-card__content">
+              <div class="premium-section-head">
+                <span class="premium-pill">Activity</span>
+                <h3>Recent Orders</h3>
+              </div>
+              <div class="table-responsive">
+                <table class="table mb-0">
+                  <thead>
+                    <tr>
+                      <th>Order</th>
+                      <th>Customer</th>
+                      <th>Amount</th>
+                      <th>Status</th>
+                      <th>Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for order in recent_orders %}
+                    <tr>
+                      <td><span class="font-weight-bold">#{{ order.id }}</span></td>
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <div class="avatar avatar-sm me-2" style="background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-light) 100%);">
+                            {{ order.first_name|slice:":1"|upper }}
+                          </div>
+                          <div>
+                            <div class="font-weight-bold">{{ order.first_name }} {{ order.last_name }}</div>
+                            <small class="text-muted">{{ order.email }}</small>
+                          </div>
+                        </div>
+                      </td>
+                      <td><span class="font-weight-bold text-success">₹{{ order.total|floatformat:0 }}</span></td>
+                      <td>
+                        {% if order.status == 'delivered' %}
+                        <span class="badge bg-success">Delivered</span>
+                        {% elif order.status == 'pending' %}
+                        <span class="badge bg-warning">Pending</span>
+                        {% elif order.status == 'cancelled' %}
+                        <span class="badge bg-danger">Cancelled</span>
+                        {% else %}
+                        <span class="badge bg-info">{{ order.status|title }}</span>
+                        {% endif %}
+                      </td>
+                      <td>
+                        <div class="text-sm">{{ order.created_at|date:"M d" }}</div>
+                        <small class="text-muted">{{ order.created_at|time:"H:i" }}</small>
+                      </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                      <td colspan="5" class="text-center py-4">
+                        <i class="fas fa-shopping-cart fa-2x text-muted mb-2"></i>
+                        <p class="text-muted mb-0">No recent orders</p>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Order Status & Actions -->
+        <div class="col-lg-4">
+          <div class="premium-card premium-animate-fade-in-up" style="animation-delay: 600ms;">
+            <div class="premium-card__content">
+              <div class="premium-section-head">
+                <span class="premium-pill">Status</span>
+                <h3>Order Overview</h3>
+              </div>
+              <div class="row g-3">
+                <div class="col-6 text-center">
+                  <div class="p-3 border rounded">
+                    <div class="text-warning mb-1">
+                      <i class="material-icons">hourglass_empty</i>
+                    </div>
+                    <h4 class="mb-0">{{ pending_orders }}</h4>
+                    <small class="text-muted">Pending</small>
+                  </div>
+                </div>
+                <div class="col-6 text-center">
+                  <div class="p-3 border rounded">
+                    <div class="text-success mb-1">
+                      <i class="material-icons">check_circle</i>
+                    </div>
+                    <h4 class="mb-0">{{ delivered_orders }}</h4>
+                    <small class="text-muted">Delivered</small>
+                  </div>
+                </div>
+              </div>
+              <hr class="my-3">
+              <div class="d-grid gap-2">
+                <a href="{% url 'myadmin:add_product' %}" class="btn btn-primary btn-sm">
+                  <i class="fas fa-plus me-1"></i>Add Product
+                </a>
+                <a href="{% url 'myadmin:orders' %}" class="btn btn-outline-primary btn-sm">
+                  <i class="fas fa-list me-1"></i>View Orders
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+        <h3 class="font-weight-bold mb-1">₹{{ total_revenue|floatformat:0 }}</h3>
+        <p class="text-sm text-muted mb-2">Total Revenue</p>
+        <div class="progress" style="height: 4px;">
+          <div class="progress-bar bg-success" style="width: 100%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-3 col-sm-6 mb-4">
+    <div class="card h-100">
+      <div class="card-body text-center">
+        <div class="avatar avatar-lg mx-auto mb-3" style="background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-light) 100%);">
+          <i class="material-icons">people</i>
+        </div>
+        <h3 class="font-weight-bold mb-1">{{ total_users }}</h3>
+        <p class="text-sm text-muted mb-2">Total Users</p>
+        <div class="progress" style="height: 4px;">
+          <div class="progress-bar bg-primary" style="width: 85%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-3 col-sm-6 mb-4">
+    <div class="card h-100">
+      <div class="card-body text-center">
+        <div class="avatar avatar-lg mx-auto mb-3" style="background: linear-gradient(135deg, var(--warning) 0%, var(--warning-light) 100%);">
+          <i class="material-icons">shopping_cart</i>
+        </div>
+        <h3 class="font-weight-bold mb-1">{{ total_orders }}</h3>
+        <p class="text-sm text-muted mb-2">Total Orders</p>
+        <div class="progress" style="height: 4px;">
+          <div class="progress-bar bg-warning" style="width: 70%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-3 col-sm-6 mb-4">
+    <div class="card h-100">
+      <div class="card-body text-center">
+        <div class="avatar avatar-lg mx-auto mb-3" style="background: linear-gradient(135deg, var(--info) 0%, var(--info-light) 100%);">
+          <i class="material-icons">inventory_2</i>
+        </div>
+        <h3 class="font-weight-bold mb-1">{{ total_products }}</h3>
+        <p class="text-sm text-muted mb-2">Total Products</p>
+        <div class="progress" style="height: 4px;">
+          <div class="progress-bar bg-info" style="width: 60%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Recent Orders & Activity -->
+<div class="row">
+  <div class="col-lg-8 mb-4">
+    <div class="card">
+      <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+          <h6 class="mb-0">
+            <i class="fas fa-shopping-cart me-2"></i>Recent Orders
+          </h6>
+          <a href="{% url 'myadmin:orders' %}" class="btn btn-sm btn-outline-primary">
+            <i class="fas fa-arrow-right me-1"></i>View All
+          </a>
+        </div>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table mb-0">
+            <thead>
+              <tr>
+                <th>Order</th>
+                <th>Customer</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for order in recent_orders %}
+              <tr>
+                <td>
+                  <span class="font-weight-bold">#{{ order.id }}</span>
+                </td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <div class="avatar avatar-sm me-2" style="background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-light) 100%);">
+                      {{ order.first_name|slice:":1"|upper }}
+                    </div>
+                    <div>
+                      <div class="font-weight-bold">{{ order.first_name }} {{ order.last_name }}</div>
+                      <small class="text-muted">{{ order.email }}</small>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <span class="font-weight-bold text-success">₹{{ order.total|floatformat:0 }}</span>
+                </td>
+                <td>
+                  {% if order.status == 'delivered' %}
+                  <span class="badge bg-success">Delivered</span>
+                  {% elif order.status == 'pending' %}
+                  <span class="badge bg-warning">Pending</span>
+                  {% elif order.status == 'cancelled' %}
+                  <span class="badge bg-danger">Cancelled</span>
+                  {% else %}
+                  <span class="badge bg-info">{{ order.status|title }}</span>
+                  {% endif %}
+                </td>
+                <td>
+                  <div class="text-sm">{{ order.created_at|date:"M d" }}</div>
+                  <small class="text-muted">{{ order.created_at|time:"H:i" }}</small>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="5" class="text-center py-4">
+                  <i class="fas fa-shopping-cart fa-2x text-muted mb-2"></i>
+                  <p class="text-muted mb-0">No recent orders</p>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4 mb-4">
+    <div class="card h-100">
+      <div class="card-header">
+        <h6 class="mb-0">
+          <i class="fas fa-chart-pie me-2"></i>Order Status
+        </h6>
+      </div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-6 text-center">
+            <div class="p-3 border rounded">
+              <div class="text-warning mb-1">
+                <i class="material-icons">hourglass_empty</i>
+              </div>
+              <div class="h4 mb-0">{{ pending_orders }}</div>
+              <small class="text-muted">Pending</small>
+            </div>
+          </div>
+          <div class="col-6 text-center">
+            <div class="p-3 border rounded">
+              <div class="text-success mb-1">
+                <i class="material-icons">check_circle</i>
+              </div>
+              <div class="h4 mb-0">{{ delivered_orders }}</div>
+              <small class="text-muted">Delivered</small>
+            </div>
+          </div>
+        </div>
+
+        <hr class="my-3">
+
+        <div class="text-center">
+          <h6 class="mb-3">Quick Actions</h6>
+          <div class="d-grid gap-2">
+            <a href="{% url 'myadmin:add_product' %}" class="btn btn-primary btn-sm">
+              <i class="fas fa-plus me-1"></i>Add Product
+            </a>
+            <a href="{% url 'myadmin:orders' %}" class="btn btn-outline-primary btn-sm">
+              <i class="fas fa-list me-1"></i>View Orders
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- System Status -->
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h6 class="mb-0">
+          <i class="fas fa-shield-alt me-2"></i>System Status
+        </h6>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          {% if pending_orders > 0 %}
+          <div class="col-md-4 mb-3">
+            <div class="alert alert-warning border-0">
+              <div class="d-flex align-items-center">
+                <i class="fas fa-exclamation-triangle me-3"></i>
+                <div>
+                  <h6 class="alert-heading mb-1">{{ pending_orders }} Orders Pending</h6>
+                  <p class="mb-0 small">Requires attention</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+
+          <div class="col-md-4 mb-3">
+            <div class="alert alert-success border-0">
+              <div class="d-flex align-items-center">
+                <i class="fas fa-check-circle me-3"></i>
+                <div>
+                  <h6 class="alert-heading mb-1">System Operational</h6>
+                  <p class="mb-0 small">All services running</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {% if total_products == 0 %}
+          <div class="col-md-4 mb-3">
+            <div class="alert alert-info border-0">
+              <div class="d-flex align-items-center">
+                <i class="fas fa-info-circle me-3"></i>
+                <div>
+                  <h6 class="alert-heading mb-1">Add Your First Product</h6>
+                  <p class="mb-0 small">Start building your catalog</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-4 text-center">
+            <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+              <i class="material-icons">hourglass_empty</i>
+            </div>
+            <h4 class="mt-2">{{ pending_orders }}</h4>
+            <p class="text-sm text-muted mb-0">Pending</p>
+          </div>
+          <div class="col-4 text-center">
+            <div class="icon icon-shape bg-success text-white rounded-circle shadow">
+              <i class="material-icons">check_circle</i>
+            </div>
+            <h4 class="mt-2">{{ delivered_orders }}</h4>
+            <p class="text-sm text-muted mb-0">Delivered</p>
+          </div>
+          <div class="col-4 text-center">
+            <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
+              <i class="material-icons">cancel</i>
+            </div>
+            <h4 class="mt-2">{{ cancelled_orders }}</h4>
+            <p class="text-sm text-muted mb-0">Cancelled</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <div class="card mb-4">
+      <div class="card-header pb-0 d-flex justify-content-between align-items-center">
+        <h6>Quick Actions</h6>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-3 col-6">
+            <a href="{% url 'myadmin:products' %}" class="btn bg-gradient-success w-100 mb-2">
+              <i class="material-icons opacity-10 me-2">inventory_2</i>
+              Manage Products
+            </a>
+          </div>
+          <div class="col-md-3 col-6">
+            <a href="{% url 'myadmin:orders' %}" class="btn bg-gradient-warning w-100 mb-2">
+              <i class="material-icons opacity-10 me-2">shopping_cart</i>
+              Manage Orders
+            </a>
+          </div>
+          <div class="col-md-3 col-6">
+            <a href="{% url 'myadmin:users' %}" class="btn bg-gradient-primary w-100 mb-2">
+              <i class="material-icons opacity-10 me-2">people</i>
+              Manage Users
+            </a>
+          </div>
+          <div class="col-md-3 col-6">
+            <a href="/admin/" class="btn bg-gradient-info w-100 mb-2" target="_blank">
+              <i class="material-icons opacity-10 me-2">admin_panel_settings</i>
+              Django Admin
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xl-6 col-lg-12 mb-4">
+    <div class="card">
+      <div class="card-header bg-gradient-primary text-white">
+        <h6 class="mb-0">Revenue Trends</h6>
+      </div>
+      <div class="card-body">
+        <canvas id="revenueChart" style="max-height: 200px;"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-6 col-lg-12 mb-4">
+    <div class="card">
+      <div class="card-header bg-gradient-success text-white">
+        <h6 class="mb-0">User Growth</h6>
+      </div>
+      <div class="card-body">
+        <canvas id="userGrowthChart" style="max-height: 200px;"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 mb-4">
+    <div class="card">
+      <div class="card-header bg-gradient-info text-white">
+        <h6 class="mb-0">Order Status Overview</h6>
+      </div>
+      <div class="card-body">
+        <canvas id="orderStatusChart" style="max-height: 200px;"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+  const userGrowthCtx = document.getElementById('userGrowthChart').getContext('2d');
+  const orderStatusCtx = document.getElementById('orderStatusChart').getContext('2d');
+
+  // Revenue Chart
+  new Chart(revenueCtx, {
+    type: 'line',
+    data: {
+      labels: {{ revenue_labels|safe }},
+      datasets: [{
+        label: 'Revenue',
+        data: {{ revenue_data|safe }},
+        borderColor: 'rgba(75, 192, 192, 1)',
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        fill: true,
+      }],
+    },
+  });
+
+  // User Growth Chart
+  new Chart(userGrowthCtx, {
+    type: 'bar',
+    data: {
+      labels: {{ user_growth_labels|safe }},
+      datasets: [{
+        label: 'New Users',
+        data: {{ user_growth_data|safe }},
+        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+        borderColor: 'rgba(54, 162, 235, 1)',
+        borderWidth: 1,
+      }],
+    },
+  });
+
+  // Order Status Chart
+  new Chart(orderStatusCtx, {
+    type: 'doughnut',
+    data: {
+      labels: {{ order_status_labels|safe }},
+      datasets: [{
+        label: 'Orders',
+        data: {{ order_status_data|safe }},
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+        ],
+        borderWidth: 1,
+      }],
+    },
+  });
+</script>
+{% endblock %}

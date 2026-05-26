@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+{% include 'includes/account-shell-styles.html' %}
+<div class="page-title page-portfolio-details">
+    <div class="rellax" data-rellax-speed="5">
+        <img src="{% static 'images/page-title/shop-detail.jpg' %}" alt="">
+    </div>
+    <div class="content-wrap">
+        <div class="tf-container w-1290">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="content">
+                        <h1 class="title">My account</h1>
+                        <div class="icon-img">
+                            <img src="{% static 'images/item/line-throw-title.png' %}" alt="">
+                        </div>
+                        <div class="breadcrumb">
+                            <a href="{% url 'index' %}">Home</a>
+                            <div class="icon">
+                                <i class="icon-arrow-right1"></i>
+                            </div>
+                            <a href="javascript:void(0)">My account</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="img-item item-2">
+        <img src="{% static 'images/item/grass-6.png' %}" alt="">
+    </div>
+</div>
+
+<section class="flat-spacing-1 account-shell">
+    <div class="tf-container">
+        {% include 'includes/account-mobile-nav.html' with active_page='dashboard' %}
+        <div class="account-layout">
+            {% include 'includes/account-sidebar-card.html' with active_page='dashboard' %}
+            <div class="account-panel">
+                <div class="account-overview">
+                    <div class="account-overview-copy">
+                        <span class="account-kicker">Dashboard</span>
+                        <h2>Hello {% if user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %}</h2>
+                        <p>Manage your orders, saved addresses, and account details from here.</p>
+                    </div>
+                    <div class="account-overview-actions">
+                        <a href="{% url 'my_account_orders' %}" class="account-pill-btn">View Orders</a>
+                        <a href="{% url 'my_account_edit' %}" class="account-pill-btn alt">Edit Profile</a>
+                    </div>
+                </div>
+
+                <div class="account-stats-grid">
+                    <div class="account-stat-card">
+                        <span class="account-stat-label">Orders</span>
+                        <span class="account-stat-value">{{ orders_count }}</span>
+                        <span class="account-stat-meta">Total orders</span>
+                    </div>
+                    <div class="account-stat-card">
+                        <span class="account-stat-label">Saved Addresses</span>
+                        <span class="account-stat-value">{{ addresses_count }}</span>
+                        <span class="account-stat-meta">Saved for checkout</span>
+                    </div>
+                    <div class="account-stat-card">
+                        <span class="account-stat-label">Wishlist</span>
+                        <span class="account-stat-value">{{ wishlist_count }}</span>
+                        <span class="account-stat-meta">Saved products</span>
+                    </div>
+                </div>
+
+                <div class="account-dashboard-grid">
+                    <div class="account-profile-card">
+                        <h4>Profile Snapshot</h4>
+                        <div class="account-meta-list">
+                            <div class="account-meta-item">
+                                <span class="account-meta-label">Username</span>
+                                <span class="account-meta-value">{{ user.username }}</span>
+                            </div>
+                            <div class="account-meta-item">
+                                <span class="account-meta-label">Email</span>
+                                <span class="account-meta-value">{{ user.email }}</span>
+                            </div>
+                            <div class="account-meta-item">
+                                <span class="account-meta-label">Full name</span>
+                                <span class="account-meta-value">{% if user.first_name %}{{ user.first_name }} {{ user.last_name }}{% else %}Not set yet{% endif %}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="account-note">
+                        <h4>Quick Actions</h4>
+                        <p>Quick links for common account actions.</p>
+                        <div class="account-panel-actions" style="margin-top: 18px;">
+                            <a href="{% url 'my_account_address' %}" class="account-pill-btn alt">Manage Addresses</a>
+                            <a href="{% url 'my_account_edit' %}" class="account-pill-btn alt">Account Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

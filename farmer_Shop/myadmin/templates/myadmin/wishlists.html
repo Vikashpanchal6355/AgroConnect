@@ -1,0 +1,84 @@
+{% extends 'myadmin/base.html' %}
+{% load static %}
+
+{% block page_title %}Wishlists{% endblock %}
+{% block page_header %}Wishlists{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+    <div class="card">
+      <div class="card-header p-3 pt-2">
+        <div class="icon icon-lg icon-shape bg-gradient-dark shadow-dark text-center border-radius-xl mt-n4 position-absolute">
+          <i class="material-icons opacity-10">favorite</i>
+        </div>
+        <div class="text-end pt-1">
+          <p class="text-sm mb-0 text-capitalize">Total Wishlists</p>
+          <h4 class="mb-0">{{ wishlists.count }}</h4>
+        </div>
+      </div>
+      <hr class="dark horizontal my-0">
+      <div class="card-footer p-3">
+        <p class="mb-0"><span class="text-success text-sm font-weight-bolder">Active</span> wishlists</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-4">
+  <div class="col-12">
+    <div class="card my-4">
+      <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+        <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+          <h6 class="text-white text-capitalize ps-3">All Wishlists</h6>
+        </div>
+      </div>
+      <div class="card-body px-0 pb-2">
+        <div class="table-responsive p-0">
+          <table class="table align-items-center mb-0">
+            <thead>
+              <tr>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">User</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Products</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Created</th>
+                <th class="text-secondary opacity-7">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for wishlist in wishlists %}
+              <tr>
+                <td>
+                  <div class="d-flex px-2 py-1">
+                    <div class="avatar avatar-sm me-3 bg-gradient-primary rounded-circle">
+                      <span class="text-xs">{% if wishlist.user %}{{ wishlist.user.username|slice:":1"|upper }}{% else %}G{% endif %}</span>
+                    </div>
+                    <div class="d-flex flex-column justify-content-center">
+                      <h6 class="mb-0 text-sm">{% if wishlist.user %}{{ wishlist.user.username }}{% else %}Guest{% endif %}</h6>
+                    </div>
+                  </div>
+                </td>
+                <td class="align-middle text-center text-sm">
+                  <span class="text-xs font-weight-bold">{{ wishlist.products.count }}</span>
+                </td>
+                <td class="align-middle text-center text-sm">
+                  <span class="text-xs">{{ wishlist.created_at|date:"d M Y" }}</span>
+                </td>
+                <td class="align-middle">
+                  <a href="/admin/user/wishlist/{{ wishlist.id }}/change/" class="text-secondary font-weight-bold text-xs" target="_blank">
+                    View
+                  </a>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="4" class="text-center text-sm text-muted py-4">No wishlists found</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
